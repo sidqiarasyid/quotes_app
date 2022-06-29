@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Page/data_customer.dart';
 import 'package:quotes_app/Page/intro.dart';
+import 'package:quotes_app/Page/price_quote.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Intro(),
+      home: DataCustomer(),
     );
   }
 }

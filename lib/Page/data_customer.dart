@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-class DataCustomer extends StatefulWidget {
-  const DataCustomer({Key? key}) : super(key: key);
+class DataCustomerPage extends StatefulWidget {
+  const DataCustomerPage({Key? key}) : super(key: key);
 
   @override
-  State<DataCustomer> createState() => _DataCustomerState();
+  State<DataCustomerPage> createState() => _DataCustomerPageState();
 }
 
-class _DataCustomerState extends State<DataCustomer> {
+class _DataCustomerPageState extends State<DataCustomerPage> {
   final _items = [
     "PT. Aneka Pratama Plastindo",
     "PT. Aneka Jasuma Plastik",
     "CV. Trieva Makmur Plastindo"
   ];
-  String? value;
+  String? _value;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarQuote("1. Data Customer"),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding:
+              const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              itemDropDown(),
+              SizedBox(
+                height: 15,
+              ),
               inputFormDataCustomer(),
               SizedBox(
                 height: 20,
@@ -59,38 +64,40 @@ class _DataCustomerState extends State<DataCustomer> {
     );
   }
 
+  Widget itemDropDown() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey,
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2<String>(
+          value: _value,
+          items: _items.map(buildMenuItem).toList(),
+          onChanged: (value) => setState(() => this._value = value),
+          isExpanded: true,
+          iconSize: 0.0,
+          hint: Text(
+            "PT. Aneka Pratama Plastindo",
+            style: TextStyle(fontSize: 19, color: Colors.black),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget inputFormDataCustomer() {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey,
-            ),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton2<String>(
-              value: value,
-              items: _items.map(buildMenuItem).toList(),
-              onChanged: (value) => setState(() => this.value = value),
-              isExpanded: true,
-              iconSize: 0.0,
-              hint: Text(
-                "PT. Aneka Pratama Plastindo",
-                style: TextStyle(fontSize: 19, color: Colors.black),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 15,
-        ),
         TextFormField(
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
             border: OutlineInputBorder(),
-            focusedBorder: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
             hintText: "Pilih Customer",
             hintStyle: TextStyle(fontSize: 19),
           ),
@@ -104,7 +111,9 @@ class _DataCustomerState extends State<DataCustomer> {
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
             border: OutlineInputBorder(),
-            focusedBorder: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
             hintText: "Alamat Customer",
             hintStyle: TextStyle(fontSize: 19),
           ),
@@ -118,7 +127,9 @@ class _DataCustomerState extends State<DataCustomer> {
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
             border: OutlineInputBorder(),
-            focusedBorder: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
             hintText: "Telp Customer",
             hintStyle: TextStyle(fontSize: 19),
           ),

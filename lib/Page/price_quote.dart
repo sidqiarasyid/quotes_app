@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class PriceQuote extends StatefulWidget {
-  const PriceQuote({Key? key}) : super(key: key);
+class PriceQuotePage extends StatefulWidget {
+  const PriceQuotePage({Key? key}) : super(key: key);
 
   @override
-  State<PriceQuote> createState() => _PriceQuoteState();
+  State<PriceQuotePage> createState() => _PriceQuotePageState();
 }
 
-class _PriceQuoteState extends State<PriceQuote> {
+class _PriceQuotePageState extends State<PriceQuotePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

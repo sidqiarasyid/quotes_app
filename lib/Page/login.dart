@@ -18,24 +18,32 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 200, bottom: 50),
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  width: 125,
-                  height: 125,
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/images/background.jpg"),
+              fit: BoxFit.cover),
+        ),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 200, bottom: 50),
+                  child: Image.asset(
+                    "assets/images/logo.png",
+                    width: 125,
+                    height: 125,
+                  ),
                 ),
-              ),
-              formLogin(),
-              formButton(),
-            ],
+                formLogin(),
+                formButton(),
+              ],
+            ),
           ),
         ),
       ),

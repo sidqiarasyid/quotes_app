@@ -26,7 +26,7 @@ class _IntroState extends State<Intro> {
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
         child: Center(
-          child: Image.asset("assets/images/screenshot.png"),
+          child: Image.asset("assets/images/logo.png", height: 200),
         ),
       ),
     );

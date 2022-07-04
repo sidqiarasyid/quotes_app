@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Page/home.dart';
+import 'package:quotes_app/Page/price_quote.dart';
 
 class SuccessSavePage extends StatefulWidget {
   const SuccessSavePage({Key? key}) : super(key: key);
@@ -48,6 +50,7 @@ class _SuccessSavePageState extends State<SuccessSavePage> {
 
   PreferredSizeWidget appBarQuote(String title) {
     return AppBar(
+      automaticallyImplyLeading: false,
       toolbarHeight: 75,
       title: Padding(
         padding: const EdgeInsets.only(left: 5),
@@ -94,7 +97,10 @@ class _SuccessSavePageState extends State<SuccessSavePage> {
           "BACK",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => PriceQuotePage()));
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

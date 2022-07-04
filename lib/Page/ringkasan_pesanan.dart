@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:quotes_app/Page/price_quote.dart';
+import 'package:quotes_app/Page/success_save.dart';
 
 class RingkasanPesananPage extends StatefulWidget {
   const RingkasanPesananPage({Key? key}) : super(key: key);
@@ -62,6 +64,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
 
   PreferredSizeWidget appBarQuote(String title) {
     return AppBar(
+      automaticallyImplyLeading: false,
       toolbarHeight: 75,
       title: Padding(
         padding: const EdgeInsets.only(left: 5),
@@ -288,7 +291,10 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           "Simpan Price Quote",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => SuccessSavePage()));
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -310,7 +316,10 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           "Batalkan",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => PriceQuotePage()));
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:quotes_app/Page/data_pesanan.dart';
 
 class DataCustomerPage extends StatefulWidget {
   const DataCustomerPage({Key? key}) : super(key: key);
@@ -49,6 +50,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
 
   PreferredSizeWidget appBarQuote(String title) {
     return AppBar(
+      automaticallyImplyLeading: false,
       toolbarHeight: 75,
       title: Padding(
         padding: const EdgeInsets.only(left: 5),
@@ -155,7 +157,10 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           "Lanjut",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => DataPesananPage()));
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -177,7 +182,9 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           "Kembali",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

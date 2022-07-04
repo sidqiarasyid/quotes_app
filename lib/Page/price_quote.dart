@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Page/data_customer.dart';
 
 class PriceQuotePage extends StatefulWidget {
   const PriceQuotePage({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
 
   PreferredSizeWidget appBarQuote(String title) {
     return AppBar(
+      automaticallyImplyLeading: false,
       toolbarHeight: 75,
       title: Padding(
         padding: const EdgeInsets.only(left: 5),
@@ -51,7 +53,10 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
           "Buat Price Quote Baru",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => DataCustomerPage()));
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

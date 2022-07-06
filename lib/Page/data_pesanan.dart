@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ringkasan_pesanan.dart';
+import 'package:http/http.dart' as http;
 
 class DataPesananPage extends StatefulWidget {
   const DataPesananPage({Key? key}) : super(key: key);
@@ -10,10 +14,36 @@ class DataPesananPage extends StatefulWidget {
 }
 
 class _DataPesananPageState extends State<DataPesananPage> {
+  UserModel? _user;
+  String? dropdownItem;
+  List? itemList;
   int _selectedValueRadioButtonPC = 1;
   int _selectedValueRadioButtonTW = 8;
-  final _items = ["OPP", "OOP MATTE", "OOP HEAT SEAL", "PET"];
-  String? _valueDropDown;
+
+  Future<String> getItem() async {
+    String url = "http://128.199.81.36/api/list_data.php";
+    Map<String, dynamic> data = {
+      "api_key": "kspconnectpedia2020feb",
+      "username": _user?.username,
+    };
+    var dataUtf = utf8.encode(json.encode(data));
+    var dataBase64 = base64.encode(dataUtf);
+    final response =
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
+    var resBody = json.decode(response.body);
+    setState(() {
+      itemList = resBody['data_item'];
+    });
+    print(resBody);
+    return "Success";
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getItem();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -272,27 +302,34 @@ class _DataPesananPageState extends State<DataPesananPage> {
 
   Widget itemDropDown() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey,
-        ),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton2<String>(
-          value: _valueDropDown,
-          items: _items.map(buildMenuItem).toList(),
-          onChanged: (value) => setState(() => this._valueDropDown = value),
-          isExpanded: true,
-          iconSize: 0.0,
-          hint: Text(
-            "OPP",
-            style: TextStyle(fontSize: 19, color: Colors.black),
+        padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
           ),
-          dropdownOverButton: true,
         ),
-      ),
-    );
+        child: DropdownButton<String>(
+          hint: Text("Pilih Item"),
+          isExpanded: true,
+          value: dropdownItem,
+          icon: Icon(Icons.arrow_drop_down),
+          onChanged: (String? newValue) {
+            setState(() {
+              dropdownItem = newValue!;
+            });
+          },
+          isDense: true,
+          underline: SizedBox.shrink(),
+          items: itemList?.map((item) {
+                return DropdownMenuItem(
+                  child: Text(
+                    item['nama'].toString(),
+                  ),
+                  value: item['id_barang'].toString(),
+                );
+              }).toList() ??
+              [],
+        ));
   }
 
   Widget inputFormNote() {

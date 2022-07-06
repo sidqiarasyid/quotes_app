@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quotes_app/Model/user_model.dart';
+import 'package:quotes_app/Network/login_api.dart';
 import 'package:quotes_app/Page/home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,6 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -25,27 +28,29 @@ class _LoginPageState extends State<LoginPage> {
               image: AssetImage("assets/images/background.jpg"),
               fit: BoxFit.cover),
         ),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 200, bottom: 50),
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    width: 125,
-                    height: 125,
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 200, bottom: 50),
+                        child: Image.asset(
+                          "assets/images/logo.png",
+                          width: 125,
+                          height: 125,
+                        ),
+                      ),
+                      formLogin(),
+                      formButton(),
+                    ],
                   ),
                 ),
-                formLogin(),
-                formButton(),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
   }
@@ -58,12 +63,9 @@ class _LoginPageState extends State<LoginPage> {
           width: double.infinity,
           child: TextFormField(
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please username';
-              } else if (value != "resha") {
-                return "Username salah";
-              }
-              return null;
+              return value.toString().trim().isEmpty
+                  ? 'Field can\'t be blank'
+                  : null;
             },
             controller: username,
             autocorrect: true,
@@ -83,12 +85,9 @@ class _LoginPageState extends State<LoginPage> {
           width: double.infinity,
           child: TextFormField(
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please password';
-              } else if (value != "123456") {
-                return "Password salah";
-              }
-              return null;
+              return value.toString().trim().isEmpty
+                  ? 'Field can\'t be blank'
+                  : null;
             },
             controller: password,
             obscureText: true,
@@ -116,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Text('Login'),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            _onLoading();
+            _login();
           }
         },
         style: ButtonStyle(
@@ -126,32 +125,22 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _onLoading() async {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return Dialog(
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // The loading indicator
-                  CircularProgressIndicator(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text('Loading...')
-                ],
-              ),
-            ),
-          );
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = !_isLoading;
+    });
+    if (username.text.isNotEmpty && password.text.isNotEmpty) {
+      UserModel result = await LoginApi()
+          .postLogin(username: username.text, password: password.text);
+      if (result.username.isNotEmpty) {
+        setState(() {
+          _isLoading = false;
         });
-    await Future.delayed(Duration(seconds: 2));
-    Navigator.of(context).pop();
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (BuildContext context) => HomePage(username: username.text)));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext c) => HomePage(username: result.name)));
+      }
+    }
   }
 }

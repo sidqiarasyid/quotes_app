@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/data_pesanan.dart';
+import 'package:http/http.dart' as http;
 
 class DataCustomerPage extends StatefulWidget {
   const DataCustomerPage({Key? key}) : super(key: key);
@@ -10,12 +14,34 @@ class DataCustomerPage extends StatefulWidget {
 }
 
 class _DataCustomerPageState extends State<DataCustomerPage> {
-  final _items = [
-    "PT. Aneka Pratama Plastindo",
-    "PT. Aneka Jasuma Plastik",
-    "CV. Trieva Makmur Plastindo"
-  ];
-  String? _value;
+  UserModel? _user;
+  String? dropdownCompany;
+  List? companyList;
+
+  Future<String> getCompany() async {
+    String url = "http://128.199.81.36/api/list_data.php";
+    Map<String, dynamic> data = {
+      "api_key": "kspconnectpedia2020feb",
+      "username": _user?.username,
+    };
+    var dataUtf = utf8.encode(json.encode(data));
+    var dataBase64 = base64.encode(dataUtf);
+    final response =
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
+    var resBody = json.decode(response.body);
+    setState(() {
+      companyList = resBody['data_company'];
+    });
+    print(resBody);
+    return "Success";
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getCompany();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,26 +94,34 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
 
   Widget itemDropDown() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey,
-        ),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton2<String>(
-          value: _value,
-          items: _items.map(buildMenuItem).toList(),
-          onChanged: (value) => setState(() => this._value = value),
-          isExpanded: true,
-          iconSize: 0.0,
-          hint: Text(
-            "PT. Aneka Pratama Plastindo",
-            style: TextStyle(fontSize: 19, color: Colors.black),
+        padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
           ),
         ),
-      ),
-    );
+        child: DropdownButton<String>(
+          hint: Text("Pilih Company"),
+          isExpanded: true,
+          value: dropdownCompany,
+          icon: Icon(Icons.arrow_drop_down),
+          onChanged: (String? newValue) {
+            setState(() {
+              dropdownCompany = newValue!;
+            });
+          },
+          isDense: true,
+          underline: SizedBox.shrink(),
+          items: companyList?.map((item) {
+                return DropdownMenuItem(
+                  child: Text(
+                    item['nama'].toString(),
+                  ),
+                  value: item['id'].toString(),
+                );
+              }).toList() ??
+              [],
+        ));
   }
 
   Widget inputFormDataCustomer() {

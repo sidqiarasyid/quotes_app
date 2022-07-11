@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Model/hasil_model.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ringkasan_pesanan.dart';
 import 'package:http/http.dart' as http;
@@ -14,11 +15,21 @@ class DataPesananPage extends StatefulWidget {
 }
 
 class _DataPesananPageState extends State<DataPesananPage> {
+  String _none = "-";
+  HasilModel? _hasilModel;
   UserModel? _user;
   String? dropdownItem;
   List? itemList;
   int _selectedValueRadioButtonPC = 1;
   int _selectedValueRadioButtonTW = 8;
+  TextEditingController _panjang = TextEditingController();
+  TextEditingController _lebar = TextEditingController();
+  TextEditingController _discount = TextEditingController();
+  TextEditingController _qty = TextEditingController();
+  TextEditingController _hrgZipper = TextEditingController();
+  TextEditingController _pitch = TextEditingController();
+  TextEditingController _lbZipper = TextEditingController();
+  bool _isLoading = false;
 
   Future<String> getItem() async {
     String url = "http://128.199.81.36/api/list_data.php";
@@ -38,6 +49,31 @@ class _DataPesananPageState extends State<DataPesananPage> {
     return "Success";
   }
 
+  getHasil() async {
+    String url = "http://128.199.81.36/api/hitungtotal.php";
+    Map<String, dynamic> data = {
+      "api_key": "kspconnectpedia2020feb",
+      "panjang": _panjang.text,
+      "lebar": _lebar.text,
+      "cash_disc": _discount.text,
+      "kode_produksi": "1",
+      "qty": _qty.text,
+      "item": dropdownItem,
+      "tol_wase": "8",
+      "hrgZipper": _hrgZipper.text,
+      "etPitch": _pitch.text,
+      "etLbZipper": _lbZipper.text,
+    };
+    var dataUtf = utf8.encode(json.encode(data));
+    var dataBase64 = base64.encode(dataUtf);
+    final response =
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
+    _hasilModel = HasilModel.fromJson(json.decode(response.body.toString()));
+    setState(() {
+      _none = _hasilModel!.grandTotalDisplay;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -49,71 +85,73 @@ class _DataPesananPageState extends State<DataPesananPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarQuote("2. Data Pesanan"),
-      body: ListView(
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 20, top: 30, right: 20, bottom: 30),
-            child: Column(
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView(
               children: [
-                inputFormName(),
-                SizedBox(
-                  height: 10,
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, top: 30, right: 20, bottom: 30),
+                  child: Column(
+                    children: [
+                      inputFormName(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      radioButtonPC(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      itemDropDown(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      inputFormNote(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      addButton(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Divider(
+                        color: Colors.black54,
+                        thickness: 1,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      inputFormPitch(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      radioButtonTW(),
+                      Divider(
+                        color: Colors.black54,
+                        thickness: 1,
+                      ),
+                      inputFormDiscount(),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      textPPN(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      countButton(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      nextButton(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      backButton(),
+                    ],
+                  ),
                 ),
-                radioButtonPC(),
-                SizedBox(
-                  height: 10,
-                ),
-                itemDropDown(),
-                SizedBox(
-                  height: 15,
-                ),
-                inputFormNote(),
-                SizedBox(
-                  height: 20,
-                ),
-                addButton(),
-                SizedBox(
-                  height: 15,
-                ),
-                Divider(
-                  color: Colors.black54,
-                  thickness: 1,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                inputFormPitch(),
-                SizedBox(
-                  height: 15,
-                ),
-                radioButtonTW(),
-                Divider(
-                  color: Colors.black54,
-                  thickness: 1,
-                ),
-                inputFormDiscount(),
-                SizedBox(
-                  height: 25,
-                ),
-                textPPN(),
-                SizedBox(
-                  height: 15,
-                ),
-                countButton(),
-                SizedBox(
-                  height: 20,
-                ),
-                nextButton(),
-                SizedBox(
-                  height: 20,
-                ),
-                backButton(),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -134,14 +172,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
       backgroundColor: Colors.black,
     );
   }
-
-  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-        value: item,
-        child: Text(
-          item,
-          style: TextStyle(fontSize: 19, color: Colors.black),
-        ),
-      );
 
   Widget inputFormName() {
     return Column(
@@ -177,6 +207,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           height: 15,
         ),
         TextFormField(
+          controller: _qty,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -196,6 +227,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
             Flexible(
               flex: 1,
               child: TextFormField(
+                controller: _lebar,
                 keyboardType: TextInputType.number,
                 style: TextStyle(fontSize: 19, color: Colors.black),
                 decoration: InputDecoration(
@@ -214,6 +246,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
             Flexible(
               flex: 1,
               child: TextFormField(
+                controller: _panjang,
                 keyboardType: TextInputType.number,
                 style: TextStyle(fontSize: 19, color: Colors.black),
                 decoration: InputDecoration(
@@ -393,6 +426,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
+            controller: _pitch,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
             decoration: InputDecoration(
@@ -411,6 +445,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
+            controller: _lbZipper,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
             decoration: InputDecoration(
@@ -429,6 +464,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
+            controller: _hrgZipper,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
             decoration: InputDecoration(
@@ -530,6 +566,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
+            controller: _discount,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
             decoration: InputDecoration(
@@ -559,7 +596,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           width: 100,
         ),
         Text(
-          "-",
+          _none,
           style: TextStyle(
             color: Colors.black,
             fontSize: 17,
@@ -579,7 +616,15 @@ class _DataPesananPageState extends State<DataPesananPage> {
           "Hitung",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            _isLoading = true;
+          });
+          setState(() {
+            getHasil();
+            _isLoading = false;
+          });
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

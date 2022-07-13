@@ -149,6 +149,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     height: 50,
                     width: 340,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
                     child: ElevatedButton(
                       child: Row(
                         children: [
@@ -173,7 +174,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: 5,),
                   Container(
+                    padding: EdgeInsets.all(10),
                     width: 340,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
                     child: ElevatedButton(
                       child: Column(
                         children: [
@@ -210,7 +213,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: 15,),
                   Container(
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
                     width: 340,
+                    padding: EdgeInsets.all(10),
                     child: ElevatedButton(
                       child: Column(
                         children: [
@@ -244,6 +249,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: 15,),
                   Container (
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
                     width: 340,
                     child: ElevatedButton(
                       child: Column(

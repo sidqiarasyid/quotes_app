@@ -92,7 +92,9 @@ class _HomePageState extends State<HomePage> {
                         '085400293454',
                         style: TextStyle(color: Colors.white),
                       ),
-                      SizedBox(width: 5,),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Icon(
                         Icons.email_outlined,
                         color: Colors.white,
@@ -106,7 +108,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -117,10 +121,14 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.qr_code, color: Colors.white,),
+                            Icon(
+                              Icons.qr_code,
+                              color: Colors.white,
+                            ),
                             SizedBox(width: 3),
                             Text('QR Code',
-                                style: TextStyle(fontSize: 12, color: Colors.white)),
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white)),
                           ],
                         ),
                       ),
@@ -131,25 +139,30 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.contact_mail, color: Colors.white,),
+                            Icon(
+                              Icons.contact_mail,
+                              color: Colors.white,
+                            ),
                             SizedBox(width: 3),
                             Text('Share Contact Card',
-                                style: TextStyle(fontSize: 12, color: Colors.white)),
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white)),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
-                    child: Row(
-
-                    ),
+                    child: Row(),
                   ),
                   Container(
                     height: 50,
                     width: 340,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(16)),
                     child: ElevatedButton(
                       child: Row(
                         children: [
@@ -172,11 +185,14 @@ class _HomePageState extends State<HomePage> {
                               Colors.transparent)),
                     ),
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     width: 340,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(16)),
                     child: ElevatedButton(
                       child: Column(
                         children: [
@@ -191,14 +207,25 @@ class _HomePageState extends State<HomePage> {
                                   style: TextStyle(fontSize: 20)),
                             ],
                           ),
-                          SizedBox(height: 5,),
-                          Row(children: [
-                            Icon(Icons.circle, color: Colors.red, size: 14,),
-                            SizedBox(width: 5,),
-                            Text('8 Quotation menunggu approval', style: TextStyle(
-                              fontWeight: FontWeight.w300
-                            ),)
-                          ],)
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.circle,
+                                color: Colors.red,
+                                size: 14,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                '8 Quotation menunggu approval',
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              )
+                            ],
+                          )
                         ],
                       ),
                       onPressed: () {
@@ -211,9 +238,12 @@ class _HomePageState extends State<HomePage> {
                               Colors.transparent)),
                     ),
                   ),
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(16)),
                     width: 340,
                     padding: EdgeInsets.all(10),
                     child: ElevatedButton(
@@ -227,14 +257,25 @@ class _HomePageState extends State<HomePage> {
                                   style: TextStyle(fontSize: 20)),
                             ],
                           ),
-                          SizedBox(height: 5,),
-                          Row(children: [
-                            Icon(Icons.circle, color: Colors.red, size: 14,),
-                            SizedBox(width: 5,),
-                            Text('8 sales contract telah lewat jatuh tempo', style: TextStyle(
-                                fontWeight: FontWeight.w300
-                            ),)
-                          ],)
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.circle,
+                                color: Colors.red,
+                                size: 14,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                '8 sales contract telah lewat jatuh tempo',
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              )
+                            ],
+                          )
                         ],
                       ),
                       onPressed: () {
@@ -247,10 +288,13 @@ class _HomePageState extends State<HomePage> {
                               Colors.transparent)),
                     ),
                   ),
-                  SizedBox(height: 15,),
-                  Container (
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
                     padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(16)),
                     width: 340,
                     child: ElevatedButton(
                       child: Column(
@@ -263,14 +307,25 @@ class _HomePageState extends State<HomePage> {
                                   style: TextStyle(fontSize: 20)),
                             ],
                           ),
-                          SizedBox(height: 5,),
-                          Row(children: [
-                            Icon(Icons.circle, color: Colors.white, size: 14,),
-                            SizedBox(width: 5,),
-                            Text('Total 800 Customers', style: TextStyle(
-                                fontWeight: FontWeight.w300
-                            ),)
-                          ],)
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.circle,
+                                color: Colors.white,
+                                size: 14,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                'Total 800 Customers',
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              )
+                            ],
+                          )
                         ],
                       ),
                       onPressed: () {
@@ -283,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                               Colors.transparent)),
                     ),
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 25),
                 ],
               ),
             ),

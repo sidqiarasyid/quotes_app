@@ -30,6 +30,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
   TextEditingController _pitch = TextEditingController();
   TextEditingController _lbZipper = TextEditingController();
   bool _isLoading = false;
+  bool _isLoadingHasil = false;
 
   Future<String> getItem() async {
     String url = "http://128.199.81.36/api/list_data.php";
@@ -51,15 +52,18 @@ class _DataPesananPageState extends State<DataPesananPage> {
 
   getHasil() async {
     String url = "http://128.199.81.36/api/hitungtotal.php";
+    setState(() {
+      _isLoadingHasil = true;
+    });
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
       "panjang": _panjang.text,
       "lebar": _lebar.text,
       "cash_disc": _discount.text,
-      "kode_produksi": "1",
+      "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text,
       "item": dropdownItem,
-      "tol_wase": "8",
+      "tol_wase": _selectedValueRadioButtonTW.toString(),
       "hrgZipper": _hrgZipper.text,
       "etPitch": _pitch.text,
       "etLbZipper": _lbZipper.text,
@@ -71,6 +75,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
     _hasilModel = HasilModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       _none = _hasilModel!.grandTotalDisplay;
+      _isLoadingHasil = false;
     });
   }
 
@@ -595,14 +600,16 @@ class _DataPesananPageState extends State<DataPesananPage> {
         SizedBox(
           width: 100,
         ),
-        Text(
-          _none,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _isLoadingHasil
+            ? CircularProgressIndicator()
+            : Text(
+                _none,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
       ],
     );
   }
@@ -617,13 +624,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          setState(() {
-            _isLoading = true;
-          });
-          setState(() {
-            getHasil();
-            _isLoading = false;
-          });
+          getHasil();
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

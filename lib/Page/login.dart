@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Network/login_api.dart';
 import 'package:quotes_app/Page/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -136,6 +137,8 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           _isLoading = false;
         });
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('username', result.username);
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(

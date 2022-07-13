@@ -338,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                               Colors.transparent)),
                     ),
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 25),
                 ],
               ),
             ),

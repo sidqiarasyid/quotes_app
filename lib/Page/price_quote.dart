@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quotes_app/Model/price_model.dart';
+import 'package:quotes_app/Page/ApproveAsSQPage.dart';
 import 'package:quotes_app/Page/data_customer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -127,29 +128,64 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                           fontStyle: FontStyle.italic,
                         ),
                       ),
-                      Container(
-                        width: 125,
-                        child: ElevatedButton(
-                          child: Text(
-                            "Download PDF",
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          onPressed: () {
-                            int angka = index + 1;
-                            print("Index: " + angka.toString());
-                            _launchUrl(angka.toString());
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.black),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 125,
+                            child: ElevatedButton(
+                              child: Text(
+                                "Download PDF",
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              onPressed: () {
+                                int angka = index + 1;
+                                print("Index: " + angka.toString());
+                                _launchUrl(angka.toString());
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                          SizedBox(width: 10),
+                          Container(
+                            width: 125,
+                            child: ElevatedButton(
+                              child: Text(
+                                "Approve as SQ",
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext c) =>
+                                            ApproveAsSQPage(
+                                                title: "Price Quote")));
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ));

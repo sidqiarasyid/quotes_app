@@ -97,7 +97,7 @@ class _DownloadPDFpageState extends State<DownloadPDFpage> {
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) => SalesContractPage(
-                              title: widget.title, idsales: "1"),
+                              title: widget.title),
                         ),
                       );
                     });

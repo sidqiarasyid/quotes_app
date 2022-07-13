@@ -3,16 +3,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:quotes_app/Model/ApiConstant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/salesContract.dart';
 
 class SalesContractPage extends StatefulWidget {
-  const SalesContractPage(
-      {Key? key, required this.title, required this.idsales})
-      : super(key: key);
+  const SalesContractPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
-  final String idsales;
 
   @override
   State<SalesContractPage> createState() => _SalesContractPageState();
@@ -22,9 +20,10 @@ class _SalesContractPageState extends State<SalesContractPage> {
   List dataList = [];
 
   getListSalesContract() async {
+    final prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> datapost = {
       "api_key": apikey,
-      "id_sales": "${widget.idsales}"
+      "id_sales": prefs.getString('username').toString(),
     };
 
     var stringToBase64 = utf8.fuse(base64);

@@ -11,6 +11,7 @@ import 'package:quotes_app/Model/ApiConstant.dart';
 import 'package:quotes_app/Model/UpdateToSQ.dart';
 import 'package:quotes_app/Model/detailPQ.dart';
 import 'package:quotes_app/Page/DownloadPDFPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ApproveAsSQPage extends StatefulWidget {
@@ -35,9 +36,10 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
   late String baseimage = "";
 
   getDetailPQ() async {
+    final prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> datapost = {
       "api_key": apikey,
-      "id_sales": "1",
+      "id_sales": prefs.getString('username').toString(),
       "id_pq": "2"
     };
 
@@ -76,9 +78,10 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
   }
 
   _submitCustomerApprove() async {
+    final prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> datapost = {
       "api_key": apikey,
-      "id_sales": "1",
+      "id_sales": prefs.getString('username').toString(),
       "id_pq": "2",
       "image": "$baseimage"
     };

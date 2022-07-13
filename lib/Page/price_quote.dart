@@ -168,6 +168,73 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
           '${knockDir.path}/FileBaru.pdf');
       print(response.statusCode);
       print('${knockDir.path}/FileBaru.pdf');
+      if(response.statusCode == 200){
+        showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                contentPadding: EdgeInsets.all(20.0),
+                content: Builder(builder: (context) {
+                  var height = MediaQuery.of(context).size.height;
+                  var width = MediaQuery.of(context).size.width;
+
+                  return Container(
+                    // height: height - 400,
+                    width: 400,
+                    child: Text(
+                      'Download Success',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                }),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text(
+                      'Ok'
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            });
+      } else {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                contentPadding: EdgeInsets.all(20.0),
+                content: Builder(builder: (context) {
+                  var height = MediaQuery.of(context).size.height;
+                  var width = MediaQuery.of(context).size.width;
+
+                  return Container(
+                    // height: height - 400,
+                    width: 400,
+                    child: Text(
+                      'Download Failed',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                }),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text(
+                        'Ok'
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            });
+      }
     } catch (e) {
       print(e);
     }

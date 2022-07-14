@@ -33,7 +33,9 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
     final response =
         await http.post(Uri.parse(url), body: {'data': dataBase64});
     _priceModel = PriceModel.fromJson(json.decode(response.body.toString()));
-    items.addAll(_priceModel!.data);
+    setState(() {
+      items.addAll(_priceModel!.data);
+    });
   }
 
   @override
@@ -204,7 +206,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
           '${knockDir.path}/FileBaru.pdf');
       print(response.statusCode);
       print('${knockDir.path}/FileBaru.pdf');
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         showDialog(
             context: context,
             builder: (_) {
@@ -227,9 +229,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                 }),
                 actions: <Widget>[
                   TextButton(
-                    child: Text(
-                      'Ok'
-                    ),
+                    child: Text('Ok'),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -260,9 +260,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                 }),
                 actions: <Widget>[
                   TextButton(
-                    child: Text(
-                        'Ok'
-                    ),
+                    child: Text('Ok'),
                     onPressed: () {
                       Navigator.pop(context);
                     },

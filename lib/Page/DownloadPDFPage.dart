@@ -96,8 +96,8 @@ class _DownloadPDFpageState extends State<DownloadPDFpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => SalesContractPage(
-                              title: widget.title),
+                          builder: (BuildContext context) =>
+                              SalesContractPage(title: widget.title),
                         ),
                       );
                     });

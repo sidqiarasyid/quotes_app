@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Page/SalesContract.dart';
 import 'package:quotes_app/Page/price_quote.dart';
 
 class HomePage extends StatefulWidget {
@@ -281,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                PriceQuotePage()));
+                               SalesContractPage(title: 'Sales Contract')));
                       },
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(

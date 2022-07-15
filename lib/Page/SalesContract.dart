@@ -31,7 +31,6 @@ class _SalesContractPageState extends State<SalesContractPage> {
     Map<String, dynamic> bodyParameters = {
       "data": "${stringToBase64.encode(json.encode(datapost))}"
     };
-
     var result = await ListSalesContract().listsalescontract(bodyParameters);
     setState(() {
       dataList = result!;
@@ -48,7 +47,19 @@ class _SalesContractPageState extends State<SalesContractPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          automaticallyImplyLeading: false,
+          toolbarHeight: 75,
+          title: Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Text(
+              widget.title,
+              style: TextStyle(
+                fontSize: 27,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.black,
         ),
         body: ListView.separated(
           separatorBuilder: (context, index) => const Divider(

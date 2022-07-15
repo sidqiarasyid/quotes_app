@@ -6,6 +6,7 @@ import 'package:quotes_app/Model/hasil_model.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ringkasan_pesanan.dart';
 import 'package:http/http.dart' as http;
+import 'package:quotes_app/duplicate/ringkasan_pesanan_dup.dart';
 
 class DataPesananDupPage extends StatefulWidget {
   const DataPesananDupPage({Key? key}) : super(key: key);
@@ -649,7 +650,7 @@ class _DataPesananDupPageState extends State<DataPesananDupPage> {
         ),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => RingkasanPesananPage()));
+              builder: (BuildContext context) => RingkasanPesananDupPage()));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

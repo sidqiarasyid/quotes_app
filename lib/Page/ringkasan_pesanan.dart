@@ -37,6 +37,8 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   final TextEditingController _conditionController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
+  
+
   static const top_list = [
     "Cash in Advance",
     "50% DP % remaining before deliver",
@@ -51,38 +53,54 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   static const note_list = ["Harga exclude PPN"];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarQuote("3. Ringkasan Pesanan"),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 20, top: 20, right: 20, bottom: 20),
-              child: Column(
-                children: [
-                  listRangkuman(),
-                  Divider(),
-                  addOrderButton(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  inputFormDetail(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  saveButton(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  cancelButton(),
-                ],
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    listRangkuman(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 1,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    addOrderButton(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    inputFormDetail(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    saveButton(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    cancelButton(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
     );
   }
 
@@ -128,23 +146,78 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
 
   Widget listRangkuman() {
     return Container(
+      margin: EdgeInsets.only(top: 10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('No          :' + '10'),
-          Text('Item        :' + widget.items),
-          Text('Size        :' +
+          Text('No          : ' + '10'),
+          Text('Item       : ' + widget.items),
+          Text('Size        : ' +
               widget.tebal +
               " X " +
               widget.lebar +
               " X " +
               widget.panjang),
-          Text('Spec        :' + widget.spec),
-          Text('Color       :' + widget.color),
-          Text('Qty         :' + widget.qty),
-          Text('Disc        :' + widget.disc),
-          Text('Price       :' + widget.price),
+          Text('Spec       : ' + widget.spec + " - " + widget.tebal),
+          Text('Color      : ' + widget.color),
+          Text('Qty          : ' + widget.qty),
+          Text('Disc        : ' + widget.disc),
+          Text('Price       : ' + widget.price),
+          SizedBox(
+            height: 10,
+          ),
+          btnListRangkum()
         ],
       ),
+    );
+  }
+
+  Widget btnListRangkum() {
+    return Row(
+      children: [
+        Container(
+          width: 170,
+          height: 50,
+          child: ElevatedButton(
+            child: Text(
+              "Rubah",
+              style: TextStyle(fontSize: 14),
+            ),
+            onPressed: () {
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Container(
+          width: 170,
+          height: 50,
+          child: ElevatedButton(
+            child: Text(
+              "Hapus",
+              style: TextStyle(fontSize: 14),
+            ),
+            onPressed: () {},
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 

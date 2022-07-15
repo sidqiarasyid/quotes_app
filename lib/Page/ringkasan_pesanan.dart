@@ -17,6 +17,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   final TextEditingController _conditionController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
+
   static const top_list = [
     "Cash in Advance",
     "50% DP % remaining before deliver",

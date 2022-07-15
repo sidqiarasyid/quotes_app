@@ -18,10 +18,11 @@ class _DataPesananPageState extends State<DataPesananPage> {
   String _none = "-";
   HasilModel? _hasilModel;
   UserModel? _user;
-  String? dropdownItem;
+  String? dropdownItem = 'OPP';
   List? itemList;
   int _selectedValueRadioButtonPC = 1;
   int _selectedValueRadioButtonTW = 8;
+  bool isShown = false;
   TextEditingController _panjang = TextEditingController();
   TextEditingController _lebar = TextEditingController();
   TextEditingController _discount = TextEditingController();
@@ -29,8 +30,14 @@ class _DataPesananPageState extends State<DataPesananPage> {
   TextEditingController _hrgZipper = TextEditingController();
   TextEditingController _pitch = TextEditingController();
   TextEditingController _lbZipper = TextEditingController();
+  TextEditingController tebalCont = TextEditingController();
+  TextEditingController catatanCont = TextEditingController();
+
   bool _isLoading = false;
   bool _isLoadingHasil = false;
+  String item = "";
+  String jumlah = "";
+  String catatan = "";
 
   Future<String> getItem() async {
     String url = "http://128.199.81.36/api/list_data.php";
@@ -84,6 +91,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
     // TODO: implement initState
     getItem();
     super.initState();
+    isShown = false;
   }
 
   @override
@@ -116,6 +124,10 @@ class _DataPesananPageState extends State<DataPesananPage> {
                         height: 20,
                       ),
                       addButton(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      isShown ? orderSum() : Container(),
                       SizedBox(
                         height: 15,
                       ),
@@ -363,7 +375,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
                   child: Text(
                     item['nama'].toString(),
                   ),
-                  value: item['id_barang'].toString(),
+                  value: item['nama'].toString(),
                 );
               }).toList() ??
               [],
@@ -374,6 +386,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
     return Column(
       children: [
         TextFormField(
+          controller: tebalCont,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -389,6 +402,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           height: 15,
         ),
         TextFormField(
+          controller: catatanCont,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -412,7 +426,18 @@ class _DataPesananPageState extends State<DataPesananPage> {
           "Tambahkan",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            isShown = true;
+              item = dropdownItem!;
+              jumlah = tebalCont.text;
+              catatan = catatanCont.text;
+            if (isShown == true) {
+              tebalCont.clear();
+              catatanCont.clear();
+            }
+          });
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -422,6 +447,44 @@ class _DataPesananPageState extends State<DataPesananPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget orderSum() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                item + ' - ' + jumlah,
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  isShown = false;
+                  item = "";
+                  jumlah = "";
+                  catatan = "";
+                });
+              },
+              icon: Icon(Icons.clear),
+              iconSize: 25,
+            )
+          ],
+        ),
+        Text(catatan, style: TextStyle(fontSize: 16)),
+        SizedBox(
+          height: 10,
+        ),
+        Divider(
+          height: 1,
+          color: Colors.grey,
+        )
+      ],
     );
   }
 

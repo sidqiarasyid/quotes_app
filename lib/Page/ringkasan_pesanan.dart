@@ -4,7 +4,27 @@ import 'package:quotes_app/Page/price_quote.dart';
 import 'package:quotes_app/Page/success_save.dart';
 
 class RingkasanPesananPage extends StatefulWidget {
-  const RingkasanPesananPage({Key? key}) : super(key: key);
+  const RingkasanPesananPage(
+      {Key? key,
+      required this.items,
+      required this.tebal,
+      required this.lebar,
+      required this.panjang,
+      required this.spec,
+      required this.color,
+      required this.qty,
+      required this.disc,
+      required this.price})
+      : super(key: key);
+  final String items;
+  final String tebal;
+  final String lebar;
+  final String panjang;
+  final String spec;
+  final String color;
+  final String qty;
+  final String disc;
+  final String price;
 
   @override
   State<RingkasanPesananPage> createState() => _RingkasanPesananPageState();
@@ -17,6 +37,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   final TextEditingController _conditionController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
+  
 
   static const top_list = [
     "Cash in Advance",
@@ -32,34 +53,54 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   static const note_list = ["Harga exclude PPN"];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarQuote("3. Ringkasan Pesanan"),
-      body: ListView(
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
-            child: Column(
-              children: [
-                addOrderButton(),
-                SizedBox(
-                  height: 20,
+      body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    listRangkuman(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 1,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    addOrderButton(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    inputFormDetail(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    saveButton(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    cancelButton(),
+                  ],
                 ),
-                inputFormDetail(),
-                SizedBox(
-                  height: 20,
-                ),
-                saveButton(),
-                SizedBox(
-                  height: 15,
-                ),
-                cancelButton(),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
     );
   }
 
@@ -100,6 +141,83 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget listRangkuman() {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('No          : ' + '10'),
+          Text('Item       : ' + widget.items),
+          Text('Size        : ' +
+              widget.tebal +
+              " X " +
+              widget.lebar +
+              " X " +
+              widget.panjang),
+          Text('Spec       : ' + widget.spec + " - " + widget.tebal),
+          Text('Color      : ' + widget.color),
+          Text('Qty          : ' + widget.qty),
+          Text('Disc        : ' + widget.disc),
+          Text('Price       : ' + widget.price),
+          SizedBox(
+            height: 10,
+          ),
+          btnListRangkum()
+        ],
+      ),
+    );
+  }
+
+  Widget btnListRangkum() {
+    return Row(
+      children: [
+        Container(
+          width: 170,
+          height: 50,
+          child: ElevatedButton(
+            child: Text(
+              "Rubah",
+              style: TextStyle(fontSize: 14),
+            ),
+            onPressed: () {
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Container(
+          width: 170,
+          height: 50,
+          child: ElevatedButton(
+            child: Text(
+              "Hapus",
+              style: TextStyle(fontSize: 14),
+            ),
+            onPressed: () {},
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 

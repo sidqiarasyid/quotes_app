@@ -6,6 +6,7 @@ import 'package:quotes_app/Model/hasil_model.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ringkasan_pesanan.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DataPesananPage extends StatefulWidget {
   const DataPesananPage({Key? key}) : super(key: key);
@@ -32,7 +33,8 @@ class _DataPesananPageState extends State<DataPesananPage> {
   TextEditingController _lbZipper = TextEditingController();
   TextEditingController tebalCont = TextEditingController();
   TextEditingController catatanCont = TextEditingController();
-
+  TextEditingController nameCont = TextEditingController();
+  TextEditingController colorCont = TextEditingController();
   bool _isLoading = false;
   bool _isLoadingHasil = false;
   String item = "";
@@ -194,6 +196,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
     return Column(
       children: [
         TextFormField(
+          controller: nameCont,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -209,6 +212,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           height: 15,
         ),
         TextFormField(
+          controller: colorCont,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -426,17 +430,19 @@ class _DataPesananPageState extends State<DataPesananPage> {
           "Tambahkan",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {
+        onPressed: () async {
           setState(() {
             isShown = true;
-              item = dropdownItem!;
-              jumlah = tebalCont.text;
-              catatan = catatanCont.text;
+            item = dropdownItem!;
+            jumlah = tebalCont.text;
+            catatan = catatanCont.text;
             if (isShown == true) {
               tebalCont.clear();
               catatanCont.clear();
             }
           });
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString("jumlah", jumlah);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -710,9 +716,21 @@ class _DataPesananPageState extends State<DataPesananPage> {
           "Lanjut",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {
+        onPressed: () async {
+          final prefs = await SharedPreferences.getInstance();
+
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => RingkasanPesananPage()));
+              builder: (BuildContext context) => RingkasanPesananPage(
+                    items: nameCont.text,
+                    lebar: _lebar.text,
+                    panjang: _panjang.text,
+                    qty: _qty.text,
+                    disc: _discount.text,
+                    spec: item,
+                    price: _hasilModel!.grandTotal.toString(),
+                    color: colorCont.text,
+                    tebal: prefs.getString("jumlah").toString(),
+                  )));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

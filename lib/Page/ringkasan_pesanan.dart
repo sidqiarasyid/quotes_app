@@ -1,30 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:quotes_app/Model/OrderModel.dart';
 import 'package:quotes_app/Page/price_quote.dart';
 import 'package:quotes_app/Page/success_save.dart';
+import 'package:quotes_app/db_order.dart';
 
 class RingkasanPesananPage extends StatefulWidget {
-  const RingkasanPesananPage(
-      {Key? key,
-      required this.items,
-      required this.tebal,
-      required this.lebar,
-      required this.panjang,
-      required this.spec,
-      required this.color,
-      required this.qty,
-      required this.disc,
-      required this.price})
-      : super(key: key);
-  final String items;
-  final String tebal;
-  final String lebar;
-  final String panjang;
-  final String spec;
-  final String color;
-  final String qty;
-  final String disc;
-  final String price;
+  const RingkasanPesananPage({Key? key}) : super(key: key);
 
   @override
   State<RingkasanPesananPage> createState() => _RingkasanPesananPageState();
@@ -36,8 +18,16 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   final TextEditingController _ovController = TextEditingController();
   final TextEditingController _conditionController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  List<OrderModel> listOrder = [];
+  bool isLoading = false;
 
-  
+  Future getData() async {
+    setState(() async {
+      isLoading = true;
+      listOrder = await OrderDatabase.instance.readAll();
+      isLoading = false;
+    });
+  }
 
   static const top_list = [
     "Cash in Advance",
@@ -56,7 +46,9 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    setState(() {
+      getData();
+    });
   }
 
   @override
@@ -64,43 +56,43 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
     return Scaffold(
       appBar: appBarQuote("3. Ringkasan Pesanan"),
       body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    listRangkuman(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Divider(
-                      color: Colors.grey,
-                      height: 1,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    addOrderButton(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    inputFormDetail(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    saveButton(),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    cancelButton(),
-                  ],
-                ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  listRangkuman(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                    height: 1,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  addOrderButton(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  inputFormDetail(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  saveButton(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  cancelButton(),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
     );
   }
 
@@ -131,7 +123,9 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           "Tambahkan Pesanan",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          getData();
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -145,31 +139,38 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   }
 
   Widget listRangkuman() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('No          : ' + '10'),
-          Text('Item       : ' + widget.items),
-          Text('Size        : ' +
-              widget.tebal +
-              " X " +
-              widget.lebar +
-              " X " +
-              widget.panjang),
-          Text('Spec       : ' + widget.spec + " - " + widget.tebal),
-          Text('Color      : ' + widget.color),
-          Text('Qty          : ' + widget.qty),
-          Text('Disc        : ' + widget.disc),
-          Text('Price       : ' + widget.price),
-          SizedBox(
-            height: 10,
-          ),
-          btnListRangkum()
-        ],
-      ),
-    );
+    return isLoading ? Center(child: CircularProgressIndicator()) : Container(
+        height: 200,
+        margin: EdgeInsets.only(top: 10),
+        child: ListView.builder(
+            itemCount: listOrder.length,
+            itemBuilder: (context, index) {
+              int no = index + 1;
+              final item = listOrder[index];
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('No          : ' + no.toString()),
+                  Text('Item       : ' + item.items),
+                  Text('Size        : ' +
+                      item.tebal +
+                      " X " +
+                      item.lebar +
+                      " X " +
+                      item.panjang),
+                  Text('Spec       : ' + item.spec + " - " + item.tebal),
+                  Text('Color      : ' + item.color),
+                  Text('Qty          : ' + item.qty),
+                  Text('Disc        : ' + item.disc),
+                  Text('Price       : ' + item.price),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  btnListRangkum(),
+                  SizedBox(height: 10,)
+                ],
+              );
+            }));
   }
 
   Widget btnListRangkum() {
@@ -183,8 +184,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
               "Rubah",
               style: TextStyle(fontSize: 14),
             ),
-            onPressed: () {
-            },
+            onPressed: () {},
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(

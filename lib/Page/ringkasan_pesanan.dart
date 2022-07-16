@@ -8,7 +8,9 @@ import 'package:quotes_app/Page/success_save.dart';
 import 'package:quotes_app/db_order.dart';
 
 class RingkasanPesananPage extends StatefulWidget {
-  const RingkasanPesananPage({Key? key}) : super(key: key);
+  const RingkasanPesananPage({Key? key, required this.pc, required this.tw}) : super(key: key);
+  final int pc;
+  final int tw;
 
   @override
   State<RingkasanPesananPage> createState() => _RingkasanPesananPageState();
@@ -198,7 +200,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
               final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => DataEditPage(id: id)));
+                      builder: (BuildContext context) => DataEditPage(id: id, pc: widget.pc, tw: widget.tw,)));
               Future.delayed(Duration(seconds: 2));
               print('result: ' + result);
 

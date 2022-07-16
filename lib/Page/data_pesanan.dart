@@ -40,6 +40,8 @@ class _DataPesananPageState extends State<DataPesananPage> {
   bool _isLoading = false;
   bool _isLoadingHasil = false;
   String item = "";
+  int pc = 1;
+  int tw = 8;
   String jumlah = "";
   String catatan = "";
   var order;
@@ -736,8 +738,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
         ),
         onPressed: () async {
           createDb();
+          setState(() {
+            pc = _selectedValueRadioButtonPC;
+            tw = _selectedValueRadioButtonTW;
+          });
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => RingkasanPesananPage()));
+              builder: (BuildContext context) => RingkasanPesananPage(pc: pc, tw: tw,)));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

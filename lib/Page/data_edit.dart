@@ -11,8 +11,10 @@ import 'package:quotes_app/db_order.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataEditPage extends StatefulWidget {
+  final int pc;
+  final int tw;
   final int? id;
-  const DataEditPage({Key? key, required this.id}) : super(key: key);
+  const DataEditPage({Key? key, required this.id, required this.tw, required this.pc}) : super(key: key);
 
   @override
   State<DataEditPage> createState() => _DataEditPageState();
@@ -44,7 +46,6 @@ class _DataEditPageState extends State<DataEditPage> {
   String jumlah = "";
   String catatan = "";
   var order;
-
 
 
 
@@ -121,6 +122,10 @@ class _DataEditPageState extends State<DataEditPage> {
     getItem();
     getDatabyId();
     super.initState();
+    setState(() {
+      _selectedValueRadioButtonTW = widget.tw;
+      _selectedValueRadioButtonPC = widget.pc;
+    });
     isShown = false;
   }
 

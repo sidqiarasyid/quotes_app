@@ -11,8 +11,10 @@ import 'package:quotes_app/db_order.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataEditPage extends StatefulWidget {
+  final int pc;
+  final int tw;
   final int? id;
-  const DataEditPage({Key? key, required this.id}) : super(key: key);
+  const DataEditPage({Key? key, required this.id, required this.tw, required this.pc}) : super(key: key);
 
   @override
   State<DataEditPage> createState() => _DataEditPageState();
@@ -22,7 +24,7 @@ class _DataEditPageState extends State<DataEditPage> {
   String _none = "-";
   HasilModel? _hasilModel;
   UserModel? _user;
-  String? dropdownItem = 'OPP';
+  String? dropdownItem;
   List? itemList;
   int _selectedValueRadioButtonPC = 1;
   int _selectedValueRadioButtonTW = 8;
@@ -45,9 +47,16 @@ class _DataEditPageState extends State<DataEditPage> {
   String catatan = "";
   var order;
 
-  Future createDb() async {
+
+
+
+  Future update() async {
     final prefs = await SharedPreferences.getInstance();
-    order = OrderModel(
+    String name = nameCont.text;
+    print("nama: " + name);
+    print("id: " + widget.id.toString());
+    final order = OrderModel(
+        id: widget.id,
         items: nameCont.text,
         tebal: prefs.getString("jumlah").toString(),
         lebar: _lebar.text,
@@ -56,8 +65,8 @@ class _DataEditPageState extends State<DataEditPage> {
         color: colorCont.text,
         qty: _qty.text,
         disc: _discount.text,
-        price: _hasilModel!.grandTotal.toString());
-    await OrderDatabase.instance.create(order);
+        price:  _hasilModel!.grandTotal.toString());
+    await OrderDatabase.instance.update(order);
   }
 
   Future<String> getItem() async {
@@ -113,6 +122,10 @@ class _DataEditPageState extends State<DataEditPage> {
     getItem();
     getDatabyId();
     super.initState();
+    setState(() {
+      _selectedValueRadioButtonTW = widget.tw;
+      _selectedValueRadioButtonPC = widget.pc;
+    });
     isShown = false;
   }
 
@@ -737,9 +750,8 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          createDb();
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => RingkasanPesananPage()));
+          update();
+          Navigator.pop(context, 'update');
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

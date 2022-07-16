@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Model/OrderModel.dart';
 import 'package:quotes_app/Model/hasil_model.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ringkasan_pesanan.dart';
 import 'package:http/http.dart' as http;
+import 'package:quotes_app/db_order.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataPesananPage extends StatefulWidget {
@@ -40,6 +42,22 @@ class _DataPesananPageState extends State<DataPesananPage> {
   String item = "";
   String jumlah = "";
   String catatan = "";
+  var order;
+
+  Future createDb() async {
+    final prefs = await SharedPreferences.getInstance();
+    order = OrderModel(
+        items: nameCont.text,
+        tebal: prefs.getString("jumlah").toString(),
+        lebar: _lebar.text,
+        panjang: _panjang.text,
+        spec: item,
+        color: colorCont.text,
+        qty: _qty.text,
+        disc: _discount.text,
+        price: _hasilModel!.grandTotal.toString());
+    await OrderDatabase.instance.create(order);
+  }
 
   Future<String> getItem() async {
     String url = "http://128.199.81.36/api/list_data.php";
@@ -717,20 +735,9 @@ class _DataPesananPageState extends State<DataPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          final prefs = await SharedPreferences.getInstance();
-
+          createDb();
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => RingkasanPesananPage(
-                    items: nameCont.text,
-                    lebar: _lebar.text,
-                    panjang: _panjang.text,
-                    qty: _qty.text,
-                    disc: _discount.text,
-                    spec: item,
-                    price: _hasilModel!.grandTotal.toString(),
-                    color: colorCont.text,
-                    tebal: prefs.getString("jumlah").toString(),
-                  )));
+              builder: (BuildContext context) => RingkasanPesananPage()));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

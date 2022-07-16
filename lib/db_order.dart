@@ -53,7 +53,7 @@ class OrderDatabase {
     return order.copy(id: id);
   }
 
-  Future<OrderModel> read(int id) async {
+  Future<OrderModel> read(int? id) async {
     final db = await instance.database;
 
     final maps = await db.query(
@@ -76,6 +76,19 @@ class OrderDatabase {
     final result = await db.query(tableOrder);
 
     return result.map((json) => OrderModel.fromJson(json)).toList();
+  }
+
+  delete(int? id) async {
+    final db = await instance.database;
+    try {
+      await db.delete(
+        tableOrder,
+        where: '${OrderFields.id} = ?',
+        whereArgs: [id],
+      );
+    } catch(e){
+      print(e);
+    }
   }
 
   Future close() async {

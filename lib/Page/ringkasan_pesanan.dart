@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:quotes_app/Model/OrderModel.dart';
+import 'package:quotes_app/Page/data_edit.dart';
+import 'package:quotes_app/Page/data_pesanan.dart';
 import 'package:quotes_app/Page/price_quote.dart';
 import 'package:quotes_app/Page/success_save.dart';
 import 'package:quotes_app/db_order.dart';
@@ -20,11 +22,12 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   final TextEditingController _noteController = TextEditingController();
   List<OrderModel> listOrder = [];
   bool isLoading = false;
+  // int ind = 0;
 
   Future getData() async {
-    setState(() async {
-      isLoading = true;
-      listOrder = await OrderDatabase.instance.readAll();
+    isLoading = true;
+    listOrder = await OrderDatabase.instance.readAll();
+    setState(() {
       isLoading = false;
     });
   }
@@ -46,9 +49,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    setState(() {
-      getData();
-    });
+    getData();
   }
 
   @override
@@ -124,7 +125,11 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          getData();
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => DataPesananPage()),
+              (route) => false);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -139,41 +144,46 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   }
 
   Widget listRangkuman() {
-    return isLoading ? Center(child: CircularProgressIndicator()) : Container(
-        height: 200,
-        margin: EdgeInsets.only(top: 10),
-        child: ListView.builder(
-            itemCount: listOrder.length,
-            itemBuilder: (context, index) {
-              int no = index + 1;
-              final item = listOrder[index];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('No          : ' + no.toString()),
-                  Text('Item       : ' + item.items),
-                  Text('Size        : ' +
-                      item.tebal +
-                      " X " +
-                      item.lebar +
-                      " X " +
-                      item.panjang),
-                  Text('Spec       : ' + item.spec + " - " + item.tebal),
-                  Text('Color      : ' + item.color),
-                  Text('Qty          : ' + item.qty),
-                  Text('Disc        : ' + item.disc),
-                  Text('Price       : ' + item.price),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  btnListRangkum(),
-                  SizedBox(height: 10,)
-                ],
-              );
-            }));
+    return isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Container(
+            height: 200,
+            margin: EdgeInsets.only(top: 10),
+            child: ListView.builder(
+                itemCount: listOrder.length,
+                itemBuilder: (context, index) {
+                  int no = index + 1;
+                  // ind = index;
+                  final item = listOrder[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('No          : ' + no.toString()),
+                      Text('Item       : ' + item.items),
+                      Text('Size        : ' +
+                          item.tebal +
+                          " X " +
+                          item.lebar +
+                          " X " +
+                          item.panjang),
+                      Text('Spec       : ' + item.spec + " - " + item.tebal),
+                      Text('Color      : ' + item.color),
+                      Text('Qty          : ' + item.qty),
+                      Text('Disc        : ' + item.disc),
+                      Text('Price       : ' + item.price),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      btnListRangkum(listOrder[index].id),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  );
+                }));
   }
 
-  Widget btnListRangkum() {
+  Widget btnListRangkum(int? id) {
     return Row(
       children: [
         Container(
@@ -184,7 +194,12 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
               "Rubah",
               style: TextStyle(fontSize: 14),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => DataEditPage(id: id)));
+            },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -206,7 +221,18 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
               "Hapus",
               style: TextStyle(fontSize: 14),
             ),
-            onPressed: () {},
+            onPressed: () async {
+              print("deleting data : " + id.toString());
+              isLoading = true;
+              await OrderDatabase.instance.delete(id);
+              Future.delayed(const Duration(milliseconds: 500), () {
+                setState(() {
+                  // Here you can write your code for open new view
+                  getData();
+                  isLoading = false;
+                });
+              });
+            },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -78,6 +78,20 @@ class OrderDatabase {
     return result.map((json) => OrderModel.fromJson(json)).toList();
   }
 
+ update(OrderModel orderModel) async {
+    final db = await instance.database;
+    try {
+      db.rawUpdate('''
+    UPDATE ${tableOrder} 
+    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?
+    WHERE ${OrderFields.id} = ?
+    ''',
+          [orderModel.items, orderModel.lebar, orderModel.panjang, orderModel.tebal, orderModel.spec, orderModel.color, orderModel.qty, orderModel.disc, orderModel.price, orderModel.id]);
+    } catch(e){
+      print('error: ' + e.toString());
+    }
+  }
+
   delete(int? id) async {
     final db = await instance.database;
     try {
@@ -86,7 +100,7 @@ class OrderDatabase {
         where: '${OrderFields.id} = ?',
         whereArgs: [id],
       );
-    } catch(e){
+    } catch (e) {
       print(e);
     }
   }

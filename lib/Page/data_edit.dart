@@ -22,7 +22,7 @@ class _DataEditPageState extends State<DataEditPage> {
   String _none = "-";
   HasilModel? _hasilModel;
   UserModel? _user;
-  String? dropdownItem = 'OPP';
+  String? dropdownItem;
   List? itemList;
   int _selectedValueRadioButtonPC = 1;
   int _selectedValueRadioButtonTW = 8;
@@ -45,9 +45,17 @@ class _DataEditPageState extends State<DataEditPage> {
   String catatan = "";
   var order;
 
-  Future createDb() async {
+
+
+
+
+  Future update() async {
     final prefs = await SharedPreferences.getInstance();
-    order = OrderModel(
+    String name = nameCont.text;
+    print("nama: " + name);
+    print("id: " + widget.id.toString());
+    final order = OrderModel(
+        id: widget.id,
         items: nameCont.text,
         tebal: prefs.getString("jumlah").toString(),
         lebar: _lebar.text,
@@ -56,8 +64,8 @@ class _DataEditPageState extends State<DataEditPage> {
         color: colorCont.text,
         qty: _qty.text,
         disc: _discount.text,
-        price: _hasilModel!.grandTotal.toString());
-    await OrderDatabase.instance.create(order);
+        price:  _hasilModel!.grandTotal.toString());
+    await OrderDatabase.instance.update(order);
   }
 
   Future<String> getItem() async {
@@ -737,9 +745,8 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          createDb();
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => RingkasanPesananPage()));
+          update();
+          Navigator.pop(context, 'update');
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

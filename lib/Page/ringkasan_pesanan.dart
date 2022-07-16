@@ -187,18 +187,22 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
     return Row(
       children: [
         Container(
-          width: 170,
+          width: 160,
           height: 50,
           child: ElevatedButton(
             child: Text(
               "Rubah",
               style: TextStyle(fontSize: 14),
             ),
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async{
+              final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => DataEditPage(id: id)));
+              Future.delayed(Duration(seconds: 2));
+              print('result: ' + result);
+
+              getData();
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -214,7 +218,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           width: 10,
         ),
         Container(
-          width: 170,
+          width: 160,
           height: 50,
           child: ElevatedButton(
             child: Text(

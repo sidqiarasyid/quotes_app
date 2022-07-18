@@ -144,7 +144,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                               onPressed: () {
                                 int angka = index + 1;
                                 print("Index: " + angka.toString());
-                                _launchUrl(angka.toString());
+                                _launchUrl(items[index].idPq);
                               },
                               style: ButtonStyle(
                                 backgroundColor:

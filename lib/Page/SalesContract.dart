@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:quotes_app/Model/ApiConstant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Model/salesContract.dart';
+import 'home.dart';
 
 class SalesContractPage extends StatefulWidget {
   const SalesContractPage({Key? key, required this.title}) : super(key: key);
@@ -83,8 +85,19 @@ class _SalesContractPageState extends State<SalesContractPage> {
                   height: 30.0,
                   // ignore: deprecated_member_use
                   child: RaisedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
                       setState(() {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomePage(
+                                      username: prefs
+                                          .getString('username')
+                                          .toString(),
+                                    )),
+                            ModalRoute.withName("/HomePage"));
+                        launch(dataList[index]['idheader']);
                         // downloadPDF(dataList[index]['idheader']);
                       });
                     },

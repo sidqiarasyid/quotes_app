@@ -42,11 +42,43 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
       isLoading = false;
     });
   }
-  void insertData() async {
+
+  void masukData() async {
     final prefs = await SharedPreferences.getInstance();
-     listOrder.forEach((OrderModel model) {
-       body += model.items + "#" + model.color + "#" + model.qty + "#" +  model.lebar + "#" +  model.panjang + "#" + prefs.getString('pitch').toString() + "#" + prefs.getString('hrgZipper').toString() + "#" + prefs.getString('lbZipper').toString() + "#" + model.tw.toString() + "#" + model.disc + "#" + model.price + "#" + model.pc.toString() + "###";
-     });
+    listOrder.forEach((OrderModel model) {
+      body += model.items +
+          "#" +
+          model.color +
+          "#" +
+          model.qty +
+          "#" +
+          model.lebar +
+          "#" +
+          model.panjang +
+          "#" +
+          prefs.getString('pitch').toString() +
+          "#" +
+          prefs.getString('hrgZipper').toString() +
+          "#" +
+          prefs.getString('lbZipper').toString() +
+          "#" +
+          model.tw.toString() +
+          "#" +
+          model.disc +
+          "#" +
+          model.price +
+          "#" +
+          model.pc.toString() +
+          "###" +
+          "1" +
+          "#" +
+          "OPP" +
+          "#" +
+          "10" +
+          "#" +
+          "-" +
+          "##";
+    });
   }
 
   getSubmit() async {

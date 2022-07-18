@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:quotes_app/Page/SalesContract.dart';
 import 'package:quotes_app/Page/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DownloadPDFpage extends StatefulWidget {
-  const DownloadPDFpage({Key? key, required this.title}) : super(key: key);
+  const DownloadPDFpage(
+      {Key? key, required this.title, required this.donwloadpdfLink})
+      : super(key: key);
 
   final String title;
+  final String donwloadpdfLink;
 
   @override
   State<DownloadPDFpage> createState() => _DownloadPDFpageState();
@@ -53,7 +57,9 @@ class _DownloadPDFpageState extends State<DownloadPDFpage> {
                 child: RaisedButton(
                   color: const Color(0xff008000),
                   onPressed: () {
-                    setState(() {});
+                    setState(() {
+                      launch(widget.donwloadpdfLink);
+                    });
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
@@ -83,7 +89,7 @@ class _DownloadPDFpageState extends State<DownloadPDFpage> {
                                     username:
                                         prefs.getString('username').toString(),
                                   )),
-                          ModalRoute.withName("/Chat"));
+                          ModalRoute.withName("/HomePage"));
                     });
                   },
                   color: Colors.black,

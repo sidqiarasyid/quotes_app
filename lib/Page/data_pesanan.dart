@@ -21,7 +21,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
   String _none = "-";
   HasilModel? _hasilModel;
   UserModel? _user;
-  String? dropdownItem = 'OPP';
+  String? dropdownItem;
   List? itemList;
   int _selectedValueRadioButtonPC = 1;
   int _selectedValueRadioButtonTW = 8;
@@ -468,6 +468,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           });
           final prefs = await SharedPreferences.getInstance();
           prefs.setString("jumlah", jumlah);
+          prefs.setString("item_drop", item);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

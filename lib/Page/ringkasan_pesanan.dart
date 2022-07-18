@@ -72,13 +72,14 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           "###" +
           "1" +
           "#" +
-          "OPP" +
+          prefs.getString('item_drop').toString() +
           "#" +
-          "10" +
+          prefs.getString("jumlah").toString() +
           "#" +
           "-" +
           "##";
     });
+    print("ISI BODY DATA: " + body);
   }
 
   getSubmit() async {
@@ -98,8 +99,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
       "notes": _noteController.text,
       "offer": _ovController.text,
       "conditions": _conditionController.text,
-      "session_item_pesanan":
-          "susu#10#10#10#10#10#10#10#8#10#91.46844144144144#1###1#OPP#10#-##"
+      "session_item_pesanan": body,
     };
     print("DATA: " + data.toString());
     var dataUtf = utf8.encode(json.encode(data));
@@ -522,7 +522,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          getSubmit();
+          masukData();
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => SuccessSavePage()));
         },

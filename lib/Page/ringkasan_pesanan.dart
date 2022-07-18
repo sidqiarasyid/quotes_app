@@ -70,7 +70,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           "#" +
           model.pc.toString() +
           "###" +
-          "1" +
+          prefs.getString('id_drop').toString() +
           "#" +
           prefs.getString('item_drop').toString() +
           "#" +
@@ -84,11 +84,11 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
 
   getSubmit() async {
     final prefs = await SharedPreferences.getInstance();
-    String url = "http://128.199.81.36/api/hitungtotal.php";
+    String url = "http://128.199.81.36/api/insertpq_new.php";
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
       "username": prefs.getString('username').toString(),
-      "id_perusahaan": "1",
+      "id_perusahaan": prefs.getString('Idcompany').toString(),
       "nama_customer": prefs.getString('namaCust').toString(),
       "telp_customer": prefs.getString('noCust').toString(),
       "alamat_customer": prefs.getString('alamatCust').toString(),
@@ -107,6 +107,8 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
     final response =
         await http.post(Uri.parse(url), body: {'data': dataBase64});
     jsonDecode(response.body);
+    print("RESPON: " + response.body);
+    print("STATUS: " + response.statusCode.toString());
   }
 
   static const top_list = [
@@ -336,6 +338,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
     return Column(
       children: [
         TextFormField(
+          controller: _cycController,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -350,6 +353,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           height: 15,
         ),
         TextFormField(
+          controller: _deliverController,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -364,6 +368,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           height: 15,
         ),
         TextFormField(
+          controller: _moqController,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -523,6 +528,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
         ),
         onPressed: () {
           masukData();
+          getSubmit();
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => SuccessSavePage()));
         },

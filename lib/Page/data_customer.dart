@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:quotes_app/Model/dropModel.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/data_pesanan.dart';
 import 'package:http/http.dart' as http;
@@ -15,9 +16,11 @@ class DataCustomerPage extends StatefulWidget {
 }
 
 class _DataCustomerPageState extends State<DataCustomerPage> {
+  DropModel? _dropModel;
+  DataCompany? _dataCompany;
   UserModel? _user;
-  String? dropdownCompany;
-  List? companyList;
+  List<DataCompany> _itemCompany = [];
+  String Idcompany = "";
   String company = "";
   String namaCust = "";
   String alamatCust = "";
@@ -36,11 +39,11 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
     var dataBase64 = base64.encode(dataUtf);
     final response =
         await http.post(Uri.parse(url), body: {'data': dataBase64});
-    var resBody = json.decode(response.body);
+    _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
     setState(() {
-      companyList = resBody['data_company'];
+      _itemCompany = _dropModel!.dataCompany;
     });
-    print(resBody);
+    print(_itemCompany);
     return "Success";
   }
 
@@ -108,27 +111,27 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
             color: Colors.grey,
           ),
         ),
-        child: DropdownButton<String>(
+        child: DropdownButton<DataCompany>(
           hint: Text("Pilih Company"),
           isExpanded: true,
-          value: dropdownCompany,
+          value: _dataCompany,
           icon: Icon(Icons.arrow_drop_down),
-          onChanged: (String? newValue) {
+          onChanged: (DataCompany? newValue) {
             setState(() {
-              dropdownCompany = newValue!;
+              _dataCompany = newValue;
             });
+            print("INDEX: " + _dataCompany!.id.toString());
           },
           isDense: true,
           underline: SizedBox.shrink(),
-          items: companyList?.map((item) {
-                return DropdownMenuItem(
-                  child: Text(
-                    item['nama'].toString(),
-                  ),
-                  value: item['id'].toString(),
-                );
-              }).toList() ??
-              [],
+          items: _itemCompany.map((DataCompany item) {
+            return DropdownMenuItem<DataCompany>(
+              child: Text(
+                item.nama,
+              ),
+              value: item,
+            );
+          }).toList(),
         ));
   }
 
@@ -204,7 +207,8 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
         ),
         onPressed: () async {
           setState(() {
-            company = dropdownCompany!;
+            company = _dataCompany!.nama;
+            Idcompany = _dataCompany!.id;
             namaCust = nama.text;
             alamatCust = alamat.text;
             noCust = nomor.text;
@@ -214,6 +218,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           prefs.setString("alamatCust", alamatCust);
           prefs.setString("noCust", noCust);
           prefs.setString("company", company);
+          prefs.setString("Idcompany", Idcompany);
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => DataPesananPage()));
         },

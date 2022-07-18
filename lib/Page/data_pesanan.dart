@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:quotes_app/Model/OrderModel.dart';
+import 'package:quotes_app/Model/dropModel.dart';
 import 'package:quotes_app/Model/hasil_model.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ringkasan_pesanan.dart';
@@ -18,11 +19,12 @@ class DataPesananPage extends StatefulWidget {
 }
 
 class _DataPesananPageState extends State<DataPesananPage> {
+  DropModel? _dropModel;
+  DataItem? _dataItem;
   String _none = "-";
   HasilModel? _hasilModel;
   UserModel? _user;
-  String? dropdownItem;
-  List? itemList;
+  List<DataItem> _itemlist = [];
   int _selectedValueRadioButtonPC = 1;
   int _selectedValueRadioButtonTW = 8;
   bool isShown = false;
@@ -40,6 +42,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
   bool _isLoading = false;
   bool _isLoadingHasil = false;
   String item = "";
+  String idItem = "";
   int pc = 1;
   int tw = 8;
   String jumlah = "";
@@ -76,11 +79,11 @@ class _DataPesananPageState extends State<DataPesananPage> {
     var dataBase64 = base64.encode(dataUtf);
     final response =
         await http.post(Uri.parse(url), body: {'data': dataBase64});
-    var resBody = json.decode(response.body);
+    _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
     setState(() {
-      itemList = resBody['data_item'];
+      _itemlist = _dropModel!.dataItem;
     });
-    print(resBody);
+    print(_itemlist);
     return "Success";
   }
 
@@ -96,7 +99,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
       "cash_disc": _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text,
-      "item": dropdownItem,
+      "item": _dataItem!.nama,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
       "hrgZipper": _hrgZipper.text,
       "etPitch": _pitch.text,
@@ -387,27 +390,27 @@ class _DataPesananPageState extends State<DataPesananPage> {
             color: Colors.grey,
           ),
         ),
-        child: DropdownButton<String>(
+        child: DropdownButton<DataItem>(
           hint: Text("Pilih Item"),
           isExpanded: true,
-          value: dropdownItem,
+          value: _dataItem,
           icon: Icon(Icons.arrow_drop_down),
-          onChanged: (String? newValue) {
+          onChanged: (DataItem? newValue) {
             setState(() {
-              dropdownItem = newValue!;
+              _dataItem = newValue;
             });
+            print("DATA INDEX: " + _dataItem!.idBarang.toString());
           },
           isDense: true,
           underline: SizedBox.shrink(),
-          items: itemList?.map((item) {
-                return DropdownMenuItem(
-                  child: Text(
-                    item['nama'].toString(),
-                  ),
-                  value: item['nama'].toString(),
-                );
-              }).toList() ??
-              [],
+          items: _itemlist.map((DataItem item) {
+            return DropdownMenuItem<DataItem>(
+              child: Text(
+                item.nama,
+              ),
+              value: item,
+            );
+          }).toList(),
         ));
   }
 
@@ -458,7 +461,8 @@ class _DataPesananPageState extends State<DataPesananPage> {
         onPressed: () async {
           setState(() {
             isShown = true;
-            item = dropdownItem!;
+            item = _dataItem!.nama;
+            idItem = _dataItem!.idBarang;
             jumlah = tebalCont.text;
             catatan = catatanCont.text;
             if (isShown == true) {
@@ -469,6 +473,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           final prefs = await SharedPreferences.getInstance();
           prefs.setString("jumlah", jumlah);
           prefs.setString("item_drop", item);
+          prefs.setString("id_drop", idItem);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

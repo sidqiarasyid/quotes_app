@@ -9,6 +9,7 @@ import 'package:quotes_app/Page/data_customer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PriceQuotePage extends StatefulWidget {
   const PriceQuotePage({Key? key}) : super(key: key);
@@ -119,7 +120,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        items[index].noPq + ', ',
+                        items[index].idPq + ', ',
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.bold),
                       ),
@@ -172,7 +173,8 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                                     MaterialPageRoute(
                                         builder: (BuildContext c) =>
                                             ApproveAsSQPage(
-                                                title: "Price Quote")));
+                                                title: "Price Quote",
+                                                id_pq: items[index].idPq)));
                               },
                               style: ButtonStyle(
                                 backgroundColor:
@@ -196,81 +198,91 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
     );
   }
 
-  void _launchUrl(String id) async {
-    var dio = Dio();
-    var dir = await getExternalStorageDirectory();
-    var knockDir = await new Directory('${dir?.path}').create(recursive: true);
-    try {
-      var response = await dio.download(
-          'http://128.199.81.36/generate-new.php?id=' + id,
-          '${knockDir.path}/FileBaru.pdf');
-      print(response.statusCode);
-      print('${knockDir.path}/FileBaru.pdf');
-      if (response.statusCode == 200) {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                contentPadding: EdgeInsets.all(20.0),
-                content: Builder(builder: (context) {
-                  var height = MediaQuery.of(context).size.height;
-                  var width = MediaQuery.of(context).size.width;
-
-                  return Container(
-                    // height: height - 400,
-                    width: 400,
-                    child: Text(
-                      'Download Success',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  );
-                }),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('Ok'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              );
-            });
-      } else {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                contentPadding: EdgeInsets.all(20.0),
-                content: Builder(builder: (context) {
-                  var height = MediaQuery.of(context).size.height;
-                  var width = MediaQuery.of(context).size.width;
-
-                  return Container(
-                    // height: height - 400,
-                    width: 400,
-                    child: Text(
-                      'Download Failed',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  );
-                }),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('Ok'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              );
-            });
-      }
-    } catch (e) {
-      print(e);
+  _launchUrl(String id) async {
+    var url = 'http://128.199.81.36/generate-new.php?id=' + id;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
+
+  // void _launchUrl(String id) async {
+  //   var dio = Dio();
+  //   var dir = await getExternalStorageDirectory();
+  //   var knockDir = await new Directory('${dir?.path}').create(recursive: true);
+  //   try {
+  //     var response = await dio.download(
+  //         'http://128.199.81.36/generate-new.php?id=' + id,
+  //         '${knockDir.path}/FileBaru.pdf');
+  //     print(response.statusCode);
+  //     print('${knockDir.path}/FileBaru.pdf');
+  //     if (response.statusCode == 200) {
+  //       showDialog(
+  //           context: context,
+  //           builder: (_) {
+  //             return AlertDialog(
+  //               shape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
+  //               contentPadding: EdgeInsets.all(20.0),
+  //               content: Builder(builder: (context) {
+  //                 var height = MediaQuery.of(context).size.height;
+  //                 var width = MediaQuery.of(context).size.width;
+  //
+  //                 return Container(
+  //                   // height: height - 400,
+  //                   width: 400,
+  //                   child: Text(
+  //                     'Download Success',
+  //                     style: TextStyle(fontSize: 20),
+  //                   ),
+  //                 );
+  //               }),
+  //               actions: <Widget>[
+  //                 TextButton(
+  //                   child: Text('Ok'),
+  //                   onPressed: () {
+  //                     Navigator.pop(context);
+  //                   },
+  //                 )
+  //               ],
+  //             );
+  //           });
+  //     } else {
+  //       showDialog(
+  //           context: context,
+  //           builder: (_) {
+  //             return AlertDialog(
+  //               shape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
+  //               contentPadding: EdgeInsets.all(20.0),
+  //               content: Builder(builder: (context) {
+  //                 var height = MediaQuery.of(context).size.height;
+  //                 var width = MediaQuery.of(context).size.width;
+  //
+  //                 return Container(
+  //                   // height: height - 400,
+  //                   width: 400,
+  //                   child: Text(
+  //                     'Download Failed',
+  //                     style: TextStyle(fontSize: 20),
+  //                   ),
+  //                 );
+  //               }),
+  //               actions: <Widget>[
+  //                 TextButton(
+  //                   child: Text('Ok'),
+  //                   onPressed: () {
+  //                     Navigator.pop(context);
+  //                   },
+  //                 )
+  //               ],
+  //             );
+  //           });
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
 }

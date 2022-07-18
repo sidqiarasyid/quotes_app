@@ -6,10 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:quotes_app/Model/ApiConstant.dart';
 
 class UpdateSQ {
-
   Future<ReturnUpdateSQ?> updatesq(bodyParameters) async {
     final response = await http.post(
-      Uri.parse(urlApi+updateSQ),
+      Uri.parse(urlApi + updateSQ),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -26,13 +25,11 @@ class UpdateSQ {
       return null;
       // return ReturnCreateConsultation.fromJson(dataList);
 
-
     } else {
       // If the server did not return a 200 CREATED response,
       // then throw an exception.
       throw Exception('Failed to create Customer.');
     }
-
   }
 }
 

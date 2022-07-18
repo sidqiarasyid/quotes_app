@@ -282,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                               SalesContractPage(title: 'Sales Contract')));
+                                SalesContractPage(title: 'Sales Contract')));
                       },
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(

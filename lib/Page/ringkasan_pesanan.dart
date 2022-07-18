@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:quotes_app/Model/OrderModel.dart';
@@ -6,9 +8,12 @@ import 'package:quotes_app/Page/data_pesanan.dart';
 import 'package:quotes_app/Page/price_quote.dart';
 import 'package:quotes_app/Page/success_save.dart';
 import 'package:quotes_app/db_order.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RingkasanPesananPage extends StatefulWidget {
-  const RingkasanPesananPage({Key? key, required this.pc, required this.tw}) : super(key: key);
+  const RingkasanPesananPage({Key? key, required this.pc, required this.tw})
+      : super(key: key);
   final int pc;
   final int tw;
 
@@ -22,8 +27,12 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   final TextEditingController _ovController = TextEditingController();
   final TextEditingController _conditionController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _cycController = TextEditingController();
+  final TextEditingController _deliverController = TextEditingController();
+  final TextEditingController _moqController = TextEditingController();
   List<OrderModel> listOrder = [];
   bool isLoading = false;
+  var body = "";
   // int ind = 0;
 
   Future getData() async {
@@ -32,6 +41,40 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
     setState(() {
       isLoading = false;
     });
+  }
+  void insertData() async {
+    final prefs = await SharedPreferences.getInstance();
+     listOrder.forEach((OrderModel model) {
+       body += model.items + "#" + model.color + "#" + model.qty + "#" +  model.lebar + "#" +  model.panjang + "#" + prefs.getString('pitch').toString() + "#" + prefs.getString('hrgZipper').toString() + "#" + prefs.getString('lbZipper').toString() + "#" + model.tw.toString() + "#" + model.disc + "#" + model.price + "#" + model.pc.toString() + "###";
+     });
+  }
+
+  getSubmit() async {
+    final prefs = await SharedPreferences.getInstance();
+    String url = "http://128.199.81.36/api/hitungtotal.php";
+    Map<String, dynamic> data = {
+      "api_key": "kspconnectpedia2020feb",
+      "username": prefs.getString('username').toString(),
+      "id_perusahaan": "1",
+      "nama_customer": prefs.getString('namaCust').toString(),
+      "telp_customer": prefs.getString('noCust').toString(),
+      "alamat_customer": prefs.getString('alamatCust').toString(),
+      "cylinder": _cycController.text,
+      "delivery": _deliverController.text,
+      "moq": _moqController.text,
+      "top": _topController.text,
+      "notes": _noteController.text,
+      "offer": _ovController.text,
+      "conditions": _conditionController.text,
+      "session_item_pesanan":
+          "susu#10#10#10#10#10#10#10#8#10#91.46844144144144#1###1#OPP#10#-##"
+    };
+    print("DATA: " + data.toString());
+    var dataUtf = utf8.encode(json.encode(data));
+    var dataBase64 = base64.encode(dataUtf);
+    final response =
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
+    jsonDecode(response.body);
   }
 
   static const top_list = [
@@ -196,11 +239,15 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
               "Rubah",
               style: TextStyle(fontSize: 14),
             ),
-            onPressed: () async{
+            onPressed: () async {
               final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => DataEditPage(id: id, pc: widget.pc, tw: widget.tw,)));
+                      builder: (BuildContext context) => DataEditPage(
+                            id: id,
+                            pc: widget.pc,
+                            tw: widget.tw,
+                          )));
               Future.delayed(Duration(seconds: 2));
               print('result: ' + result);
 
@@ -314,7 +361,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
                     ),
                   ),
                   onSuggestionSelected: (String val) {
-                    this._topController.text = val;
+                    _topController.text = val;
                   },
                   hideOnEmpty: true,
                   autoFlipDirection: true,
@@ -328,7 +375,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
                       hintText: "Term of Payment",
                       hintStyle: TextStyle(fontSize: 19),
                     ),
-                    controller: this._topController,
+                    controller: _topController,
                   ),
                 ),
                 SizedBox(
@@ -344,7 +391,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
                     ),
                   ),
                   onSuggestionSelected: (String val) {
-                    this._ovController.text = val;
+                    _ovController.text = val;
                   },
                   hideOnEmpty: true,
                   autoFlipDirection: true,
@@ -359,7 +406,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
                       hintText: "Offer Validity",
                       hintStyle: TextStyle(fontSize: 19),
                     ),
-                    controller: this._ovController,
+                    controller: _ovController,
                   ),
                 ),
                 SizedBox(
@@ -376,7 +423,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
                     ),
                   ),
                   onSuggestionSelected: (String val) {
-                    this._conditionController.text = val;
+                    _conditionController.text = val;
                   },
                   hideOnEmpty: true,
                   autoFlipDirection: true,
@@ -391,7 +438,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
                       hintText: "Conditions",
                       hintStyle: TextStyle(fontSize: 19),
                     ),
-                    controller: this._conditionController,
+                    controller: _conditionController,
                   ),
                 ),
                 SizedBox(
@@ -407,7 +454,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
                     ),
                   ),
                   onSuggestionSelected: (String val) {
-                    this._noteController.text = val;
+                    _noteController.text = val;
                   },
                   hideOnEmpty: true,
                   autoFlipDirection: true,
@@ -422,7 +469,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
                       hintText: "Catatan",
                       hintStyle: TextStyle(fontSize: 19),
                     ),
-                    controller: this._noteController,
+                    controller: _noteController,
                   ),
                 ),
               ],
@@ -443,6 +490,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
+          getSubmit();
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => SuccessSavePage()));
         },

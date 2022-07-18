@@ -12,6 +12,8 @@ class OrderFields {
     qty,
     disc,
     price,
+    pc,
+    tw
   ];
   static final String id = '_id';
   static final String items = 'items';
@@ -23,6 +25,8 @@ class OrderFields {
   static final String qty = 'qty';
   static final String disc = 'disc';
   static final String price = 'price';
+  static final String tw = 'tw';
+  static final String pc = 'pc';
 }
 
 class OrderModel {
@@ -36,6 +40,8 @@ class OrderModel {
   final String qty;
   final String disc;
   final String price;
+  final int pc;
+  final int tw;
   OrderModel(
       {required this.items,
       required this.tebal,
@@ -46,6 +52,8 @@ class OrderModel {
       required this.qty,
       required this.disc,
       required this.price,
+      required this.pc,
+      required this.tw,
       this.id});
 
   static OrderModel fromJson(Map<String, Object?> json) => OrderModel(
@@ -58,6 +66,8 @@ class OrderModel {
       qty: json[OrderFields.qty] as String,
       disc: json[OrderFields.disc] as String,
       price: json[OrderFields.price] as String,
+      pc: json[OrderFields.pc] as int,
+      tw: json[OrderFields.tw] as int,
       id: json[OrderFields.id] as int?);
 
   Map<String, Object?> toJson() => {
@@ -71,6 +81,8 @@ class OrderModel {
         OrderFields.qty: qty,
         OrderFields.disc: disc,
         OrderFields.price: price,
+        OrderFields.tw: tw,
+        OrderFields.pc: pc,
       };
   OrderModel copy({
     int? id,
@@ -82,6 +94,8 @@ class OrderModel {
     String? color,
     String? qty,
     String? disc,
+    int? pc,
+    int? tw,
     String? price,
   }) =>
       OrderModel(
@@ -94,6 +108,8 @@ class OrderModel {
         color: color ?? this.color,
         qty: qty ?? this.qty,
         disc: disc ?? this.disc,
+        pc: pc ?? this.pc,
+        tw: tw ?? this.tw,
         price: price ?? this.price,
       );
 }

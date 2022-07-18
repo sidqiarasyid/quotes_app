@@ -15,9 +15,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ApproveAsSQPage extends StatefulWidget {
-  const ApproveAsSQPage({Key? key, required this.title}) : super(key: key);
+  const ApproveAsSQPage({Key? key, required this.title, required this.id_pq})
+      : super(key: key);
 
   final String title;
+  final String id_pq;
 
   @override
   State<ApproveAsSQPage> createState() => _ApproveAsSQPageState();
@@ -40,11 +42,10 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
     Map<String, dynamic> datapost = {
       "api_key": apikey,
       "id_sales": prefs.getString('username').toString(),
-      "id_pq": "2"
+      "id_pq": widget.id_pq.toString()
     };
 
     Codec<String, String> stringToBase64 = utf8.fuse(base64);
-
     Map<String, dynamic> bodyParameters = {
       "data": "${stringToBase64.encode(json.encode(datapost))}"
     };
@@ -54,25 +55,28 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
       dataDetail = result!;
       expT = dataDetail[0]['date'].split("-");
       lengthDatapesanan = dataDetail[1]['data_pesanan'].length;
-      for (var i = 0; i < lengthDatapesanan; i++) {
-        int jml = 0;
-        double jmldiscount = 0;
-        int jmltotal = 0;
-        for (var j = 0;
-            j < dataDetail[1]['data_pesanan'][i]['detail_produk '].length;
-            j++) {
-          jml += int.parse(dataDetail[1]['data_pesanan'][i]['qty']) *
-              int.parse(dataDetail[1]['data_pesanan'][i]['detail_produk '][j]
-                  ['harga']);
-        }
-        total.add(jml);
-        jmldiscount = (total[i] *
-                int.parse(dataDetail[1]['data_pesanan'][i]['cash_discount'])) /
-            100;
-        discount.add(jmldiscount);
+      if (lengthDatapesanan > 0) {
+        for (var i = 0; i < lengthDatapesanan; i++) {
+          int jml = 0;
+          double jmldiscount = 0;
+          int jmltotal = 0;
+          for (var j = 0;
+              j < dataDetail[1]['data_pesanan'][i]['detail_produk '].length;
+              j++) {
+            jml += int.parse(dataDetail[1]['data_pesanan'][i]['qty']) *
+                int.parse(dataDetail[1]['data_pesanan'][i]['detail_produk '][j]
+                    ['harga']);
+          }
+          total.add(jml);
+          jmldiscount = (total[i] *
+                  int.parse(
+                      dataDetail[1]['data_pesanan'][i]['cash_discount'])) /
+              100;
+          discount.add(jmldiscount);
 
-        jmltotal = (total[i] - discount[i].toInt());
-        grandtotal.add(jmltotal);
+          jmltotal = (total[i] - discount[i].toInt());
+          grandtotal.add(jmltotal);
+        }
       }
     });
   }
@@ -82,12 +86,13 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
     Map<String, dynamic> datapost = {
       "api_key": apikey,
       "id_sales": prefs.getString('username').toString(),
-      "id_pq": "2",
+      "id_pq": widget.id_pq.toString(),
       "image": "$baseimage"
     };
 
-    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    print("DATA: " + datapost.toString());
 
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
     Map<String, dynamic> bodyParameters = {
       "data": "${stringToBase64.encode(json.encode(datapost))}"
     };
@@ -102,6 +107,11 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
               DownloadPDFpage(title: widget.title),
         ),
       );
+    } else {
+      await EasyLoading.dismiss();
+      final snackBar =
+          SnackBar(content: const Text("Gagal Approve !!!"), action: null);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -296,7 +306,7 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
                                 ' ',
                                 yyyy
                               ])}"),
-                          Text("${dataDetail[1]['data_pesanan'][0]['no_pq']}"),
+                          Text("${dataDetail[0]['no_pq']}"),
                           Text("Kop: ${dataDetail[0]['nama_customer']}"),
                           const Text(""),
                           Text(

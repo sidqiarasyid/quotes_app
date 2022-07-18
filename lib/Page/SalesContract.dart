@@ -88,6 +88,7 @@ class _SalesContractPageState extends State<SalesContractPage> {
                         // downloadPDF(dataList[index]['idheader']);
                       });
                     },
+                    color: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),

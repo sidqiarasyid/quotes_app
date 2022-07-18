@@ -20,40 +20,44 @@ class PriceModel {
   List<Datum> data;
 
   factory PriceModel.fromJson(Map<String, dynamic> json) => PriceModel(
-        response: json["Response"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
-      );
+    response: json["Response"],
+    data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+  );
 
   Map<String, dynamic> toJson() => {
-        "Response": response,
-        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-      };
+    "Response": response,
+    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+  };
 }
 
 class Datum {
   Datum({
+    required this.idPq,
     required this.nama,
     required this.noPq,
     required this.approval,
-    required this.idheader,
+    required this.idheader
   });
 
+  String idPq;
   String nama;
   String noPq;
   dynamic approval;
   String idheader;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        nama: json["nama"],
-        noPq: json["no_pq"],
-        approval: json["approval"],
-        idheader: json["idheader"],
-      );
+    idPq: json["id_pq"],
+    nama: json["nama"],
+    noPq: json["no_pq"],
+    approval: json["approval"],
+    idheader: json["idheader"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "nama": nama,
-        "no_pq": noPq,
-        "approval": approval,
-        "idheader": idheader,
-      };
+    "id_pq": idPq,
+    "nama": nama,
+    "no_pq": noPq,
+    "approval": approval,
+    "idheader": idheader,
+  };
 }

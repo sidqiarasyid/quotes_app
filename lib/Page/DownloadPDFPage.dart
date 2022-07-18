@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:quotes_app/Page/SalesContract.dart';
+import 'package:quotes_app/Page/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DownloadPDFpage extends StatefulWidget {
   const DownloadPDFpage({Key? key, required this.title}) : super(key: key);
@@ -17,6 +19,7 @@ class _DownloadPDFpageState extends State<DownloadPDFpage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.black,
           title: Text(widget.title),
         ),
         body: Column(
@@ -70,9 +73,20 @@ class _DownloadPDFpageState extends State<DownloadPDFpage> {
                 height: 40.0,
                 // ignore: deprecated_member_use
                 child: RaisedButton(
-                  onPressed: () {
-                    setState(() {});
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    setState(() {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage(
+                                    username:
+                                        prefs.getString('username').toString(),
+                                  )),
+                          ModalRoute.withName("/Chat"));
+                    });
                   },
+                  color: Colors.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
@@ -83,35 +97,35 @@ class _DownloadPDFpageState extends State<DownloadPDFpage> {
                 ),
               ),
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 25.0),
-              child: ButtonTheme(
-                minWidth: MediaQuery.of(context).size.width,
-                height: 40.0,
-                // ignore: deprecated_member_use
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              SalesContractPage(title: widget.title),
-                        ),
-                      );
-                    });
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: const Text(
-                    "SALES CONTRACT",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            )
+            // Padding(
+            //   padding:
+            //       const EdgeInsets.only(left: 20.0, right: 20.0, top: 25.0),
+            //   child: ButtonTheme(
+            //     minWidth: MediaQuery.of(context).size.width,
+            //     height: 40.0,
+            //     // ignore: deprecated_member_use
+            //     child: RaisedButton(
+            //       onPressed: () {
+            //         setState(() {
+            //           Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (BuildContext context) =>
+            //                   SalesContractPage(title: widget.title),
+            //             ),
+            //           );
+            //         });
+            //       },
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(5.0),
+            //       ),
+            //       child: const Text(
+            //         "SALES CONTRACT",
+            //         style: TextStyle(color: Colors.white),
+            //       ),
+            //     ),
+            //   ),
+            // )
           ],
         ));
   }

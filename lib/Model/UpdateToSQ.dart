@@ -36,13 +36,15 @@ class UpdateSQ {
 class ReturnUpdateSQ {
   final String response;
   final String message;
+  final String urlpdf;
 
-  const ReturnUpdateSQ({required this.response, required this.message});
+  const ReturnUpdateSQ(
+      {required this.response, required this.message, required this.urlpdf});
 
   factory ReturnUpdateSQ.fromJson(Map<dynamic, dynamic> json) {
     return ReturnUpdateSQ(
-      response: json['Response'],
-      message: json['Message'],
-    );
+        response: json['Response'],
+        message: json['Message'],
+        urlpdf: json['url_pdf']);
   }
 }

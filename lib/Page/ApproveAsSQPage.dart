@@ -90,8 +90,6 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
       "image": "$baseimage"
     };
 
-    print("DATA: " + datapost.toString());
-
     Codec<String, String> stringToBase64 = utf8.fuse(base64);
     Map<String, dynamic> bodyParameters = {
       "data": "${stringToBase64.encode(json.encode(datapost))}"
@@ -103,8 +101,8 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) =>
-              DownloadPDFpage(title: widget.title),
+          builder: (BuildContext context) => DownloadPDFpage(
+              title: widget.title, donwloadpdfLink: result.urlpdf),
         ),
       );
     } else {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:quotes_app/Model/OrderModel.dart';
 import 'package:quotes_app/Model/dropModel.dart';
 import 'package:quotes_app/Model/hasil_model.dart';
+import 'package:quotes_app/Model/modelTambahData.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ringkasan_pesanan.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,8 @@ class DataPesananPage extends StatefulWidget {
 }
 
 class _DataPesananPageState extends State<DataPesananPage> {
+  ModelTambahData? _model;
+  List<ModelTambahData> _listTambahData = [];
   DropModel? _dropModel;
   DataItem? _dataItem;
   String _none = "-";
@@ -460,6 +463,21 @@ class _DataPesananPageState extends State<DataPesananPage> {
         ),
         onPressed: () async {
           setState(() {
+            if(_listTambahData.length == 0){
+              _listTambahData.add(ModelTambahData(
+                  _dataItem!.nama, tebalCont.text, catatanCont.text));
+            } else {
+              for(int i = 0; i < _listTambahData.length; i++){
+                if(_listTambahData[i].item == _dataItem!.nama){
+                  _listTambahData[i].tebal = tebalCont.text;
+                  _listTambahData[i].catatan = catatanCont.text;
+                } else {
+                  _listTambahData.add(ModelTambahData(
+                      _dataItem!.nama, tebalCont.text, catatanCont.text));
+                }
+              }
+            }
+
             isShown = true;
             item = _dataItem!.nama;
             idItem = _dataItem!.idBarang;
@@ -488,40 +506,47 @@ class _DataPesananPageState extends State<DataPesananPage> {
   }
 
   Widget orderSum() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                item + ' - ' + jumlah,
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  isShown = false;
-                  item = "";
-                  jumlah = "";
-                  catatan = "";
-                });
-              },
-              icon: Icon(Icons.clear),
-              iconSize: 25,
-            )
-          ],
-        ),
-        Text(catatan, style: TextStyle(fontSize: 16)),
-        SizedBox(
-          height: 10,
-        ),
-        Divider(
-          height: 1,
-          color: Colors.grey,
-        )
-      ],
+    return Container(
+      height: 100,
+      child: ListView.builder(
+          itemCount: _listTambahData.length,
+          itemBuilder: (context, index) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _listTambahData[index].item.toString() +
+                            ' - ' +
+                            _listTambahData[index].tebal.toString(),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _listTambahData.removeAt(index);
+                        });
+                      },
+                      icon: Icon(Icons.clear),
+                      iconSize: 25,
+                    )
+                  ],
+                ),
+                Text(_listTambahData[index].catatan.toString(),
+                    style: TextStyle(fontSize: 16)),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  height: 1,
+                  color: Colors.grey,
+                )
+              ],
+            );
+          }),
     );
   }
 

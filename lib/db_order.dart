@@ -29,6 +29,7 @@ class OrderDatabase {
   Future _createDB(Database db, int version) async {
     final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     final textType = 'TEXT NOT NULL';
+    final intType = 'INTEGER NOT NULL';
 
     await db.execute('''CREATE TABLE $tableOrder (
     ${OrderFields.id} $idType,
@@ -40,9 +41,11 @@ class OrderDatabase {
     ${OrderFields.spec} $textType,
     ${OrderFields.qty} $textType,
     ${OrderFields.disc} $textType,
-    ${OrderFields.panjang} $textType
+    ${OrderFields.panjang} $textType,
+    ${OrderFields.pc} $intType,
+    ${OrderFields.tw} $intType
     
-    
+ 
     )''');
   }
 
@@ -83,10 +86,10 @@ class OrderDatabase {
     try {
       db.rawUpdate('''
     UPDATE ${tableOrder} 
-    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?
+    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?, ${OrderFields.pc} = ?, ${OrderFields.tw} = ?
     WHERE ${OrderFields.id} = ?
     ''',
-          [orderModel.items, orderModel.lebar, orderModel.panjang, orderModel.tebal, orderModel.spec, orderModel.color, orderModel.qty, orderModel.disc, orderModel.price, orderModel.id]);
+          [orderModel.items, orderModel.lebar, orderModel.panjang, orderModel.tebal, orderModel.spec, orderModel.color, orderModel.qty, orderModel.disc, orderModel.price, orderModel.pc, orderModel.tw, orderModel.id]);
     } catch(e){
       print('error: ' + e.toString());
     }

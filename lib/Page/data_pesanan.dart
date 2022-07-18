@@ -44,6 +44,9 @@ class _DataPesananPageState extends State<DataPesananPage> {
   int tw = 8;
   String jumlah = "";
   String catatan = "";
+  String pitch = "";
+  String hrgZipper = "";
+  String lbZipper = "";
   var order;
 
   Future createDb() async {
@@ -57,7 +60,9 @@ class _DataPesananPageState extends State<DataPesananPage> {
         color: colorCont.text,
         qty: _qty.text,
         disc: _discount.text,
-        price: _hasilModel!.grandTotal.toString());
+        price: _hasilModel!.grandTotal.toString(),
+        tw: tw,
+        pc: pc);
     await OrderDatabase.instance.create(order);
   }
 
@@ -712,7 +717,16 @@ class _DataPesananPageState extends State<DataPesananPage> {
           "Hitung",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {
+        onPressed: () async {
+          setState(() {
+            pitch = _pitch.text;
+            hrgZipper = _hrgZipper.text;
+            lbZipper = _lbZipper.text;
+          });
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString("pitch", pitch);
+          prefs.setString("hrgZipper", hrgZipper);
+          prefs.setString("lbZipper", lbZipper);
           getHasil();
         },
         style: ButtonStyle(
@@ -743,7 +757,10 @@ class _DataPesananPageState extends State<DataPesananPage> {
             tw = _selectedValueRadioButtonTW;
           });
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => RingkasanPesananPage(pc: pc, tw: tw,)));
+              builder: (BuildContext context) => RingkasanPesananPage(
+                    pc: pc,
+                    tw: tw,
+                  )));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

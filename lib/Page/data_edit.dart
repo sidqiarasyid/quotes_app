@@ -14,7 +14,9 @@ class DataEditPage extends StatefulWidget {
   final int pc;
   final int tw;
   final int? id;
-  const DataEditPage({Key? key, required this.id, required this.tw, required this.pc}) : super(key: key);
+  const DataEditPage(
+      {Key? key, required this.id, required this.tw, required this.pc})
+      : super(key: key);
 
   @override
   State<DataEditPage> createState() => _DataEditPageState();
@@ -47,9 +49,6 @@ class _DataEditPageState extends State<DataEditPage> {
   String catatan = "";
   var order;
 
-
-
-
   Future update() async {
     final prefs = await SharedPreferences.getInstance();
     String name = nameCont.text;
@@ -65,9 +64,13 @@ class _DataEditPageState extends State<DataEditPage> {
         color: colorCont.text,
         qty: _qty.text,
         disc: _discount.text,
-        price:  _hasilModel!.grandTotal.toString());
+        price: _hasilModel!.grandTotal.toString(),
+        tw: widget.tw,
+        pc: widget.pc);
     await OrderDatabase.instance.update(order);
   }
+
+
 
   Future<String> getItem() async {
     String url = "http://128.199.81.36/api/list_data.php";

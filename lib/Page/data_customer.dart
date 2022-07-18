@@ -5,6 +5,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/data_pesanan.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DataCustomerPage extends StatefulWidget {
   const DataCustomerPage({Key? key}) : super(key: key);
@@ -17,6 +18,13 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
   UserModel? _user;
   String? dropdownCompany;
   List? companyList;
+  String company = "";
+  String namaCust = "";
+  String alamatCust = "";
+  String noCust = "";
+  TextEditingController nama = TextEditingController();
+  TextEditingController alamat = TextEditingController();
+  TextEditingController nomor = TextEditingController();
 
   Future<String> getCompany() async {
     String url = "http://128.199.81.36/api/list_data.php";
@@ -128,6 +136,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
     return Column(
       children: [
         TextFormField(
+          controller: nama,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -144,6 +153,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           height: 15,
         ),
         TextFormField(
+          controller: alamat,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -159,6 +169,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           height: 15,
         ),
         TextFormField(
+          controller: nomor,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -191,7 +202,18 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           "Lanjut",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {
+        onPressed: () async {
+          setState(() {
+            company = dropdownCompany!;
+            namaCust = nama.text;
+            alamatCust = alamat.text;
+            noCust = nomor.text;
+          });
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString("namaCust", namaCust);
+          prefs.setString("alamatCust", alamatCust);
+          prefs.setString("noCust", noCust);
+          prefs.setString("company", company);
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => DataPesananPage()));
         },

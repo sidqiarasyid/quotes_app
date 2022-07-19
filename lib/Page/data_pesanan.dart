@@ -53,23 +53,32 @@ class _DataPesananPageState extends State<DataPesananPage> {
   String pitch = "";
   String hrgZipper = "";
   String lbZipper = "";
-  var order;
 
   Future createDb() async {
-    final prefs = await SharedPreferences.getInstance();
-    order = OrderModel(
-        items: nameCont.text,
-        tebal: prefs.getString("jumlah").toString(),
-        lebar: _lebar.text,
-        panjang: _panjang.text,
-        spec: item,
-        color: colorCont.text,
-        qty: _qty.text,
-        disc: _discount.text,
-        price: _hasilModel!.grandTotal.toString(),
-        tw: tw,
-        pc: pc);
-    await OrderDatabase.instance.create(order);
+    for (int i = 0; i < _listTambahData.length; i++) {
+      var order = OrderModel(
+          items: nameCont.text,
+          tebal: _listTambahData[i].tebal,
+          lebar: _lebar.text,
+          panjang: _panjang.text,
+          spec: _listTambahData[i].item,
+          color: colorCont.text,
+          qty: _qty.text,
+          disc: _discount.text,
+          price: _hasilModel!.grandTotal.toString(),
+          tw: tw,
+          pc: pc);
+      await OrderDatabase.instance.create(order);
+    }
+    setState(() {
+      pc = _selectedValueRadioButtonPC;
+      tw = _selectedValueRadioButtonTW;
+    });
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => RingkasanPesananPage(
+              pc: pc,
+              tw: tw,
+            )));
   }
 
   Future<String> getItem() async {
@@ -463,12 +472,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
         ),
         onPressed: () async {
           setState(() {
-            if(_listTambahData.length == 0){
+            if (_listTambahData.length == 0) {
               _listTambahData.add(ModelTambahData(
                   _dataItem!.nama, tebalCont.text, catatanCont.text));
             } else {
-              for(int i = 0; i < _listTambahData.length; i++){
-                if(_listTambahData[i].item == _dataItem!.nama){
+              for (int i = 0; i < _listTambahData.length; i++) {
+                if (_listTambahData[i].item == _dataItem!.nama) {
                   _listTambahData[i].tebal = tebalCont.text;
                   _listTambahData[i].catatan = catatanCont.text;
                 } else {
@@ -783,15 +792,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
         ),
         onPressed: () async {
           createDb();
-          setState(() {
-            pc = _selectedValueRadioButtonPC;
-            tw = _selectedValueRadioButtonTW;
-          });
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => RingkasanPesananPage(
-                    pc: pc,
-                    tw: tw,
-                  )));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

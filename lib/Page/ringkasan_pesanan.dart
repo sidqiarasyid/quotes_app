@@ -38,6 +38,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   Future getData() async {
     isLoading = true;
     listOrder = await OrderDatabase.instance.readAll();
+    print("DATA LIST: " + listOrder.length.toString());
     setState(() {
       isLoading = false;
     });

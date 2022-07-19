@@ -54,24 +54,22 @@ class _DataPesananPageState extends State<DataPesananPage> {
   String hrgZipper = "";
   String lbZipper = "";
   String specLebar = "";
-  int hasilLebar = 0;
+  int hasiTebal = 0;
 
   Future createDb() async {
     var order;
-    for (int i = 0; i < _listTambahData.length; i++) {
-      order = OrderModel(
-          items: nameCont.text,
-          tebal: _listTambahData[i].tebal,
-          lebar: hasilLebar.toString(),
-          panjang: _panjang.text,
-          spec: specLebar,
-          color: colorCont.text,
-          qty: _qty.text,
-          disc: _discount.text,
-          price: _hasilModel!.grandTotal.toString(),
-          tw: tw,
-          pc: pc);
-    }
+    order = OrderModel(
+        items: nameCont.text,
+        tebal: hasiTebal.toString(),
+        lebar: _lebar.text,
+        panjang: _panjang.text,
+        spec: specLebar,
+        color: colorCont.text,
+        qty: _qty.text,
+        disc: _discount.text,
+        price: _hasilModel!.grandTotal.toString(),
+        tw: tw,
+        pc: pc);
     await OrderDatabase.instance.create(order);
     setState(() {
       pc = _selectedValueRadioButtonPC;
@@ -136,10 +134,10 @@ class _DataPesananPageState extends State<DataPesananPage> {
       specLebar += model.item + "-" + model.tebal + " // ";
       var lebarInt = int.parse(model.tebal);
       setState(() {
-        hasilLebar += lebarInt;
+        hasiTebal += lebarInt;
       });
     });
-    print('Hasil Lebar: ' + hasilLebar.toString());
+    print('Hasil Lebar: ' + hasiTebal.toString());
   }
 
   @override
@@ -498,12 +496,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
                   _listTambahData.add(ModelTambahData(
                       _dataItem!.nama, tebalCont.text, catatanCont.text));
                 }
-                print("Item: " +
-                    _listTambahData[i].item +
-                    "Tebal: " +
-                    _listTambahData[i].tebal +
-                    "Catatan: " +
-                    _listTambahData[i].catatan);
               }
             }
 

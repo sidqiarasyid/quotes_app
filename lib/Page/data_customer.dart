@@ -38,7 +38,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-        await http.post(Uri.parse(url), body: {'data': dataBase64});
+    await http.post(Uri.parse(url), body: {'data': dataBase64});
     _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       _itemCompany = _dropModel!.dataCompany;
@@ -61,7 +61,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding:
-              const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
+          const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -189,12 +189,12 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
   }
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-        value: item,
-        child: Text(
-          item,
-          style: TextStyle(fontSize: 19, color: Colors.black),
-        ),
-      );
+    value: item,
+    child: Text(
+      item,
+      style: TextStyle(fontSize: 19, color: Colors.black),
+    ),
+  );
 
   Widget nextButton() {
     return Container(

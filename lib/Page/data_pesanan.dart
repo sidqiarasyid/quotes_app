@@ -55,6 +55,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
   String lbZipper = "";
   String specLebar = "";
   int hasiTebal = 0;
+  String cat = "";
 
   Future createDb() async {
     var order;
@@ -68,6 +69,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         qty: _qty.text,
         disc: _discount.text,
         price: _hasilModel!.grandTotal.toString(),
+        catatan: cat,
         tw: tw,
         pc: pc);
     await OrderDatabase.instance.create(order);
@@ -132,6 +134,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
   masukData() {
     _listTambahData.forEach((ModelTambahData model) {
       specLebar += model.item + "-" + model.tebal + " // ";
+      cat += model.catatan + "-" + " / ";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;

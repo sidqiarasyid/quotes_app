@@ -10,6 +10,8 @@ import 'package:http/http.dart' as http;
 import 'package:quotes_app/db_order.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Model/modelTambahData.dart';
+
 class DataEditPage extends StatefulWidget {
   final int pc;
   final int tw;
@@ -23,8 +25,10 @@ class DataEditPage extends StatefulWidget {
 }
 
 class _DataEditPageState extends State<DataEditPage> {
+  ModelTambahData? tambahData;
   String _none = "-";
   HasilModel? _hasilModel;
+  List<ModelTambahData> _listTambahData = [];
   UserModel? _user;
   String? dropdownItem;
   List? itemList;
@@ -48,29 +52,39 @@ class _DataEditPageState extends State<DataEditPage> {
   String jumlah = "";
   String catatan = "";
   var order;
+  var itemRangkum;
+  var tebalRangkum;
+  var catatanRangkum;
+  List<String> listItems = [];
+  List<String> listTebal = [];
+  List<String> listCatatan = [];
+  var realItem = "";
+
+  updateItem(){
+    for(int i = 0; i < listItems.length; i++){
+      realItem += listItems[i] + " - " + listTebal[i] + "//";
+      print("REAL ITEM: " + realItem);
+    }
+  }
 
   Future update() async {
     final prefs = await SharedPreferences.getInstance();
-    String name = nameCont.text;
-    print("nama: " + name);
-    print("id: " + widget.id.toString());
     final order = OrderModel(
         id: widget.id,
         items: nameCont.text,
-        tebal: prefs.getString("jumlah").toString(),
+        tebal: tebalCont.text,
         lebar: _lebar.text,
         panjang: _panjang.text,
-        spec: item,
+        spec: realItem,
         color: colorCont.text,
         qty: _qty.text,
         disc: _discount.text,
+        catatan: catatan,
         price: _hasilModel!.grandTotal.toString(),
         tw: widget.tw,
         pc: widget.pc);
     await OrderDatabase.instance.update(order);
   }
-
-
 
   Future<String> getItem() async {
     String url = "http://128.199.81.36/api/list_data.php";
@@ -129,7 +143,7 @@ class _DataEditPageState extends State<DataEditPage> {
       _selectedValueRadioButtonTW = widget.tw;
       _selectedValueRadioButtonPC = widget.pc;
     });
-    isShown = false;
+    // isShown = false;
   }
 
   @override
@@ -467,16 +481,7 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          setState(() {
-            isShown = true;
-            item = dropdownItem!;
-            jumlah = tebalCont.text;
-            catatan = catatanCont.text;
-            if (isShown == true) {
-              tebalCont.clear();
-              catatanCont.clear();
-            }
-          });
+          setState(() {});
           final prefs = await SharedPreferences.getInstance();
           prefs.setString("jumlah", jumlah);
         },
@@ -493,40 +498,49 @@ class _DataEditPageState extends State<DataEditPage> {
   }
 
   Widget orderSum() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                item + ' - ' + jumlah,
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  isShown = false;
-                  item = "";
-                  jumlah = "";
-                  catatan = "";
-                });
-              },
-              icon: Icon(Icons.clear),
-              iconSize: 25,
-            )
-          ],
-        ),
-        Text(catatan, style: TextStyle(fontSize: 16)),
-        SizedBox(
-          height: 10,
-        ),
-        Divider(
-          height: 1,
-          color: Colors.grey,
-        )
-      ],
+    return Container(
+      height: 200,
+      child: ListView.builder(
+          itemCount: listItems.length,
+          itemBuilder: (context, index) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        listItems[index] +
+                            ' - ' +
+                            listTebal[index],
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isShown = false;
+                          item = "";
+                          jumlah = "";
+                          catatan = "";
+                        });
+                      },
+                      icon: Icon(Icons.clear),
+                      iconSize: 25,
+                    )
+                  ],
+                ),
+                Text(listCatatan[index], style: TextStyle(fontSize: 16)),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  height: 1,
+                  color: Colors.grey,
+                )
+              ],
+            );
+          }),
     );
   }
 
@@ -753,6 +767,7 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
+          updateItem();
           update();
           Navigator.pop(context, 'update');
         },
@@ -795,7 +810,35 @@ class _DataEditPageState extends State<DataEditPage> {
   void getDatabyId() async {
     OrderModel order = await OrderDatabase.instance.read(widget.id);
     print("DATA ID: " + order.id.toString());
-    print("DATA order.spec: " +order.spec.toString());
+    print("DATA order.spec: " + order.spec.toString());
+    List<String> stat = order.spec.split('//');
+    List<String> cat = order.catatan.split('/');
+    var split = "-";
+
+
+
+    cat.forEach((element) {
+      print("catatan: " + element);
+    });
+
+    for (int i = 0; i < stat.length - 1; i++) {
+      itemRangkum = stat[i].substring(0, stat[i].indexOf(split));
+      tebalRangkum = stat[i].substring(stat[i].indexOf(split) + 1);
+      print("ITEM : " + itemRangkum);
+      listItems.add(itemRangkum);
+      listTebal.add(tebalRangkum);
+    }
+
+    for (int i = 0; i < cat.length - 1; i++) {
+      catatanRangkum = cat[i].substring(0, cat[i].indexOf(split));
+      print("Catatan split : " + catatanRangkum);
+      listCatatan.add(catatanRangkum);
+    }
+
+
+
+
+
     setState(() {
       nameCont.text = order.items;
       colorCont.text = order.color;
@@ -804,6 +847,7 @@ class _DataEditPageState extends State<DataEditPage> {
       _panjang.text = order.panjang;
       // dropdownItem = order.spec;
       tebalCont.text = order.tebal;
+      isShown = true;
     });
   }
 }

@@ -795,13 +795,14 @@ class _DataEditPageState extends State<DataEditPage> {
   void getDatabyId() async {
     OrderModel order = await OrderDatabase.instance.read(widget.id);
     print("DATA ID: " + order.id.toString());
+    print("DATA order.spec: " +order.spec.toString());
     setState(() {
       nameCont.text = order.items;
       colorCont.text = order.color;
       _qty.text = order.qty;
       _lebar.text = order.lebar;
       _panjang.text = order.panjang;
-      dropdownItem = order.spec;
+      // dropdownItem = order.spec;
       tebalCont.text = order.tebal;
     });
   }

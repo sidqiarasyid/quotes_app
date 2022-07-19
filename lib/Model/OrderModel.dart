@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 final String tableOrder = 'pesan';
 
 class OrderFields {
@@ -12,6 +14,7 @@ class OrderFields {
     qty,
     disc,
     price,
+    catatan,
     pc,
     tw
   ];
@@ -19,6 +22,7 @@ class OrderFields {
   static final String items = 'items';
   static final String tebal = 'tebal';
   static final String lebar = 'lebar';
+  static final String catatan = 'catatan';
   static final String panjang = 'panjang';
   static final String spec = 'spec';
   static final String color = 'color';
@@ -40,6 +44,7 @@ class OrderModel {
   final String qty;
   final String disc;
   final String price;
+  final String catatan;
   final int pc;
   final int tw;
   OrderModel(
@@ -52,6 +57,7 @@ class OrderModel {
       required this.qty,
       required this.disc,
       required this.price,
+        required this.catatan,
       required this.pc,
       required this.tw,
       this.id});
@@ -66,6 +72,7 @@ class OrderModel {
       qty: json[OrderFields.qty] as String,
       disc: json[OrderFields.disc] as String,
       price: json[OrderFields.price] as String,
+      catatan: json[OrderFields.catatan] as String,
       pc: json[OrderFields.pc] as int,
       tw: json[OrderFields.tw] as int,
       id: json[OrderFields.id] as int?);
@@ -80,6 +87,7 @@ class OrderModel {
         OrderFields.color: color,
         OrderFields.qty: qty,
         OrderFields.disc: disc,
+        OrderFields.catatan: catatan,
         OrderFields.price: price,
         OrderFields.tw: tw,
         OrderFields.pc: pc,
@@ -94,6 +102,7 @@ class OrderModel {
     String? color,
     String? qty,
     String? disc,
+    String? catatan,
     int? pc,
     int? tw,
     String? price,
@@ -108,6 +117,7 @@ class OrderModel {
         color: color ?? this.color,
         qty: qty ?? this.qty,
         disc: disc ?? this.disc,
+        catatan: catatan ?? this.catatan,
         pc: pc ?? this.pc,
         tw: tw ?? this.tw,
         price: price ?? this.price,

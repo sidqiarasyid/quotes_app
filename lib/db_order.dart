@@ -42,6 +42,7 @@ class OrderDatabase {
     ${OrderFields.qty} $textType,
     ${OrderFields.disc} $textType,
     ${OrderFields.panjang} $textType,
+    ${OrderFields.catatan} $textType,
     ${OrderFields.pc} $intType,
     ${OrderFields.tw} $intType
     
@@ -86,10 +87,10 @@ class OrderDatabase {
     try {
       db.rawUpdate('''
     UPDATE ${tableOrder} 
-    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?, ${OrderFields.pc} = ?, ${OrderFields.tw} = ?
+    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?, ${OrderFields.pc} = ?, ${OrderFields.tw} = ?, ${OrderFields.catatan} = ? 
     WHERE ${OrderFields.id} = ?
     ''',
-          [orderModel.items, orderModel.lebar, orderModel.panjang, orderModel.tebal, orderModel.spec, orderModel.color, orderModel.qty, orderModel.disc, orderModel.price, orderModel.pc, orderModel.tw, orderModel.id]);
+          [orderModel.items, orderModel.lebar, orderModel.panjang, orderModel.tebal, orderModel.spec, orderModel.color, orderModel.qty, orderModel.disc, orderModel.price, orderModel.pc, orderModel.tw, orderModel.catatan, orderModel.id]);
     } catch(e){
       print('error: ' + e.toString());
     }

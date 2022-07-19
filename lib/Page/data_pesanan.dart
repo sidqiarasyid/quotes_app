@@ -503,11 +503,19 @@ class _DataPesananPageState extends State<DataPesananPage> {
             }
 
             isShown = true;
+            item = _dataItem!.nama;
+            idItem = _dataItem!.idBarang;
+            jumlah = tebalCont.text;
+            catatan = catatanCont.text;
             if (isShown == true) {
               tebalCont.clear();
               catatanCont.clear();
             }
           });
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString("jumlah", jumlah);
+          prefs.setString("item_drop", item);
+          prefs.setString("id_drop", idItem);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

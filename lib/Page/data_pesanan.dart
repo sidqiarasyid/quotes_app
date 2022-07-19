@@ -53,23 +53,26 @@ class _DataPesananPageState extends State<DataPesananPage> {
   String pitch = "";
   String hrgZipper = "";
   String lbZipper = "";
+  String specLebar = "";
+  int hasilLebar = 0;
 
   Future createDb() async {
+    var order;
     for (int i = 0; i < _listTambahData.length; i++) {
-      var order = OrderModel(
+      order = OrderModel(
           items: nameCont.text,
           tebal: _listTambahData[i].tebal,
-          lebar: _lebar.text,
+          lebar: hasilLebar.toString(),
           panjang: _panjang.text,
-          spec: _listTambahData[i].item,
+          spec: specLebar,
           color: colorCont.text,
           qty: _qty.text,
           disc: _discount.text,
           price: _hasilModel!.grandTotal.toString(),
           tw: tw,
           pc: pc);
-      await OrderDatabase.instance.create(order);
     }
+    await OrderDatabase.instance.create(order);
     setState(() {
       pc = _selectedValueRadioButtonPC;
       tw = _selectedValueRadioButtonTW;
@@ -126,6 +129,17 @@ class _DataPesananPageState extends State<DataPesananPage> {
       _none = _hasilModel!.grandTotalDisplay;
       _isLoadingHasil = false;
     });
+  }
+
+  masukData() {
+    _listTambahData.forEach((ModelTambahData model) {
+      specLebar += model.item + "-" + model.tebal + " // ";
+      var lebarInt = int.parse(model.tebal);
+      setState(() {
+        hasilLebar += lebarInt;
+      });
+    });
+    print('Hasil Lebar: ' + hasilLebar.toString());
   }
 
   @override
@@ -472,7 +486,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         ),
         onPressed: () async {
           setState(() {
-            if (_listTambahData.length == 0) {
+            if (_listTambahData.isEmpty) {
               _listTambahData.add(ModelTambahData(
                   _dataItem!.nama, tebalCont.text, catatanCont.text));
             } else {
@@ -480,27 +494,25 @@ class _DataPesananPageState extends State<DataPesananPage> {
                 if (_listTambahData[i].item == _dataItem!.nama) {
                   _listTambahData[i].tebal = tebalCont.text;
                   _listTambahData[i].catatan = catatanCont.text;
-                } else {
+                } else if (_listTambahData[i].item != _dataItem!.nama) {
                   _listTambahData.add(ModelTambahData(
                       _dataItem!.nama, tebalCont.text, catatanCont.text));
                 }
+                print("Item: " +
+                    _listTambahData[i].item +
+                    "Tebal: " +
+                    _listTambahData[i].tebal +
+                    "Catatan: " +
+                    _listTambahData[i].catatan);
               }
             }
 
             isShown = true;
-            item = _dataItem!.nama;
-            idItem = _dataItem!.idBarang;
-            jumlah = tebalCont.text;
-            catatan = catatanCont.text;
             if (isShown == true) {
               tebalCont.clear();
               catatanCont.clear();
             }
           });
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString("jumlah", jumlah);
-          prefs.setString("item_drop", item);
-          prefs.setString("id_drop", idItem);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -791,6 +803,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
+          masukData();
           createDb();
         },
         style: ButtonStyle(

@@ -246,7 +246,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
                           item.lebar +
                           " X " +
                           item.panjang),
-                      Text('Spec       : ' + item.spec + " - " + item.tebal),
+                      Text('Spec       : ' + item.spec),
                       Text('Color      : ' + item.color),
                       Text('Qty          : ' + item.qty),
                       Text('Disc        : ' + item.disc),

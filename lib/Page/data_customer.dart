@@ -77,29 +77,32 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarQuote("1. Data Customer"),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              itemDropDown(),
-              SizedBox(
-                height: 15,
-              ),
-              inputFormDataCustomer(),
-              SizedBox(
-                height: 20,
-              ),
-              nextButton(),
-              SizedBox(
-                height: 20,
-              ),
-              backButton(),
-            ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: appBarQuote("1. Data Customer"),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                itemDropDown(),
+                SizedBox(
+                  height: 15,
+                ),
+                inputFormDataCustomer(),
+                SizedBox(
+                  height: 20,
+                ),
+                nextButton(),
+                SizedBox(
+                  height: 20,
+                ),
+                backButton(),
+              ],
+            ),
           ),
         ),
       ),

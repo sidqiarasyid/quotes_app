@@ -14,36 +14,39 @@ class SuccessSavePage extends StatefulWidget {
 class _SuccessSavePageState extends State<SuccessSavePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarQuote("Price Quote"),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 40, left: 40, right: 40),
-        child: Center(
-          child: Column(
-            children: [
-              Image.asset(
-                "assets/images/success.png",
-                width: 100,
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                "Price Quote telah tersimpan",
-                style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              downloadButton(),
-              SizedBox(
-                height: 25,
-              ),
-              backButton(),
-            ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: appBarQuote("Price Quote"),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 40, left: 40, right: 40),
+          child: Center(
+            child: Column(
+              children: [
+                Image.asset(
+                  "assets/images/success.png",
+                  width: 100,
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                Text(
+                  "Price Quote telah tersimpan",
+                  style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                downloadButton(),
+                SizedBox(
+                  height: 25,
+                ),
+                backButton(),
+              ],
+            ),
           ),
         ),
       ),
@@ -102,8 +105,9 @@ class _SuccessSavePageState extends State<SuccessSavePage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => PriceQuotePage()));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => PriceQuotePage()),
+              (Route<dynamic> route) => false);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

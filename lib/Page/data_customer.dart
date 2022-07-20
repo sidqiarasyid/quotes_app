@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:quotes_app/Model/dropModel.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/data_pesanan.dart';
@@ -18,8 +19,10 @@ class DataCustomerPage extends StatefulWidget {
 class _DataCustomerPageState extends State<DataCustomerPage> {
   DropModel? _dropModel;
   DataCompany? _dataCompany;
+  DataCustomer? _dataCustomer;
   UserModel? _user;
   List<DataCompany> _itemCompany = [];
+  List<DataCustomer> _itemCustomer = [];
   String Idcompany = "";
   String company = "";
   String namaCust = "";
@@ -38,7 +41,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-    await http.post(Uri.parse(url), body: {'data': dataBase64});
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
     _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       _itemCompany = _dropModel!.dataCompany;
@@ -47,10 +50,29 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
     return "Success";
   }
 
+  Future<String> getCustomer() async {
+    String url = "http://128.199.81.36/api/list_data.php";
+    Map<String, dynamic> data = {
+      "api_key": "kspconnectpedia2020feb",
+      "username": _user?.username,
+    };
+    var dataUtf = utf8.encode(json.encode(data));
+    var dataBase64 = base64.encode(dataUtf);
+    final response =
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
+    _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
+    setState(() {
+      _itemCustomer = _dropModel!.dataCustomer;
+    });
+    print(_itemCustomer);
+    return "Success";
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     getCompany();
+    getCustomer();
     super.initState();
   }
 
@@ -61,7 +83,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding:
-          const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
+              const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -138,19 +160,34 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
   Widget inputFormDataCustomer() {
     return Column(
       children: [
-        TextFormField(
-          controller: nama,
-          style: TextStyle(fontSize: 19, color: Colors.black),
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+        TypeAheadField(
+          suggestionsCallback: (value) => _itemCustomer.where((element) =>
+              element.nama.toLowerCase().contains(value.toLowerCase())),
+          itemBuilder: (_, DataCustomer item) => ListTile(
+            title: Text(
+              item.nama,
+              style: TextStyle(color: Colors.black),
             ),
-            hintText: "Pilih Customer",
-            hintStyle: TextStyle(fontSize: 19),
           ),
-          minLines: 1,
-          maxLines: 5,
+          onSuggestionSelected: (DataCustomer val) {
+            nama.text = val.nama.toString();
+            alamat.text = val.alamat.toString();
+            nomor.text = val.telp.toString();
+          },
+          hideOnEmpty: true,
+          autoFlipDirection: true,
+          textFieldConfiguration: TextFieldConfiguration(
+            style: TextStyle(fontSize: 19, color: Colors.black),
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              hintText: "Term of Payment",
+              hintStyle: TextStyle(fontSize: 19),
+            ),
+            controller: nama,
+          ),
         ),
         SizedBox(
           height: 15,
@@ -189,12 +226,12 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
   }
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-    value: item,
-    child: Text(
-      item,
-      style: TextStyle(fontSize: 19, color: Colors.black),
-    ),
-  );
+        value: item,
+        child: Text(
+          item,
+          style: TextStyle(fontSize: 19, color: Colors.black),
+        ),
+      );
 
   Widget nextButton() {
     return Container(

@@ -158,79 +158,82 @@ class _DataPesananPageState extends State<DataPesananPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarQuote("2. Data Pesanan"),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, top: 30, right: 20, bottom: 30),
-                  child: Column(
-                    children: [
-                      inputFormName(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      radioButtonPC(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      itemDropDown(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      inputFormNote(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      addButton(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      isShown ? orderSum() : Container(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Divider(
-                        color: Colors.black54,
-                        thickness: 1,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      inputFormPitch(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      radioButtonTW(),
-                      Divider(
-                        color: Colors.black54,
-                        thickness: 1,
-                      ),
-                      inputFormDiscount(),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      textPPN(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      countButton(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      nextButton(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      backButton(),
-                    ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: appBarQuote("2. Data Pesanan"),
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, top: 30, right: 20, bottom: 30),
+                    child: Column(
+                      children: [
+                        inputFormName(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        radioButtonPC(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        itemDropDown(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        inputFormNote(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        addButton(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        isShown ? orderSum() : Container(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Divider(
+                          color: Colors.black54,
+                          thickness: 1,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        inputFormPitch(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        radioButtonTW(),
+                        Divider(
+                          color: Colors.black54,
+                          thickness: 1,
+                        ),
+                        inputFormDiscount(),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        textPPN(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        countButton(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        nextButton(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        backButton(),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 

@@ -15,8 +15,9 @@ class _IntroState extends State<Intro> {
   void initState() {
     Future.delayed(
         Duration(seconds: 3),
-        () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context) => LoginPage())));
+        () => Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => LoginPage()),
+            (Route<dynamic> route) => false));
     super.initState();
   }
 

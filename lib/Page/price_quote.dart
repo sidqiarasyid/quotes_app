@@ -120,7 +120,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        items[index].idPq + ', ',
+                        items[index].noPq + ', ',
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.bold),
                       ),
@@ -142,8 +142,6 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                                 style: TextStyle(fontSize: 10),
                               ),
                               onPressed: () {
-                                int angka = index + 1;
-                                print("Index: " + angka.toString());
                                 _launchUrl(items[index].idPq);
                               },
                               style: ButtonStyle(

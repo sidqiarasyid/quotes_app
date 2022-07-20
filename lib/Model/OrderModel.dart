@@ -16,7 +16,8 @@ class OrderFields {
     price,
     catatan,
     pc,
-    tw
+    tw,
+    dropId
   ];
   static final String id = '_id';
   static final String items = 'items';
@@ -31,6 +32,7 @@ class OrderFields {
   static final String price = 'price';
   static final String tw = 'tw';
   static final String pc = 'pc';
+  static final String dropId = 'dropId';
 }
 
 class OrderModel {
@@ -47,6 +49,7 @@ class OrderModel {
   final String catatan;
   final int pc;
   final int tw;
+  final String dropId;
   OrderModel(
       {required this.items,
       required this.tebal,
@@ -57,9 +60,10 @@ class OrderModel {
       required this.qty,
       required this.disc,
       required this.price,
-        required this.catatan,
+      required this.catatan,
       required this.pc,
       required this.tw,
+      required this.dropId,
       this.id});
 
   static OrderModel fromJson(Map<String, Object?> json) => OrderModel(
@@ -75,6 +79,7 @@ class OrderModel {
       catatan: json[OrderFields.catatan] as String,
       pc: json[OrderFields.pc] as int,
       tw: json[OrderFields.tw] as int,
+      dropId: json[OrderFields.dropId] as String,
       id: json[OrderFields.id] as int?);
 
   Map<String, Object?> toJson() => {
@@ -91,6 +96,7 @@ class OrderModel {
         OrderFields.price: price,
         OrderFields.tw: tw,
         OrderFields.pc: pc,
+        OrderFields.dropId: dropId
       };
   OrderModel copy({
     int? id,
@@ -106,20 +112,21 @@ class OrderModel {
     int? pc,
     int? tw,
     String? price,
+    String? dropId,
   }) =>
       OrderModel(
-        id: id ?? this.id,
-        items: items ?? this.items,
-        tebal: tebal ?? this.tebal,
-        lebar: lebar ?? this.lebar,
-        panjang: panjang ?? this.panjang,
-        spec: spec ?? this.spec,
-        color: color ?? this.color,
-        qty: qty ?? this.qty,
-        disc: disc ?? this.disc,
-        catatan: catatan ?? this.catatan,
-        pc: pc ?? this.pc,
-        tw: tw ?? this.tw,
-        price: price ?? this.price,
-      );
+          id: id ?? this.id,
+          items: items ?? this.items,
+          tebal: tebal ?? this.tebal,
+          lebar: lebar ?? this.lebar,
+          panjang: panjang ?? this.panjang,
+          spec: spec ?? this.spec,
+          color: color ?? this.color,
+          qty: qty ?? this.qty,
+          disc: disc ?? this.disc,
+          catatan: catatan ?? this.catatan,
+          pc: pc ?? this.pc,
+          tw: tw ?? this.tw,
+          price: price ?? this.price,
+          dropId: dropId ?? this.dropId);
 }

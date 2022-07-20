@@ -138,13 +138,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
     _listTambahData.forEach((ModelTambahData model) {
       specLebar += model.item + "-" + model.tebal + " // ";
       cat += model.catatan + "-" + " / ";
-      idDrops += _dataItem!.idBarang + " ";
+      idDrops += model.iddrop + " ";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;
       });
     });
-    print('Dropd Id: ' + _dataItem!.idBarang);
     print('Hasil Lebar: ' + hasiTebal.toString());
     print('Drop IDs ' + idDrops);
   }
@@ -495,7 +494,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           setState(() {
             if (_listTambahData.isEmpty) {
               _listTambahData.add(ModelTambahData(
-                  _dataItem!.nama, tebalCont.text, catatanCont.text));
+                  _dataItem!.nama, tebalCont.text, catatanCont.text, _dataItem!.idBarang));
             } else {
               for (int i = 0; i < _listTambahData.length; i++) {
                 if (_listTambahData[i].item == _dataItem!.nama) {
@@ -503,7 +502,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
                   _listTambahData[i].catatan = catatanCont.text;
                 } else if (_listTambahData[i].item != _dataItem!.nama) {
                   _listTambahData.add(ModelTambahData(
-                      _dataItem!.nama, tebalCont.text, catatanCont.text));
+                      _dataItem!.nama, tebalCont.text, catatanCont.text, _dataItem!.idBarang));
                 }
               }
             }

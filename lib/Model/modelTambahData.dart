@@ -2,9 +2,10 @@ class ModelTambahData {
   String item;
   String tebal;
   String catatan;
+  String iddrop;
 
 
-  ModelTambahData(this.item, this.tebal, this.catatan);
+  ModelTambahData(this.item, this.tebal, this.catatan, this.iddrop);
 
   String get getItem {
     return item;

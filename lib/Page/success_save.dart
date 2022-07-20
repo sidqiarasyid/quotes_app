@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:quotes_app/Page/home.dart';
 import 'package:quotes_app/Page/price_quote.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SuccessSavePage extends StatefulWidget {
-  const SuccessSavePage({Key? key}) : super(key: key);
+  final String url;
+  const SuccessSavePage({Key? key, required this.url}) : super(key: key);
 
   @override
   State<SuccessSavePage> createState() => _SuccessSavePageState();
@@ -75,7 +77,9 @@ class _SuccessSavePageState extends State<SuccessSavePage> {
           "Download PDF",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {},
+        onPressed: () {
+          _launchurl();
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -111,5 +115,15 @@ class _SuccessSavePageState extends State<SuccessSavePage> {
         ),
       ),
     );
+  }
+
+  _launchurl() async {
+    var url = widget.url;
+    print("URL: " + url);
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

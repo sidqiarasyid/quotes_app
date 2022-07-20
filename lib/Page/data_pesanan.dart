@@ -58,7 +58,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
   String cat = "";
   String idDrops = "";
 
-
   Future createDb() async {
     var order;
     order = OrderModel(
@@ -74,7 +73,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         catatan: cat,
         tw: tw,
         pc: pc,
-    dropId: idDrops);
+        dropId: idDrops);
     await OrderDatabase.instance.create(order);
     setState(() {
       pc = _selectedValueRadioButtonPC;

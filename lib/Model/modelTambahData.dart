@@ -3,7 +3,6 @@ class ModelTambahData {
   String tebal;
   String catatan;
 
-
   ModelTambahData(this.item, this.tebal, this.catatan);
 
   String get getItem {

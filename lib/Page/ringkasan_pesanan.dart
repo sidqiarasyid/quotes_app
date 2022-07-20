@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:quotes_app/Model/OrderModel.dart';
+import 'package:quotes_app/Model/urlModel.dart';
 import 'package:quotes_app/Page/data_edit.dart';
 import 'package:quotes_app/Page/data_pesanan.dart';
 import 'package:quotes_app/Page/price_quote.dart';
@@ -30,6 +31,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   final TextEditingController _cycController = TextEditingController();
   final TextEditingController _deliverController = TextEditingController();
   final TextEditingController _moqController = TextEditingController();
+  UrlModel? _urlModel;
   List<OrderModel> listOrder = [];
   bool isLoading = false;
   var body = "";
@@ -107,9 +109,13 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
     var dataBase64 = base64.encode(dataUtf);
     final response =
         await http.post(Uri.parse(url), body: {'data': dataBase64});
-    jsonDecode(response.body);
-    print("RESPON: " + response.body);
+    _urlModel = UrlModel.fromJson(json.decode(response.body.toString()));
+    print("RESPON: " + _urlModel!.urlPdf.toString());
     print("STATUS: " + response.statusCode.toString());
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => SuccessSavePage(
+              url: _urlModel!.urlPdf,
+            )));
     OrderDatabase.instance.deleteAll();
   }
 
@@ -137,9 +143,8 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -538,8 +543,6 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
         onPressed: () {
           masukData();
           getSubmit();
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => SuccessSavePage()));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

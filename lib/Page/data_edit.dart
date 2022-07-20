@@ -60,8 +60,8 @@ class _DataEditPageState extends State<DataEditPage> {
   List<String> listCatatan = [];
   var realItem = "";
 
-  updateItem(){
-    for(int i = 0; i < listItems.length; i++){
+  updateItem() {
+    for (int i = 0; i < listItems.length; i++) {
       realItem += listItems[i] + " - " + listTebal[i] + "//";
       print("REAL ITEM: " + realItem);
     }
@@ -83,7 +83,7 @@ class _DataEditPageState extends State<DataEditPage> {
         price: _hasilModel!.grandTotal.toString(),
         tw: widget.tw,
         pc: widget.pc,
-    dropId:  'a');
+        dropId: 'a');
     await OrderDatabase.instance.update(order);
   }
 
@@ -519,9 +519,7 @@ class _DataEditPageState extends State<DataEditPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        listItems[index] +
-                            ' - ' +
-                            listTebal[index],
+                        listItems[index] + ' - ' + listTebal[index],
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
@@ -823,8 +821,6 @@ class _DataEditPageState extends State<DataEditPage> {
     List<String> stat = order.spec.split('//');
     List<String> cat = order.catatan.split('/');
     var split = "-";
-
-
 
     cat.forEach((element) {
       print("catatan: " + element);

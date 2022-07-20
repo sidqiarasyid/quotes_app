@@ -83,8 +83,6 @@ class OrderDatabase {
     return result.map((json) => OrderModel.fromJson(json)).toList();
   }
 
-
-
   update(OrderModel orderModel) async {
     final db = await instance.database;
     try {
@@ -125,11 +123,12 @@ class OrderDatabase {
       print(e);
     }
   }
-  deleteAll() async{
+
+  deleteAll() async {
     final db = await instance.database;
     try {
       db.delete(tableOrder);
-    } catch(e){
+    } catch (e) {
       print(e);
     }
   }

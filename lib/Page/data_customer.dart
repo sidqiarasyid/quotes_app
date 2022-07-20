@@ -19,7 +19,6 @@ class DataCustomerPage extends StatefulWidget {
 class _DataCustomerPageState extends State<DataCustomerPage> {
   DropModel? _dropModel;
   DataCompany? _dataCompany;
-  DataCustomer? _dataCustomer;
   UserModel? _user;
   List<DataCompany> _itemCompany = [];
   List<DataCustomer> _itemCustomer = [];

@@ -82,7 +82,8 @@ class _DataEditPageState extends State<DataEditPage> {
         catatan: catatan,
         price: _hasilModel!.grandTotal.toString(),
         tw: widget.tw,
-        pc: widget.pc);
+        pc: widget.pc,
+    dropId:  'a');
     await OrderDatabase.instance.update(order);
   }
 
@@ -482,8 +483,16 @@ class _DataEditPageState extends State<DataEditPage> {
         ),
         onPressed: () async {
           setState(() {});
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString("jumlah", jumlah);
+          for (int i = 0; i < listItems.length; i++) {
+            if (listItems[i] == dropdownItem) {
+              listTebal[i] == tebalCont.text;
+              listCatatan[i] == catatanCont.text;
+            } else {
+              listItems.add(dropdownItem!);
+              listTebal.add(tebalCont.text);
+              listCatatan.add(catatanCont.text);
+            }
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -834,10 +843,6 @@ class _DataEditPageState extends State<DataEditPage> {
       print("Catatan split : " + catatanRangkum);
       listCatatan.add(catatanRangkum);
     }
-
-
-
-
 
     setState(() {
       nameCont.text = order.items;

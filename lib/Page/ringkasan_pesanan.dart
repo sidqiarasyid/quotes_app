@@ -71,11 +71,11 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           "#" +
           model.pc.toString() +
           "###" +
-          prefs.getString('id_drop').toString() +
+          model.dropId +
           "#" +
-          prefs.getString('item_drop').toString() +
+          model.spec +
           "#" +
-          prefs.getString("jumlah").toString() +
+          model.tebal +
           "#" +
           "-" +
           "##";
@@ -110,6 +110,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
     jsonDecode(response.body);
     print("RESPON: " + response.body);
     print("STATUS: " + response.statusCode.toString());
+    OrderDatabase.instance.deleteAll();
   }
 
   static const top_list = [
@@ -132,6 +133,13 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
     getData();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

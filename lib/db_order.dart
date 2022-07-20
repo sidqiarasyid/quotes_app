@@ -44,7 +44,8 @@ class OrderDatabase {
     ${OrderFields.panjang} $textType,
     ${OrderFields.catatan} $textType,
     ${OrderFields.pc} $intType,
-    ${OrderFields.tw} $intType
+    ${OrderFields.tw} $intType,
+    ${OrderFields.dropId} $textType
     
  
     )''');
@@ -82,16 +83,32 @@ class OrderDatabase {
     return result.map((json) => OrderModel.fromJson(json)).toList();
   }
 
- update(OrderModel orderModel) async {
+
+
+  update(OrderModel orderModel) async {
     final db = await instance.database;
     try {
       db.rawUpdate('''
     UPDATE ${tableOrder} 
-    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?, ${OrderFields.pc} = ?, ${OrderFields.tw} = ?, ${OrderFields.catatan} = ? 
+    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?, ${OrderFields.pc} = ?, ${OrderFields.tw} = ?, ${OrderFields.catatan} = ?, ${OrderFields.dropId} = ? 
     WHERE ${OrderFields.id} = ?
-    ''',
-          [orderModel.items, orderModel.lebar, orderModel.panjang, orderModel.tebal, orderModel.spec, orderModel.color, orderModel.qty, orderModel.disc, orderModel.price, orderModel.pc, orderModel.tw, orderModel.catatan, orderModel.id]);
-    } catch(e){
+    ''', [
+        orderModel.items,
+        orderModel.lebar,
+        orderModel.panjang,
+        orderModel.tebal,
+        orderModel.spec,
+        orderModel.color,
+        orderModel.qty,
+        orderModel.disc,
+        orderModel.price,
+        orderModel.pc,
+        orderModel.tw,
+        orderModel.catatan,
+        orderModel.dropId,
+        orderModel.id
+      ]);
+    } catch (e) {
       print('error: ' + e.toString());
     }
   }
@@ -105,6 +122,14 @@ class OrderDatabase {
         whereArgs: [id],
       );
     } catch (e) {
+      print(e);
+    }
+  }
+  deleteAll() async{
+    final db = await instance.database;
+    try {
+      db.delete(tableOrder);
+    } catch(e){
       print(e);
     }
   }

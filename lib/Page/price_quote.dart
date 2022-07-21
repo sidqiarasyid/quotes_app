@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:quotes_app/Duplicate/dup_customer.dart';
+import 'package:quotes_app/Model/dupModel.dart';
 import 'package:quotes_app/Model/price_model.dart';
+import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ApproveAsSQPage.dart';
 import 'package:quotes_app/Page/data_customer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,7 +114,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
       builder: (context) {
         var height = MediaQuery.of(context).size.height;
         return Container(
-          padding: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(top: 20),
             height: height * 0.77,
             child: ListView.builder(
                 itemCount: items.length,
@@ -189,7 +192,31 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                             ),
                           ),
                         ],
-                      )
+                      ),
+                      Container(
+                        width: 125,
+                        child: ElevatedButton(
+                          child: Text(
+                            "Duplicate",
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    DupCustomerPage(idPq: items[index].idPq)));
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ));
                 }));

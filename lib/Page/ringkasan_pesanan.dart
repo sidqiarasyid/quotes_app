@@ -72,15 +72,8 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           model.price +
           "#" +
           model.pc.toString() +
-          "###" +
-          model.dropId +
-          "#" +
-          model.spec +
-          "#" +
-          model.tebal +
-          "#" +
-          "-" +
-          "##";
+          "##" +
+          model.sipSession;
     });
     print("ISI BODY DATA: " + body);
   }
@@ -542,7 +535,6 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
         ),
         onPressed: () {
           masukData();
-          getSubmit();
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

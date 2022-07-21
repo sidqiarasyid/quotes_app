@@ -17,7 +17,8 @@ class OrderFields {
     catatan,
     pc,
     tw,
-    dropId
+    dropId,
+    sipSession
   ];
   static final String id = '_id';
   static final String items = 'items';
@@ -33,6 +34,7 @@ class OrderFields {
   static final String tw = 'tw';
   static final String pc = 'pc';
   static final String dropId = 'dropId';
+  static final String sipSession = 'sipSession';
 }
 
 class OrderModel {
@@ -47,6 +49,7 @@ class OrderModel {
   final String disc;
   final String price;
   final String catatan;
+  final String sipSession;
   final int pc;
   final int tw;
   final String dropId;
@@ -64,6 +67,7 @@ class OrderModel {
       required this.pc,
       required this.tw,
       required this.dropId,
+        required this.sipSession,
       this.id});
 
   static OrderModel fromJson(Map<String, Object?> json) => OrderModel(
@@ -80,6 +84,7 @@ class OrderModel {
       pc: json[OrderFields.pc] as int,
       tw: json[OrderFields.tw] as int,
       dropId: json[OrderFields.dropId] as String,
+      sipSession: json[OrderFields.sipSession] as String,
       id: json[OrderFields.id] as int?);
 
   Map<String, Object?> toJson() => {
@@ -96,7 +101,8 @@ class OrderModel {
         OrderFields.price: price,
         OrderFields.tw: tw,
         OrderFields.pc: pc,
-        OrderFields.dropId: dropId
+        OrderFields.dropId: dropId,
+        OrderFields.sipSession: sipSession
       };
   OrderModel copy({
     int? id,
@@ -113,6 +119,7 @@ class OrderModel {
     int? tw,
     String? price,
     String? dropId,
+    String? sipSession
   }) =>
       OrderModel(
           id: id ?? this.id,
@@ -128,5 +135,6 @@ class OrderModel {
           pc: pc ?? this.pc,
           tw: tw ?? this.tw,
           price: price ?? this.price,
-          dropId: dropId ?? this.dropId);
+          dropId: dropId ?? this.dropId,
+          sipSession: sipSession ?? this.sipSession);
 }

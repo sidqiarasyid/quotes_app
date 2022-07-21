@@ -59,11 +59,14 @@ class _DataEditPageState extends State<DataEditPage> {
   List<String> listTebal = [];
   List<String> listCatatan = [];
   var realItem = "";
-
+  String sips = "";
+  var dropId = "";
+  bool drop = false;
   updateItem() {
     for (int i = 0; i < listItems.length; i++) {
       realItem += listItems[i] + " - " + listTebal[i] + "//";
       print("REAL ITEM: " + realItem);
+      sips += "#" + dropId + "#" + listItems[i] + "#" + listTebal[i] + "#-#";
     }
   }
 
@@ -83,7 +86,8 @@ class _DataEditPageState extends State<DataEditPage> {
         price: _hasilModel!.grandTotal.toString(),
         tw: widget.tw,
         pc: widget.pc,
-        dropId: 'a');
+        sipSession: sips,
+        dropId: dropId);
     await OrderDatabase.instance.update(order);
   }
 
@@ -482,17 +486,23 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          setState(() {});
-          for (int i = 0; i < listItems.length; i++) {
-            if (listItems[i] == dropdownItem) {
-              listTebal[i] == tebalCont.text;
-              listCatatan[i] == catatanCont.text;
-            } else {
-              listItems.add(dropdownItem!);
-              listTebal.add(tebalCont.text);
-              listCatatan.add(catatanCont.text);
-            }
-          }
+          setState(() {
+            print("List: " + listItems.length.toString());
+            for (int i = 0; i < listItems.length; i++) {
+              if(listItems[i].toString() == dropdownItem.toString()){
+                listItems[i] = dropdownItem.toString();
+                listTebal[i] = tebalCont.text.toString();
+                listCatatan[i] = catatanCont.text.toString();
+            } else if(listItems[i].toString() != dropdownItem.toString()){
+                listItems.add(dropdownItem.toString());
+                listTebal.add(tebalCont.text.toString());
+                listCatatan.add(catatanCont.text.toString());
+              }
+              }
+
+
+          });
+
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -508,7 +518,7 @@ class _DataEditPageState extends State<DataEditPage> {
 
   Widget orderSum() {
     return Container(
-      height: 200,
+      height: 150,
       child: ListView.builder(
           itemCount: listItems.length,
           itemBuilder: (context, index) {
@@ -526,10 +536,9 @@ class _DataEditPageState extends State<DataEditPage> {
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          isShown = false;
-                          item = "";
-                          jumlah = "";
-                          catatan = "";
+                          listItems.removeAt(index);
+                          listTebal.removeAt(index);
+                          listCatatan.removeAt(index);
                         });
                       },
                       icon: Icon(Icons.clear),
@@ -821,6 +830,7 @@ class _DataEditPageState extends State<DataEditPage> {
     List<String> stat = order.spec.split('//');
     List<String> cat = order.catatan.split('/');
     var split = "-";
+    dropId = order.dropId;
 
     cat.forEach((element) {
       print("catatan: " + element);

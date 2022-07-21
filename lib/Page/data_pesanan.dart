@@ -57,6 +57,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
   int hasiTebal = 0;
   String cat = "";
   String idDrops = "";
+  String sessionItem = "";
 
   Future createDb() async {
     var order;
@@ -73,6 +74,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         catatan: cat,
         tw: tw,
         pc: pc,
+        sipSession: sessionItem,
         dropId: idDrops);
     await OrderDatabase.instance.create(order);
     setState(() {
@@ -138,14 +140,17 @@ class _DataPesananPageState extends State<DataPesananPage> {
       specLebar += model.item + "-" + model.tebal + " // ";
       cat += model.catatan + "-" + " / ";
       idDrops += _dataItem!.idBarang + " ";
+      sessionItem += "#" + _dataItem!.idBarang + "#" + model.item + "#" + model.tebal + "#-#";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;
       });
+
     });
     print('Dropd Id: ' + _dataItem!.idBarang);
     print('Hasil Lebar: ' + hasiTebal.toString());
     print('Drop IDs ' + idDrops);
+    print('SESSION ITEMS: ' + sessionItem);
   }
 
   @override

@@ -45,9 +45,10 @@ class OrderDatabase {
     ${OrderFields.catatan} $textType,
     ${OrderFields.pc} $intType,
     ${OrderFields.tw} $intType,
-    ${OrderFields.dropId} $textType
-    
- 
+    ${OrderFields.dropId} $textType,
+    ${OrderFields.sipSession} $textType
+   
+
     )''');
   }
 
@@ -88,7 +89,7 @@ class OrderDatabase {
     try {
       db.rawUpdate('''
     UPDATE ${tableOrder} 
-    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?, ${OrderFields.pc} = ?, ${OrderFields.tw} = ?, ${OrderFields.catatan} = ?, ${OrderFields.dropId} = ? 
+    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?, ${OrderFields.pc} = ?, ${OrderFields.tw} = ?, ${OrderFields.catatan} = ?, ${OrderFields.dropId} = ?, ${OrderFields.sipSession} = ?  
     WHERE ${OrderFields.id} = ?
     ''', [
         orderModel.items,
@@ -104,6 +105,7 @@ class OrderDatabase {
         orderModel.tw,
         orderModel.catatan,
         orderModel.dropId,
+        orderModel.sipSession,
         orderModel.id
       ]);
     } catch (e) {

@@ -55,6 +55,7 @@ class _DataEditPageState extends State<DataEditPage> {
   var itemRangkum;
   var tebalRangkum;
   var catatanRangkum;
+  int idxEdit = -1;
   List<String> listItems = [];
   List<String> listTebal = [];
   List<String> listCatatan = [];
@@ -488,21 +489,24 @@ class _DataEditPageState extends State<DataEditPage> {
         onPressed: () async {
           setState(() {
             print("List: " + listItems.length.toString());
-            for (int i = 0; i < listItems.length; i++) {
+            for(int i = 0; i < listItems.length; i++){
               if(listItems[i].toString() == dropdownItem.toString()){
-                listItems[i] = dropdownItem.toString();
-                listTebal[i] = tebalCont.text.toString();
-                listCatatan[i] = catatanCont.text.toString();
-            } else if(listItems[i].toString() != dropdownItem.toString()){
-                listItems.add(dropdownItem.toString());
-                listTebal.add(tebalCont.text.toString());
-                listCatatan.add(catatanCont.text.toString());
+                idxEdit = i;
               }
-              }
+            }
+            if(idxEdit == -1){
+              listItems.add(dropdownItem.toString());
+              listTebal.add(tebalCont.text.toString());
+              listCatatan.add(catatanCont.text.toString());
+              print(idxEdit);
+            }else{
+              listTebal[idxEdit] =  tebalCont.text.toString();
+              listCatatan[idxEdit] =  catatanCont.text.toString();
+            }
 
+            idxEdit = -1;
 
           });
-
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

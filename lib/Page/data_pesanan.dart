@@ -138,17 +138,18 @@ class _DataPesananPageState extends State<DataPesananPage> {
 
   masukData() {
     _listTambahData.forEach((ModelTambahData model) {
-      specLebar += model.item + "-" + model.tebal + " // ";
-      cat += model.catatan + "-" + " / ";
-      idDrops += _dataItem!.idBarang + " ";
-      sessionItem += _dataItem!.idBarang + "#" + model.item + "#" + model.tebal + "#-##";
+      specLebar += model.item + "-" + model.tebal.replaceAll(" ", "") + "//";
+      cat += model.catatan + "-" + "/";
+      idDrops += model.dropId + "*" + "/";
+      sessionItem += model.dropId + "#" + model.item + "#" + model.tebal.replaceAll(" ", "") + "#-##";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;
       });
+      print("ID: " + model.dropId);
 
     });
-    print('Dropd Id: ' + _dataItem!.idBarang);
+
     print('Hasil Lebar: ' + hasiTebal.toString());
     print('Drop IDs ' + idDrops);
     print('SESSION ITEMS: ' + sessionItem);
@@ -504,7 +505,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
               }
             }
             if(idx == -1){
-              _listTambahData.add(ModelTambahData(_dataItem!.nama, tebalCont.text, catatanCont.text));
+              _listTambahData.add(ModelTambahData(_dataItem!.nama, tebalCont.text, catatanCont.text, _dataItem!.idBarang));
             }else{
               _listTambahData[idx].tebal =  tebalCont.text.toString();
               _listTambahData[idx].catatan =  catatanCont.text.toString();

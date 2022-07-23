@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Model/EditModel.dart';
 import 'package:quotes_app/Model/OrderModel.dart';
+import 'package:quotes_app/Model/dropModel.dart';
 import 'package:quotes_app/Model/hasil_model.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ringkasan_pesanan.dart';
@@ -25,13 +27,14 @@ class DataEditPage extends StatefulWidget {
 }
 
 class _DataEditPageState extends State<DataEditPage> {
-  ModelTambahData? tambahData;
+  EditModel? tambahData;
   String _none = "-";
   HasilModel? _hasilModel;
-  List<ModelTambahData> _listTambahData = [];
+  List<EditModel> _listTambahData = [];
   UserModel? _user;
+  DataItem? _dataItem;
   String? dropdownItem;
-  List? itemList;
+  List<DataItem>? itemList;
   int _selectedValueRadioButtonPC = 1;
   int _selectedValueRadioButtonTW = 8;
   bool isShown = false;
@@ -56,27 +59,47 @@ class _DataEditPageState extends State<DataEditPage> {
   var tebalRangkum;
   var catatanRangkum;
   int idxEdit = -1;
+  DropModel? _dropModel;
+  int hasil = 0;
   List<String> listItems = [];
   List<String> listTebal = [];
   List<String> listCatatan = [];
+  List<String> listId = [];
   var realItem = "";
   String sips = "";
-  var dropId = "";
+  var dropId;
+  String idDrops = "";
   bool drop = false;
   updateItem() {
-    for (int i = 0; i < listItems.length; i++) {
-      realItem += listItems[i] + " - " + listTebal[i] + "//";
+    print("ISI LENGTH LIST KETIKA UPDATE"+ _listTambahData.length.toString());
+    _listTambahData.forEach((EditModel model) {
+      print("DROP ID UPDATE: "+ model.dropId);
+      print("DROP ITEM UPDATE: "+ model.item);
+      print("DROP TEBAL UPDATE: "+ model.tebal);
+      print("DROP catatan UPDATE: "+ model.catatan);
+      realItem += model.item.toString() + "-" + model.tebal.toString() + "//";
       print("REAL ITEM: " + realItem);
-      sips += "#" + dropId + "#" + listItems[i] + "#" + listTebal[i] + "#-#";
-    }
+      sips += model.dropId.toString() + "#" + model.item.toString() + "#" + model.tebal.toString() + "#" + "#-##";
+      print("SIPS: "+ sips);
+      catatan += model.catatan.toString() + "-" + "/";
+      print("CATATAN: " + catatan);
+      idDrops += model.dropId.toString() + "*" + "/";
+      print("Model ID: " + idDrops);
+      var lebarInt = int.parse(model.tebal);
+      setState(() {
+        hasil += lebarInt;
+      });
+    });
+    // print("SIPS: " + sips);
+    // print("DROP ID EDIT:  " + idDrops);
+    print('Hasil Lebar: ' + hasil.toString());
   }
 
   Future update() async {
-    final prefs = await SharedPreferences.getInstance();
     final order = OrderModel(
         id: widget.id,
         items: nameCont.text,
-        tebal: tebalCont.text,
+        tebal: hasil.toString(),
         lebar: _lebar.text,
         panjang: _panjang.text,
         spec: realItem,
@@ -88,7 +111,7 @@ class _DataEditPageState extends State<DataEditPage> {
         tw: widget.tw,
         pc: widget.pc,
         sipSession: sips,
-        dropId: dropId);
+        dropId: idDrops);
     await OrderDatabase.instance.update(order);
   }
 
@@ -101,12 +124,12 @@ class _DataEditPageState extends State<DataEditPage> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-        await http.post(Uri.parse(url), body: {'data': dataBase64});
-    var resBody = json.decode(response.body);
+    await http.post(Uri.parse(url), body: {'data': dataBase64});
+    _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
     setState(() {
-      itemList = resBody['data_item'];
+      itemList = _dropModel!.dataItem;
     });
-    print(resBody);
+    print(itemList);
     return "Success";
   }
 
@@ -131,7 +154,7 @@ class _DataEditPageState extends State<DataEditPage> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-        await http.post(Uri.parse(url), body: {'data': dataBase64});
+    await http.post(Uri.parse(url), body: {'data': dataBase64});
     _hasilModel = HasilModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       _none = _hasilModel!.grandTotalDisplay;
@@ -159,74 +182,74 @@ class _DataEditPageState extends State<DataEditPage> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 20, top: 30, right: 20, bottom: 30),
+            child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, top: 30, right: 20, bottom: 30),
-                  child: Column(
-                    children: [
-                      inputFormName(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      radioButtonPC(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      itemDropDown(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      inputFormNote(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      addButton(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      isShown ? orderSum() : Container(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Divider(
-                        color: Colors.black54,
-                        thickness: 1,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      inputFormPitch(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      radioButtonTW(),
-                      Divider(
-                        color: Colors.black54,
-                        thickness: 1,
-                      ),
-                      inputFormDiscount(),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      textPPN(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      countButton(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      nextButton(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      backButton(),
-                    ],
-                  ),
+                inputFormName(),
+                SizedBox(
+                  height: 10,
                 ),
+                radioButtonPC(),
+                SizedBox(
+                  height: 10,
+                ),
+                itemDropDown(),
+                SizedBox(
+                  height: 15,
+                ),
+                inputFormNote(),
+                SizedBox(
+                  height: 20,
+                ),
+                addButton(),
+                SizedBox(
+                  height: 10,
+                ),
+                isShown ? orderSum() : Container(),
+                SizedBox(
+                  height: 15,
+                ),
+                Divider(
+                  color: Colors.black54,
+                  thickness: 1,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                inputFormPitch(),
+                SizedBox(
+                  height: 15,
+                ),
+                radioButtonTW(),
+                Divider(
+                  color: Colors.black54,
+                  thickness: 1,
+                ),
+                inputFormDiscount(),
+                SizedBox(
+                  height: 25,
+                ),
+                textPPN(),
+                SizedBox(
+                  height: 15,
+                ),
+                countButton(),
+                SizedBox(
+                  height: 20,
+                ),
+                nextButton(),
+                SizedBox(
+                  height: 20,
+                ),
+                backButton(),
               ],
             ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -418,26 +441,27 @@ class _DataEditPageState extends State<DataEditPage> {
             color: Colors.grey,
           ),
         ),
-        child: DropdownButton<String>(
+        child: DropdownButton<DataItem>(
           hint: Text("Pilih Item"),
           isExpanded: true,
-          value: dropdownItem,
+          value: _dataItem,
           icon: Icon(Icons.arrow_drop_down),
-          onChanged: (String? newValue) {
+          onChanged: (DataItem? newValue) {
             setState(() {
-              dropdownItem = newValue!;
+              _dataItem = newValue!;
             });
+            print("DropDown Item: " + _dataItem!.nama.toString());
           },
           isDense: true,
           underline: SizedBox.shrink(),
-          items: itemList?.map((item) {
-                return DropdownMenuItem(
-                  child: Text(
-                    item['nama'].toString(),
-                  ),
-                  value: item['nama'].toString(),
-                );
-              }).toList() ??
+          items: itemList?.map((DataItem item) {
+            return DropdownMenuItem<DataItem>(
+              child: Text(
+                item.nama,
+              ),
+              value: item,
+            );
+          }).toList() ??
               [],
         ));
   }
@@ -488,24 +512,22 @@ class _DataEditPageState extends State<DataEditPage> {
         ),
         onPressed: () async {
           setState(() {
-            print("List: " + listItems.length.toString());
-            for(int i = 0; i < listItems.length; i++){
-              if(listItems[i].toString() == dropdownItem.toString()){
+            print("List: " + _listTambahData.length.toString());
+            for (int i = 0; i < _listTambahData.length; i++) {
+              if (_listTambahData[i].item == _dataItem!.nama) {
                 idxEdit = i;
               }
             }
-            if(idxEdit == -1){
-              listItems.add(dropdownItem.toString());
-              listTebal.add(tebalCont.text.toString());
-              listCatatan.add(catatanCont.text.toString());
+            if (idxEdit == -1) {
+              _listTambahData.add(EditModel(_dataItem!.nama, tebalCont.text,
+                  catatanCont.text, _dataItem!.idBarang));
               print(idxEdit);
-            }else{
-              listTebal[idxEdit] =  tebalCont.text.toString();
-              listCatatan[idxEdit] =  catatanCont.text.toString();
+            } else {
+              _listTambahData[idxEdit].tebal = tebalCont.text.toString();
+              _listTambahData[idxEdit].catatan = catatanCont.text.toString();
             }
 
             idxEdit = -1;
-
           });
         },
         style: ButtonStyle(
@@ -524,7 +546,7 @@ class _DataEditPageState extends State<DataEditPage> {
     return Container(
       height: 150,
       child: ListView.builder(
-          itemCount: listItems.length,
+          itemCount: _listTambahData.length,
           itemBuilder: (context, index) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -533,16 +555,14 @@ class _DataEditPageState extends State<DataEditPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        listItems[index] + ' - ' + listTebal[index],
+                        _listTambahData[index].item + ' - ' + _listTambahData[index].tebal,
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          listItems.removeAt(index);
-                          listTebal.removeAt(index);
-                          listCatatan.removeAt(index);
+                          _listTambahData.removeAt(index);
                         });
                       },
                       icon: Icon(Icons.clear),
@@ -550,7 +570,7 @@ class _DataEditPageState extends State<DataEditPage> {
                     )
                   ],
                 ),
-                Text(listCatatan[index], style: TextStyle(fontSize: 16)),
+                Text(_listTambahData[index].catatan, style: TextStyle(fontSize: 16)),
                 SizedBox(
                   height: 10,
                 ),
@@ -742,13 +762,13 @@ class _DataEditPageState extends State<DataEditPage> {
         _isLoadingHasil
             ? CircularProgressIndicator()
             : Text(
-                _none,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+          _none,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
     );
   }
@@ -829,31 +849,45 @@ class _DataEditPageState extends State<DataEditPage> {
 
   void getDatabyId() async {
     OrderModel order = await OrderDatabase.instance.read(widget.id);
-    print("DATA ID: " + order.id.toString());
-    print("DATA order.spec: " + order.spec.toString());
     List<String> stat = order.spec.split('//');
     List<String> cat = order.catatan.split('/');
+    print("ID DATABASE: " + order.dropId);
+    List<String> id = order.dropId.split('/');
+
     var split = "-";
-    dropId = order.dropId;
 
     cat.forEach((element) {
       print("catatan: " + element);
     });
 
-    for (int i = 0; i < stat.length - 1; i++) {
+    id.forEach((element) {
+      print("CATATAN SETELAH SPLIT: " + element);
+    });
+
+    for (int i = 0; i < stat.length -1; i++) {
       itemRangkum = stat[i].substring(0, stat[i].indexOf(split));
       tebalRangkum = stat[i].substring(stat[i].indexOf(split) + 1);
       print("ITEM : " + itemRangkum);
       listItems.add(itemRangkum);
       listTebal.add(tebalRangkum);
+
     }
 
-    for (int i = 0; i < cat.length - 1; i++) {
+    for (int i = 0; i < cat.length-1; i++) {
       catatanRangkum = cat[i].substring(0, cat[i].indexOf(split));
       print("Catatan split : " + catatanRangkum);
       listCatatan.add(catatanRangkum);
     }
 
+    for (int i = 0; i < id.length-1; i++) {
+      dropId = id[i].substring(0, id[i].indexOf("*"));
+      print("ID split : " + dropId);
+      listId.add(dropId);
+    }
+
+    for(int i = 0; i < listItems.length; i++){
+      _listTambahData.add(EditModel(listItems[i], listTebal[i], listCatatan[i], listId[i]));
+    }
     setState(() {
       nameCont.text = order.items;
       colorCont.text = order.color;

@@ -1,10 +1,10 @@
-class ModelTambahData {
+class EditModel {
   String item;
   String tebal;
   String catatan;
   String dropId;
 
-  ModelTambahData(this.item, this.tebal, this.catatan, this.dropId);
+  EditModel(this.item, this.tebal, this.catatan, this.dropId);
 
   String get getItem {
     return item;

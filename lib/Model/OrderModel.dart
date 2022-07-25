@@ -18,7 +18,10 @@ class OrderFields {
     pc,
     tw,
     dropId,
-    sipSession
+    sipSession,
+    pitch,
+    hrgZip,
+    lbrZip
   ];
   static final String id = '_id';
   static final String items = 'items';
@@ -35,6 +38,9 @@ class OrderFields {
   static final String pc = 'pc';
   static final String dropId = 'dropId';
   static final String sipSession = 'sipSession';
+  static final String pitch = 'pitch';
+  static final String hrgZip = 'hrgZip';
+  static final String lbrZip = 'lbrZip';
 }
 
 class OrderModel {
@@ -53,6 +59,9 @@ class OrderModel {
   final int pc;
   final int tw;
   final String dropId;
+  final String pitch;
+  final String hrgZip;
+  final String lbrZip;
   OrderModel(
       {required this.items,
       required this.tebal,
@@ -67,7 +76,10 @@ class OrderModel {
       required this.pc,
       required this.tw,
       required this.dropId,
-        required this.sipSession,
+      required this.sipSession,
+      required this.pitch,
+      required this.hrgZip,
+      required this.lbrZip,
       this.id});
 
   static OrderModel fromJson(Map<String, Object?> json) => OrderModel(
@@ -85,6 +97,9 @@ class OrderModel {
       tw: json[OrderFields.tw] as int,
       dropId: json[OrderFields.dropId] as String,
       sipSession: json[OrderFields.sipSession] as String,
+      pitch: json[OrderFields.pitch] as String,
+      hrgZip: json[OrderFields.hrgZip] as String,
+      lbrZip: json[OrderFields.lbrZip] as String,
       id: json[OrderFields.id] as int?);
 
   Map<String, Object?> toJson() => {
@@ -102,39 +117,48 @@ class OrderModel {
         OrderFields.tw: tw,
         OrderFields.pc: pc,
         OrderFields.dropId: dropId,
-        OrderFields.sipSession: sipSession
+        OrderFields.sipSession: sipSession,
+        OrderFields.pitch: pitch,
+        OrderFields.hrgZip: hrgZip,
+        OrderFields.lbrZip: lbrZip,
       };
-  OrderModel copy({
-    int? id,
-    String? items,
-    String? tebal,
-    String? lebar,
-    String? panjang,
-    String? spec,
-    String? color,
-    String? qty,
-    String? disc,
-    String? catatan,
-    int? pc,
-    int? tw,
-    String? price,
-    String? dropId,
-    String? sipSession
-  }) =>
+  OrderModel copy(
+          {int? id,
+          String? items,
+          String? tebal,
+          String? lebar,
+          String? panjang,
+          String? spec,
+          String? color,
+          String? qty,
+          String? disc,
+          String? catatan,
+          int? pc,
+          int? tw,
+          String? price,
+          String? dropId,
+          String? sipSession,
+          String? pitch,
+          String? hrgZip,
+          String? lbrZip}) =>
       OrderModel(
-          id: id ?? this.id,
-          items: items ?? this.items,
-          tebal: tebal ?? this.tebal,
-          lebar: lebar ?? this.lebar,
-          panjang: panjang ?? this.panjang,
-          spec: spec ?? this.spec,
-          color: color ?? this.color,
-          qty: qty ?? this.qty,
-          disc: disc ?? this.disc,
-          catatan: catatan ?? this.catatan,
-          pc: pc ?? this.pc,
-          tw: tw ?? this.tw,
-          price: price ?? this.price,
-          dropId: dropId ?? this.dropId,
-          sipSession: sipSession ?? this.sipSession);
+        id: id ?? this.id,
+        items: items ?? this.items,
+        tebal: tebal ?? this.tebal,
+        lebar: lebar ?? this.lebar,
+        panjang: panjang ?? this.panjang,
+        spec: spec ?? this.spec,
+        color: color ?? this.color,
+        qty: qty ?? this.qty,
+        disc: disc ?? this.disc,
+        catatan: catatan ?? this.catatan,
+        pc: pc ?? this.pc,
+        tw: tw ?? this.tw,
+        price: price ?? this.price,
+        dropId: dropId ?? this.dropId,
+        sipSession: sipSession ?? this.sipSession,
+        pitch: pitch ?? this.pitch,
+        hrgZip: pitch ?? this.hrgZip,
+        lbrZip: pitch ?? this.lbrZip,
+      );
 }

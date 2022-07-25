@@ -2,32 +2,39 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Model/EditModel.dart';
 import 'package:quotes_app/Model/OrderModel.dart';
 import 'package:quotes_app/Model/dropModel.dart';
 import 'package:quotes_app/Model/hasil_model.dart';
-import 'package:quotes_app/Model/modelTambahData.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ringkasan_pesanan.dart';
 import 'package:http/http.dart' as http;
 import 'package:quotes_app/db_order.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DataPesananPage extends StatefulWidget {
-  const DataPesananPage({Key? key}) : super(key: key);
+import '../Model/modelTambahData.dart';
+
+class DupRangkumanEdit extends StatefulWidget {
+  final int pc;
+  final int tw;
+  final int? id;
+  const DupRangkumanEdit(
+      {Key? key, required this.id, required this.tw, required this.pc})
+      : super(key: key);
 
   @override
-  State<DataPesananPage> createState() => _DataPesananPageState();
+  State<DupRangkumanEdit> createState() => _DupRangkumanEditState();
 }
 
-class _DataPesananPageState extends State<DataPesananPage> {
-  ModelTambahData? _model;
-  List<ModelTambahData> _listTambahData = [];
-  DropModel? _dropModel;
-  DataItem? _dataItem;
+class _DupRangkumanEditState extends State<DupRangkumanEdit> {
+  EditModel? tambahData;
   String _none = "-";
   HasilModel? _hasilModel;
+  List<EditModel> _listTambahData = [];
   UserModel? _user;
-  List<DataItem> _itemlist = [];
+  DataItem? _dataItem;
+  String? dropdownItem;
+  List<DataItem>? itemList;
   int _selectedValueRadioButtonPC = 1;
   int _selectedValueRadioButtonTW = 8;
   bool isShown = false;
@@ -45,51 +52,76 @@ class _DataPesananPageState extends State<DataPesananPage> {
   bool _isLoading = false;
   bool _isLoadingHasil = false;
   String item = "";
-  String idItem = "";
-  int pc = 1;
-  int tw = 8;
   String jumlah = "";
   String catatan = "";
-  String pitch = "";
-  String hrgZipper = "";
-  String lbZipper = "";
-  String specLebar = "";
-  int hasiTebal = 0;
-  String cat = "";
+  var order;
+  var itemRangkum;
+  var tebalRangkum;
+  var catatanRangkum;
+  int idxEdit = -1;
+  DropModel? _dropModel;
+  int hasil = 0;
+  List<String> listItems = [];
+  List<String> listTebal = [];
+  List<String> listCatatan = [];
+  List<String> listId = [];
+  var realItem = "";
+  String sips = "";
+  var dropId;
   String idDrops = "";
-  String sessionItem = "";
-  int idx = -1;
+  bool drop = false;
+  updateItem() {
+    print("ISI LENGTH LIST KETIKA UPDATE" + _listTambahData.length.toString());
+    _listTambahData.forEach((EditModel model) {
+      print("DROP ID UPDATE: " + model.dropId);
+      print("DROP ITEM UPDATE: " + model.item);
+      print("DROP TEBAL UPDATE: " + model.tebal);
+      print("DROP catatan UPDATE: " + model.catatan);
+      realItem += model.item.toString() + "-" + model.tebal.toString() + "//";
+      print("REAL ITEM: " + realItem);
+      sips += model.dropId.toString() +
+          "#" +
+          model.item.toString() +
+          "#" +
+          model.tebal.toString() +
+          "#" +
+          "#-##";
+      print("SIPS: " + sips);
+      catatan += model.catatan.toString() + "-" + "/";
+      print("CATATAN: " + catatan);
+      idDrops += model.dropId.toString() + "*" + "/";
+      print("Model ID: " + idDrops);
+      var lebarInt = int.parse(model.tebal);
+      setState(() {
+        hasil += lebarInt;
+      });
+    });
+    // print("SIPS: " + sips);
+    // print("DROP ID EDIT:  " + idDrops);
+    print('Hasil Lebar: ' + hasil.toString());
+  }
 
-  Future createDb() async {
-    var order;
-    order = OrderModel(
+  Future update() async {
+    final order = OrderModel(
+        id: widget.id,
         items: nameCont.text,
-        tebal: hasiTebal.toString(),
+        tebal: hasil.toString(),
         lebar: _lebar.text,
         panjang: _panjang.text,
-        spec: specLebar,
+        spec: realItem,
         color: colorCont.text,
         qty: _qty.text,
         disc: _discount.text,
+        catatan: catatan,
         price: _hasilModel!.grandTotal.toString(),
-        catatan: cat,
-        tw: tw,
-        pc: pc,
-        sipSession: sessionItem,
+        tw: widget.tw,
+        pc: widget.pc,
+        sipSession: sips,
         dropId: idDrops,
+        hrgZip: _hrgZipper.text,
         pitch: _pitch.text,
-        lbrZip: _lbZipper.text,
-        hrgZip: _hrgZipper.text);
-    await OrderDatabase.instance.create(order);
-    setState(() {
-      pc = _selectedValueRadioButtonPC;
-      tw = _selectedValueRadioButtonTW;
-    });
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (BuildContext context) => RingkasanPesananPage(
-              pc: pc,
-              tw: tw,
-            )));
+        lbrZip: _lbZipper.text);
+    await OrderDatabase.instance.update(order);
   }
 
   Future<String> getItem() async {
@@ -104,9 +136,9 @@ class _DataPesananPageState extends State<DataPesananPage> {
         await http.post(Uri.parse(url), body: {'data': dataBase64});
     _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
     setState(() {
-      _itemlist = _dropModel!.dataItem;
+      itemList = _dropModel!.dataItem;
     });
-    print(_itemlist);
+    print(itemList);
     return "Success";
   }
 
@@ -122,7 +154,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
       "cash_disc": _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text,
-      "item": _dataItem!.nama,
+      "item": dropdownItem,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
       "hrgZipper": _hrgZipper.text,
       "etPitch": _pitch.text,
@@ -139,115 +171,94 @@ class _DataPesananPageState extends State<DataPesananPage> {
     });
   }
 
-  masukData() {
-    _listTambahData.forEach((ModelTambahData model) {
-      specLebar += model.item + "-" + model.tebal.replaceAll(" ", "") + "//";
-      cat += model.catatan + "-" + "/";
-      idDrops += model.dropId + "*" + "/";
-      sessionItem += model.dropId +
-          "#" +
-          model.item +
-          "#" +
-          model.tebal.replaceAll(" ", "") +
-          "#-##";
-      var lebarInt = int.parse(model.tebal);
-      setState(() {
-        hasiTebal += lebarInt;
-      });
-      print("ID: " + model.dropId);
-    });
-
-    print('Hasil Lebar: ' + hasiTebal.toString());
-    print('Drop IDs ' + idDrops);
-    print('SESSION ITEMS: ' + sessionItem);
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     getItem();
+    getDatabyId();
     super.initState();
-    isShown = false;
+    setState(() {
+      _selectedValueRadioButtonTW = widget.tw;
+      _selectedValueRadioButtonPC = widget.pc;
+    });
+    // isShown = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        appBar: appBarQuote("2. Data Pesanan"),
-        body: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20, top: 30, right: 20, bottom: 30),
-                    child: Column(
-                      children: [
-                        inputFormName(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        radioButtonPC(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        itemDropDown(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        inputFormNote(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        addButton(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        isShown ? orderSum() : Container(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Divider(
-                          color: Colors.black54,
-                          thickness: 1,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        inputFormPitch(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        radioButtonTW(),
-                        Divider(
-                          color: Colors.black54,
-                          thickness: 1,
-                        ),
-                        inputFormDiscount(),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        textPPN(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        countButton(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        nextButton(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        backButton(),
-                      ],
-                    ),
+    return Scaffold(
+      appBar: appBarQuote("Edit Pesanan"),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, top: 30, right: 20, bottom: 30),
+                  child: Column(
+                    children: [
+                      inputFormName(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      radioButtonPC(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      itemDropDown(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      inputFormNote(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      addButton(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      isShown ? orderSum() : Container(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Divider(
+                        color: Colors.black54,
+                        thickness: 1,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      inputFormPitch(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      radioButtonTW(),
+                      Divider(
+                        color: Colors.black54,
+                        thickness: 1,
+                      ),
+                      inputFormDiscount(),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      textPPN(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      countButton(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      nextButton(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      backButton(),
+                    ],
                   ),
-                ],
-              ),
-      ),
+                ),
+              ],
+            ),
     );
   }
 
@@ -446,20 +457,21 @@ class _DataPesananPageState extends State<DataPesananPage> {
           icon: Icon(Icons.arrow_drop_down),
           onChanged: (DataItem? newValue) {
             setState(() {
-              _dataItem = newValue;
+              _dataItem = newValue!;
             });
-            print("DATA INDEX: " + _dataItem!.idBarang.toString());
+            print("DropDown Item: " + _dataItem!.nama.toString());
           },
           isDense: true,
           underline: SizedBox.shrink(),
-          items: _itemlist.map((DataItem item) {
-            return DropdownMenuItem<DataItem>(
-              child: Text(
-                item.nama,
-              ),
-              value: item,
-            );
-          }).toList(),
+          items: itemList?.map((DataItem item) {
+                return DropdownMenuItem<DataItem>(
+                  child: Text(
+                    item.nama,
+                  ),
+                  value: item,
+                );
+              }).toList() ??
+              [],
         ));
   }
 
@@ -509,27 +521,23 @@ class _DataPesananPageState extends State<DataPesananPage> {
         ),
         onPressed: () async {
           setState(() {
+            print("List: " + _listTambahData.length.toString());
             for (int i = 0; i < _listTambahData.length; i++) {
-              if (_listTambahData[i].item == _dataItem!.nama.toString()) {
-                idx = i;
+              if (_listTambahData[i].item == _dataItem!.nama) {
+                idxEdit = i;
               }
             }
-            if (idx == -1) {
-              _listTambahData.add(ModelTambahData(_dataItem!.nama,
-                  tebalCont.text, catatanCont.text, _dataItem!.idBarang));
+            if (idxEdit == -1) {
+              _listTambahData.add(EditModel(_dataItem!.nama, tebalCont.text,
+                  catatanCont.text, _dataItem!.idBarang));
+              print(idxEdit);
             } else {
-              _listTambahData[idx].tebal = tebalCont.text.toString();
-              _listTambahData[idx].catatan = catatanCont.text.toString();
+              _listTambahData[idxEdit].tebal = tebalCont.text.toString();
+              _listTambahData[idxEdit].catatan = catatanCont.text.toString();
             }
 
-            idx = -1;
+            idxEdit = -1;
           });
-
-          isShown = true;
-          if (isShown == true) {
-            tebalCont.clear();
-            catatanCont.clear();
-          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -545,7 +553,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
 
   Widget orderSum() {
     return Container(
-      height: 100,
+      height: 150,
       child: ListView.builder(
           itemCount: _listTambahData.length,
           itemBuilder: (context, index) {
@@ -556,9 +564,9 @@ class _DataPesananPageState extends State<DataPesananPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        _listTambahData[index].item.toString() +
+                        _listTambahData[index].item +
                             ' - ' +
-                            _listTambahData[index].tebal.toString(),
+                            _listTambahData[index].tebal,
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
@@ -573,7 +581,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
                     )
                   ],
                 ),
-                Text(_listTambahData[index].catatan.toString(),
+                Text(_listTambahData[index].catatan,
                     style: TextStyle(fontSize: 16)),
                 SizedBox(
                   height: 10,
@@ -786,16 +794,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           "Hitung",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () async {
-          setState(() {
-            pitch = _pitch.text;
-            hrgZipper = _hrgZipper.text;
-            lbZipper = _lbZipper.text;
-          });
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString("pitch", pitch);
-          prefs.setString("hrgZipper", hrgZipper);
-          prefs.setString("lbZipper", lbZipper);
+        onPressed: () {
           getHasil();
         },
         style: ButtonStyle(
@@ -820,8 +819,9 @@ class _DataPesananPageState extends State<DataPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          masukData();
-          createDb();
+          updateItem();
+          update();
+          Navigator.pop(context, 'update');
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -857,5 +857,58 @@ class _DataPesananPageState extends State<DataPesananPage> {
         ),
       ),
     );
+  }
+
+  void getDatabyId() async {
+    OrderModel order = await OrderDatabase.instance.read(widget.id);
+    List<String> stat = order.spec.split('//');
+    List<String> cat = order.catatan.split('/');
+    print("ID DATABASE: " + order.dropId);
+    List<String> id = order.dropId.split('/');
+
+    var split = "-";
+
+    cat.forEach((element) {
+      print("catatan: " + element);
+    });
+
+    id.forEach((element) {
+      print("CATATAN SETELAH SPLIT: " + element);
+    });
+
+    for (int i = 0; i < stat.length - 1; i++) {
+      itemRangkum = stat[i].substring(0, stat[i].indexOf(split));
+      tebalRangkum = stat[i].substring(stat[i].indexOf(split) + 1);
+      print("ITEM : " + itemRangkum);
+      listItems.add(itemRangkum);
+      listTebal.add(tebalRangkum);
+    }
+
+    for (int i = 0; i < cat.length - 1; i++) {
+      catatanRangkum = cat[i].substring(0, cat[i].indexOf(split));
+      print("Catatan split : " + catatanRangkum);
+      listCatatan.add(catatanRangkum);
+    }
+
+    for (int i = 0; i < id.length - 1; i++) {
+      dropId = id[i].substring(0, id[i].indexOf("*"));
+      print("ID split : " + dropId);
+      listId.add(dropId);
+    }
+
+    for (int i = 0; i < listItems.length; i++) {
+      _listTambahData.add(
+          EditModel(listItems[i], listTebal[i], listCatatan[i], listId[i]));
+    }
+    setState(() {
+      nameCont.text = order.items;
+      colorCont.text = order.color;
+      _qty.text = order.qty;
+      _lebar.text = order.lebar;
+      _panjang.text = order.panjang;
+      // dropdownItem = order.spec;
+      tebalCont.text = order.tebal;
+      isShown = true;
+    });
   }
 }

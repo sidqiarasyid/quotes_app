@@ -71,16 +71,22 @@ class _DataEditPageState extends State<DataEditPage> {
   String idDrops = "";
   bool drop = false;
   updateItem() {
-    print("ISI LENGTH LIST KETIKA UPDATE"+ _listTambahData.length.toString());
+    print("ISI LENGTH LIST KETIKA UPDATE" + _listTambahData.length.toString());
     _listTambahData.forEach((EditModel model) {
-      print("DROP ID UPDATE: "+ model.dropId);
-      print("DROP ITEM UPDATE: "+ model.item);
-      print("DROP TEBAL UPDATE: "+ model.tebal);
-      print("DROP catatan UPDATE: "+ model.catatan);
+      print("DROP ID UPDATE: " + model.dropId);
+      print("DROP ITEM UPDATE: " + model.item);
+      print("DROP TEBAL UPDATE: " + model.tebal);
+      print("DROP catatan UPDATE: " + model.catatan);
       realItem += model.item.toString() + "-" + model.tebal.toString() + "//";
       print("REAL ITEM: " + realItem);
-      sips += model.dropId.toString() + "#" + model.item.toString() + "#" + model.tebal.toString() + "#" + "#-##";
-      print("SIPS: "+ sips);
+      sips += model.dropId.toString() +
+          "#" +
+          model.item.toString() +
+          "#" +
+          model.tebal.toString() +
+          "#" +
+          "#-##";
+      print("SIPS: " + sips);
       catatan += model.catatan.toString() + "-" + "/";
       print("CATATAN: " + catatan);
       idDrops += model.dropId.toString() + "*" + "/";
@@ -111,7 +117,10 @@ class _DataEditPageState extends State<DataEditPage> {
         tw: widget.tw,
         pc: widget.pc,
         sipSession: sips,
-        dropId: idDrops);
+        dropId: idDrops,
+        pitch: '',
+        lbrZip: '',
+        hrgZip: '');
     await OrderDatabase.instance.update(order);
   }
 
@@ -124,7 +133,7 @@ class _DataEditPageState extends State<DataEditPage> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-    await http.post(Uri.parse(url), body: {'data': dataBase64});
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
     _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       itemList = _dropModel!.dataItem;
@@ -154,7 +163,7 @@ class _DataEditPageState extends State<DataEditPage> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-    await http.post(Uri.parse(url), body: {'data': dataBase64});
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
     _hasilModel = HasilModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       _none = _hasilModel!.grandTotalDisplay;
@@ -182,74 +191,74 @@ class _DataEditPageState extends State<DataEditPage> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 20, top: 30, right: 20, bottom: 30),
-            child: Column(
               children: [
-                inputFormName(),
-                SizedBox(
-                  height: 10,
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, top: 30, right: 20, bottom: 30),
+                  child: Column(
+                    children: [
+                      inputFormName(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      radioButtonPC(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      itemDropDown(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      inputFormNote(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      addButton(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      isShown ? orderSum() : Container(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Divider(
+                        color: Colors.black54,
+                        thickness: 1,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      inputFormPitch(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      radioButtonTW(),
+                      Divider(
+                        color: Colors.black54,
+                        thickness: 1,
+                      ),
+                      inputFormDiscount(),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      textPPN(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      countButton(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      nextButton(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      backButton(),
+                    ],
+                  ),
                 ),
-                radioButtonPC(),
-                SizedBox(
-                  height: 10,
-                ),
-                itemDropDown(),
-                SizedBox(
-                  height: 15,
-                ),
-                inputFormNote(),
-                SizedBox(
-                  height: 20,
-                ),
-                addButton(),
-                SizedBox(
-                  height: 10,
-                ),
-                isShown ? orderSum() : Container(),
-                SizedBox(
-                  height: 15,
-                ),
-                Divider(
-                  color: Colors.black54,
-                  thickness: 1,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                inputFormPitch(),
-                SizedBox(
-                  height: 15,
-                ),
-                radioButtonTW(),
-                Divider(
-                  color: Colors.black54,
-                  thickness: 1,
-                ),
-                inputFormDiscount(),
-                SizedBox(
-                  height: 25,
-                ),
-                textPPN(),
-                SizedBox(
-                  height: 15,
-                ),
-                countButton(),
-                SizedBox(
-                  height: 20,
-                ),
-                nextButton(),
-                SizedBox(
-                  height: 20,
-                ),
-                backButton(),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -455,13 +464,13 @@ class _DataEditPageState extends State<DataEditPage> {
           isDense: true,
           underline: SizedBox.shrink(),
           items: itemList?.map((DataItem item) {
-            return DropdownMenuItem<DataItem>(
-              child: Text(
-                item.nama,
-              ),
-              value: item,
-            );
-          }).toList() ??
+                return DropdownMenuItem<DataItem>(
+                  child: Text(
+                    item.nama,
+                  ),
+                  value: item,
+                );
+              }).toList() ??
               [],
         ));
   }
@@ -555,7 +564,9 @@ class _DataEditPageState extends State<DataEditPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        _listTambahData[index].item + ' - ' + _listTambahData[index].tebal,
+                        _listTambahData[index].item +
+                            ' - ' +
+                            _listTambahData[index].tebal,
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
@@ -570,7 +581,8 @@ class _DataEditPageState extends State<DataEditPage> {
                     )
                   ],
                 ),
-                Text(_listTambahData[index].catatan, style: TextStyle(fontSize: 16)),
+                Text(_listTambahData[index].catatan,
+                    style: TextStyle(fontSize: 16)),
                 SizedBox(
                   height: 10,
                 ),
@@ -762,13 +774,13 @@ class _DataEditPageState extends State<DataEditPage> {
         _isLoadingHasil
             ? CircularProgressIndicator()
             : Text(
-          _none,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+                _none,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
       ],
     );
   }
@@ -864,29 +876,29 @@ class _DataEditPageState extends State<DataEditPage> {
       print("CATATAN SETELAH SPLIT: " + element);
     });
 
-    for (int i = 0; i < stat.length -1; i++) {
+    for (int i = 0; i < stat.length - 1; i++) {
       itemRangkum = stat[i].substring(0, stat[i].indexOf(split));
       tebalRangkum = stat[i].substring(stat[i].indexOf(split) + 1);
       print("ITEM : " + itemRangkum);
       listItems.add(itemRangkum);
       listTebal.add(tebalRangkum);
-
     }
 
-    for (int i = 0; i < cat.length-1; i++) {
+    for (int i = 0; i < cat.length - 1; i++) {
       catatanRangkum = cat[i].substring(0, cat[i].indexOf(split));
       print("Catatan split : " + catatanRangkum);
       listCatatan.add(catatanRangkum);
     }
 
-    for (int i = 0; i < id.length-1; i++) {
+    for (int i = 0; i < id.length - 1; i++) {
       dropId = id[i].substring(0, id[i].indexOf("*"));
       print("ID split : " + dropId);
       listId.add(dropId);
     }
 
-    for(int i = 0; i < listItems.length; i++){
-      _listTambahData.add(EditModel(listItems[i], listTebal[i], listCatatan[i], listId[i]));
+    for (int i = 0; i < listItems.length; i++) {
+      _listTambahData.add(
+          EditModel(listItems[i], listTebal[i], listCatatan[i], listId[i]));
     }
     setState(() {
       nameCont.text = order.items;

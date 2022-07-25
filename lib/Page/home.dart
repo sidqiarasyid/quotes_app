@@ -13,7 +13,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return WillPopScope(
+      onWillPop: () async => true,
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Container(

@@ -4,24 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:quotes_app/Model/dropModel.dart';
+import 'package:quotes_app/Model/dupModel.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/data_pesanan.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DataCustomerPage extends StatefulWidget {
-  const DataCustomerPage({Key? key}) : super(key: key);
+class DupCustomerPage extends StatefulWidget {
+  final String idPq;
+  const DupCustomerPage({Key? key, required this.idPq}) : super(key: key);
 
   @override
-  State<DataCustomerPage> createState() => _DataCustomerPageState();
+  State<DupCustomerPage> createState() => _DupCustomerPageState();
 }
 
-class _DataCustomerPageState extends State<DataCustomerPage> {
+class _DupCustomerPageState extends State<DupCustomerPage> {
   DropModel? _dropModel;
   DataCompany? _dataCompany;
   UserModel? _user;
   List<DataCompany> _itemCompany = [];
   List<DataCustomer> _itemCustomer = [];
+  DupModel? _dup;
   String Idcompany = "";
   String company = "";
   String namaCust = "";
@@ -67,11 +70,32 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
     return "Success";
   }
 
+  getDuplicate() async {
+    final prefs = await SharedPreferences.getInstance();
+    String url = "http://128.199.81.36/api/list_detail_pq.php";
+    Map<String, dynamic> data = {
+      "api_key": "kspconnectpedia2020feb",
+      "id_sales": prefs.getString('username'),
+      "id_pq": widget.idPq,
+      // "id_pq": "2",
+    };
+    print("ID PQ: " + widget.idPq);
+    var dataUtf = utf8.encode(json.encode(data));
+    var dataBase64 = base64.encode(dataUtf);
+    final response =
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
+    _dup = DupModel.fromJson(json.decode(response.body.toString()));
+    setState(() {
+      nama.text = _dup!.data[0].namaCustomer;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     getCompany();
     getCustomer();
+    getDuplicate();
     super.initState();
   }
 
@@ -80,7 +104,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: appBarQuote("1. Data Customer"),
+        appBar: appBarQuote("1. Duplicate Customer"),
         body: SingleChildScrollView(
           child: Padding(
             padding:
@@ -258,8 +282,6 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           prefs.setString("noCust", noCust);
           prefs.setString("company", company);
           prefs.setString("Idcompany", Idcompany);
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => DataPesananPage()));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

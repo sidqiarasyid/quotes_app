@@ -140,44 +140,47 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarQuote("3. Ringkasan Pesanan"),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  listRangkuman(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    height: 1,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  addOrderButton(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  inputFormDetail(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  saveButton(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  cancelButton(),
-                ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: appBarQuote("3. Ringkasan Pesanan"),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    listRangkuman(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 1,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    addOrderButton(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    inputFormDetail(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    saveButton(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    cancelButton(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -559,8 +562,9 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => PriceQuotePage()));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => PriceQuotePage()),
+              (Route<dynamic> route) => false);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:quotes_app/Duplicate/dup_customer.dart';
+import 'package:quotes_app/Model/dupModel.dart';
 import 'package:quotes_app/Model/price_model.dart';
+import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ApproveAsSQPage.dart';
 import 'package:quotes_app/Page/data_customer.dart';
 import 'package:quotes_app/dup/dupCustomer.dart';
@@ -143,7 +146,8 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
       builder: (context) {
         var height = MediaQuery.of(context).size.height;
         return Container(
-            height: height * 0.75,
+            padding: EdgeInsets.only(top: 20),
+            height: height * 0.77,
             child: ListView.builder(
                 itemCount: items.length,
                 itemBuilder: (context, index) {
@@ -221,6 +225,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                           ),
                         ],
                       ),
+                      
                       Row(
                         children: [
                           Container(
@@ -313,7 +318,6 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
       },
     );
   }
-
   _launchUrl(String id) async {
     var url = 'http://128.199.81.36/generate-new.php?id=' + id;
     if (await canLaunch(url)) {

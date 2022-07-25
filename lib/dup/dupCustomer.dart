@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:quotes_app/Model/DupModel.dart';
 import 'package:quotes_app/Model/dropModel.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/data_pesanan.dart';
@@ -11,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:quotes_app/dup/dupRangkuman.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Model/DupModel.dart';
 import '../Model/OrderModel.dart';
 import '../db_order.dart';
 

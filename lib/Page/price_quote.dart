@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:quotes_app/Duplicate/dup_customer.dart';
 import 'package:quotes_app/Model/dupModel.dart';
 import 'package:quotes_app/Model/price_model.dart';
 import 'package:quotes_app/Model/user_model.dart';

@@ -6,6 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:quotes_app/Model/price_model.dart';
 import 'package:quotes_app/Page/ApproveAsSQPage.dart';
 import 'package:quotes_app/Page/data_customer.dart';
+import 'package:quotes_app/dup/dupCustomer.dart';
+import 'package:quotes_app/edit/editCustomer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
@@ -21,6 +23,7 @@ class PriceQuotePage extends StatefulWidget {
 class _PriceQuotePageState extends State<PriceQuotePage> {
   PriceModel? _priceModel;
   List<Datum> items = [];
+  bool isLoading = false;
 
   getPrice() async {
     final prefs = await SharedPreferences.getInstance();
@@ -39,6 +42,31 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
     });
   }
 
+  delete(String id) async {
+    setState(() {
+      isLoading = true;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    String url = "http://128.199.81.36/api/delete_pq.php";
+    Map<String, dynamic> data = {
+      "api_key": "kspconnectpedia2020feb",
+      "id_sales": prefs.getString('username').toString(),
+      "id_pq": id,
+    };
+    var dataUtf = utf8.encode(json.encode(data));
+    var dataBase64 = base64.encode(dataUtf);
+    final response =
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
+    jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      items.clear();
+      getPrice();
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     getPrice();
@@ -55,7 +83,11 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
           child: Column(
             children: [
               addPriceButton(),
-              listPriceQuote(),
+              isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : listPriceQuote(),
             ],
           ),
         ),
@@ -178,6 +210,92 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
                                         Colors.black),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 100,
+                            child: ElevatedButton(
+                              child: Text(
+                                "Duplicate",
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => DataCustomerDup(
+                                              idPq: items[index].idPq,
+                                            ))));
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            width: 100,
+                            child: ElevatedButton(
+                              child: Text(
+                                "Delete",
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              onPressed: () {
+                                delete(items[index].idPq);
+
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            width: 100,
+                            child: ElevatedButton(
+                              child: Text(
+                                "Edit PQ",
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: ((context) => DataCustomerEdit(idPq: items[index].idPq,))));
+
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                MaterialStateProperty.all<Color>(
+                                    Colors.black),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(

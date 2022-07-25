@@ -46,7 +46,10 @@ class OrderDatabase {
     ${OrderFields.pc} $intType,
     ${OrderFields.tw} $intType,
     ${OrderFields.dropId} $textType,
-    ${OrderFields.sipSession} $textType
+    ${OrderFields.sipSession} $textType,
+    ${OrderFields.pitch} $textType,
+    ${OrderFields.hrgZip} $textType,
+    ${OrderFields.lbrZip} $textType
    
 
     )''');
@@ -89,7 +92,7 @@ class OrderDatabase {
     try {
       db.rawUpdate('''
     UPDATE ${tableOrder} 
-    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?, ${OrderFields.pc} = ?, ${OrderFields.tw} = ?, ${OrderFields.catatan} = ?, ${OrderFields.dropId} = ?, ${OrderFields.sipSession} = ?  
+    SET ${OrderFields.items} = ?, ${OrderFields.lebar} = ?, ${OrderFields.panjang} = ?, ${OrderFields.tebal} = ?, ${OrderFields.spec} = ?, ${OrderFields.color} = ?, ${OrderFields.qty} = ?, ${OrderFields.disc} = ?, ${OrderFields.price} = ?, ${OrderFields.pc} = ?, ${OrderFields.tw} = ?, ${OrderFields.catatan} = ?, ${OrderFields.dropId} = ?, ${OrderFields.sipSession} = ?, ${OrderFields.pitch} = ?, ${OrderFields.hrgZip} = ?, ${OrderFields.lbrZip} = ?
     WHERE ${OrderFields.id} = ?
     ''', [
         orderModel.items,
@@ -106,6 +109,9 @@ class OrderDatabase {
         orderModel.catatan,
         orderModel.dropId,
         orderModel.sipSession,
+        orderModel.pitch,
+        orderModel.hrgZip,
+        orderModel.lbrZip,
         orderModel.id
       ]);
     } catch (e) {

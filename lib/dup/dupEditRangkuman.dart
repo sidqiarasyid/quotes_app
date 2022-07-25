@@ -14,19 +14,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/modelTambahData.dart';
 
-class DataEditPage extends StatefulWidget {
+class DupRangkumanEdit extends StatefulWidget {
   final int pc;
   final int tw;
   final int? id;
-  const DataEditPage(
+  const DupRangkumanEdit(
       {Key? key, required this.id, required this.tw, required this.pc})
       : super(key: key);
 
   @override
-  State<DataEditPage> createState() => _DataEditPageState();
+  State<DupRangkumanEdit> createState() => _DupRangkumanEditState();
 }
 
-class _DataEditPageState extends State<DataEditPage> {
+class _DupRangkumanEditState extends State<DupRangkumanEdit> {
   EditModel? tambahData;
   String _none = "-";
   HasilModel? _hasilModel;
@@ -118,9 +118,9 @@ class _DataEditPageState extends State<DataEditPage> {
         pc: widget.pc,
         sipSession: sips,
         dropId: idDrops,
-        pitch: '',
-        lbrZip: '',
-        hrgZip: '');
+        hrgZip: _hrgZipper.text,
+        pitch: _pitch.text,
+        lbrZip: _lbZipper.text);
     await OrderDatabase.instance.update(order);
   }
 

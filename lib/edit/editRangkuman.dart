@@ -12,10 +12,18 @@ import 'package:quotes_app/db_order.dart';
 import 'package:http/http.dart' as http;
 import 'package:quotes_app/dup/dupEditRangkuman.dart';
 import 'package:quotes_app/edit/RangkumanEdit.dart';
+import 'package:quotes_app/edit/editData_pesanan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditRingkasanPage extends StatefulWidget {
-  const EditRingkasanPage({Key? key}) : super(key: key);
+  final String cyc;
+  final String deliver;
+  final String moq;
+  final String top;
+  final String note;
+  final String ov;
+  final String condition;
+  const EditRingkasanPage({Key? key, required this.cyc, required this.deliver, required this.moq, required this.top, required this.note, required this.ov, required this.condition}) : super(key: key);
 
   @override
   State<EditRingkasanPage> createState() => _EditRingkasanPageState();
@@ -160,10 +168,10 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  // addOrderButton(),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
+                  addOrderButton(),
+                  SizedBox(
+                    height: 20,
+                  ),
                   inputFormDetail(),
                   SizedBox(
                     height: 20,
@@ -213,7 +221,7 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => DataPesananPage()),
+                  builder: (BuildContext context) => editDataPesanan(cyc: widget.cyc, deliver: widget.deliver, moq: widget.moq, top: widget.top, note: widget.note, ov: widget.ov, condition: widget.condition)),
               (route) => false);
         },
         style: ButtonStyle(

@@ -344,7 +344,14 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
           prefs.setString("company", company);
           prefs.setString("Idcompany", Idcompany);
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => EditRingkasanPage()));
+              builder: (BuildContext context) => EditRingkasanPage(
+                  deliver: _dup!.data[0].delivery,
+                  cyc: _dup!.data[0].cylinder,
+                  moq: _dup!.data[0].moq,
+                  top: _dup!.data[0].termofpayment,
+                  ov: _dup!.data[0].offerValidity,
+                  condition: _dup!.data[0].conditions,
+                  note: _dup!.data[0].catatan)));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -368,7 +375,7 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.pop(context, 'update');
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

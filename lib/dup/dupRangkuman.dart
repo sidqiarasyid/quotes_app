@@ -11,6 +11,7 @@ import 'package:quotes_app/Page/price_quote.dart';
 import 'package:quotes_app/Page/success_save.dart';
 import 'package:quotes_app/db_order.dart';
 import 'package:http/http.dart' as http;
+import 'package:quotes_app/dup/dupData_pesanan.dart';
 import 'package:quotes_app/dup/dupEditRangkuman.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -185,10 +186,10 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
                     SizedBox(
                       height: 10,
                     ),
-                    // addOrderButton(),
-                    // SizedBox(
-                    //   height: 20,
-                    // ),
+                    addOrderButton(),
+                    SizedBox(
+                      height: 20,
+                    ),
                     inputFormDetail(),
                     SizedBox(
                       height: 20,
@@ -239,7 +240,10 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => DataPesananPage()),
+                  builder: (BuildContext context) => dupDataPesanan(
+                    cyc: widget.cyc, moq: widget.moq, top: widget.top, note: widget.note, ov: widget.ov, condition: widget.condition,  deliver: widget.deliver,
+
+                  )),
               (route) => false);
         },
         style: ButtonStyle(

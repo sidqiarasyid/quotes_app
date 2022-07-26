@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:quotes_app/Model/DupModel.dart';
 import 'package:quotes_app/Model/OrderModel.dart';
 import 'package:quotes_app/Model/urlModel.dart';
 import 'package:quotes_app/Page/data_edit.dart';
@@ -14,9 +15,23 @@ import 'package:quotes_app/dup/dupEditRangkuman.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DupRingkasanPage extends StatefulWidget {
-  const DupRingkasanPage({Key? key})
+  final String cyc;
+  final String deliver;
+  final String moq;
+  final String top;
+  final String note;
+  final String ov;
+  final String condition;
+  const DupRingkasanPage(
+      {Key? key,
+      required this.cyc,
+      required this.deliver,
+      required this.moq,
+      required this.top,
+      required this.note,
+      required this.ov,
+      required this.condition})
       : super(key: key);
-
 
   @override
   State<DupRingkasanPage> createState() => _DupRingkasanPageState();
@@ -101,14 +116,14 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-    await http.post(Uri.parse(url), body: {'data': dataBase64});
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
     _urlModel = UrlModel.fromJson(json.decode(response.body.toString()));
     print("RESPON: " + _urlModel!.urlPdf.toString());
     print("STATUS: " + response.statusCode.toString());
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => SuccessSavePage(
-          url: _urlModel!.urlPdf,
-        )));
+              url: _urlModel!.urlPdf,
+            )));
     OrderDatabase.instance.deleteAll();
   }
 
@@ -127,6 +142,13 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
 
   @override
   void initState() {
+    _cycController.text = widget.cyc;
+    _deliverController.text = widget.deliver;
+    _moqController.text = widget.moq;
+    _topController.text = widget.top;
+    _noteController.text = widget.note;
+    _ovController.text = widget.ov;
+    _conditionController.text = widget.condition;
     // TODO: implement initState
     super.initState();
     getData();
@@ -147,34 +169,37 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
           children: [
             Container(
               padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  listRangkuman(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    height: 1,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  // addOrderButton(),
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  inputFormDetail(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  saveButton(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  cancelButton(),
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    listRangkuman(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 1,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    // addOrderButton(),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    inputFormDetail(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    saveButton(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    cancelButton(),
+                  ],
+                ),
               ),
             ),
           ],
@@ -215,7 +240,7 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => DataPesananPage()),
-                  (route) => false);
+              (route) => false);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -233,40 +258,41 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
     return isLoading
         ? Center(child: CircularProgressIndicator())
         : Container(
-        height: 200,
-        margin: EdgeInsets.only(top: 10),
-        child: ListView.builder(
-            itemCount: listOrder.length,
-            itemBuilder: (context, index) {
-              int no = index + 1;
-              // ind = index;
-              final item = listOrder[index];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('No          : ' + no.toString()),
-                  Text('Item       : ' + item.items),
-                  Text('Size        : ' +
-                      item.tebal +
-                      " X " +
-                      item.lebar +
-                      " X " +
-                      item.panjang),
-                  Text('Spec       : ' + item.spec),
-                  Text('Color      : ' + item.color),
-                  Text('Qty          : ' + item.qty),
-                  Text('Disc        : ' + item.disc),
-                  Text('Price       : ' + item.price),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  btnListRangkum(listOrder[index].id, listOrder[index].tw, listOrder[index].pc),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
-              );
-            }));
+            height: 200,
+            margin: EdgeInsets.only(top: 10),
+            child: ListView.builder(
+                itemCount: listOrder.length,
+                itemBuilder: (context, index) {
+                  int no = index + 1;
+                  // ind = index;
+                  final item = listOrder[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('No          : ' + no.toString()),
+                      Text('Item       : ' + item.items),
+                      Text('Size        : ' +
+                          item.tebal +
+                          " X " +
+                          item.lebar +
+                          " X " +
+                          item.panjang),
+                      Text('Spec       : ' + item.spec),
+                      Text('Color      : ' + item.color),
+                      Text('Qty          : ' + item.qty),
+                      Text('Disc        : ' + item.disc),
+                      Text('Price       : ' + item.price),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      btnListRangkum(listOrder[index].id, listOrder[index].tw,
+                          listOrder[index].pc),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  );
+                }));
   }
 
   Widget btnListRangkum(int? id, int tw, int pc) {
@@ -280,15 +306,15 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
               "Rubah",
               style: TextStyle(fontSize: 14),
             ),
-            onPressed: () async{
+            onPressed: () async {
               final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => DupRangkumanEdit(
-                        id: id,
-                        pc: pc,
-                        tw: tw,
-                      )));
+                            id: id,
+                            pc: pc,
+                            tw: tw,
+                          )));
               Future.delayed(Duration(seconds: 2));
               print('result: ' + result);
               getData();
@@ -344,6 +370,12 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
     return Column(
       children: [
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: _cycController,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -359,6 +391,12 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
           height: 15,
         ),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: _deliverController,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -374,6 +412,12 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
           height: 15,
         ),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: _moqController,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
@@ -389,134 +433,155 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
         SizedBox(
           height: 15,
         ),
-        Form(
-          key: _formKey,
-          child: Container(
-            child: Column(
-              children: [
-                TypeAheadField(
-                  suggestionsCallback: (value) => top_list.where((element) =>
-                      element.toLowerCase().contains(value.toLowerCase())),
-                  itemBuilder: (_, String item) => ListTile(
-                    title: Text(
-                      item,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  onSuggestionSelected: (String val) {
-                    _topController.text = val;
-                  },
-                  hideOnEmpty: true,
-                  autoFlipDirection: true,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      hintText: "Term of Payment",
-                      hintStyle: TextStyle(fontSize: 19),
-                    ),
-                    controller: _topController,
+        Container(
+          child: Column(
+            children: [
+              TypeAheadFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
+                suggestionsCallback: (value) => top_list.where((element) =>
+                    element.toLowerCase().contains(value.toLowerCase())),
+                itemBuilder: (_, String item) => ListTile(
+                  title: Text(
+                    item,
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                TypeAheadField(
-                  suggestionsCallback: (value) => ov_list.where((element) =>
-                      element.toLowerCase().contains(value.toLowerCase())),
-                  itemBuilder: (_, String item) => ListTile(
-                    title: Text(
-                      item,
-                      style: TextStyle(color: Colors.black),
+                onSuggestionSelected: (String val) {
+                  _topController.text = val;
+                },
+                hideOnEmpty: true,
+                autoFlipDirection: true,
+                textFieldConfiguration: TextFieldConfiguration(
+                  style: TextStyle(fontSize: 19, color: Colors.black),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
                     ),
+                    hintText: "Term of Payment",
+                    hintStyle: TextStyle(fontSize: 19),
                   ),
-                  onSuggestionSelected: (String val) {
-                    _ovController.text = val;
-                  },
-                  hideOnEmpty: true,
-                  autoFlipDirection: true,
-                  hideSuggestionsOnKeyboardHide: true,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      hintText: "Offer Validity",
-                      hintStyle: TextStyle(fontSize: 19),
-                    ),
-                    controller: _ovController,
-                  ),
+                  controller: _topController,
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                TypeAheadField(
-                  suggestionsCallback: (value) => condition_list.where(
-                          (element) =>
-                          element.toLowerCase().contains(value.toLowerCase())),
-                  itemBuilder: (_, String item) => ListTile(
-                    title: Text(
-                      item,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  onSuggestionSelected: (String val) {
-                    _conditionController.text = val;
-                  },
-                  hideOnEmpty: true,
-                  autoFlipDirection: true,
-                  hideSuggestionsOnKeyboardHide: true,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      hintText: "Conditions",
-                      hintStyle: TextStyle(fontSize: 19),
-                    ),
-                    controller: _conditionController,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TypeAheadFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
+                suggestionsCallback: (value) => ov_list.where((element) =>
+                    element.toLowerCase().contains(value.toLowerCase())),
+                itemBuilder: (_, String item) => ListTile(
+                  title: Text(
+                    item,
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                TypeAheadField(
-                  suggestionsCallback: (value) => note_list.where((element) =>
-                      element.toLowerCase().contains(value.toLowerCase())),
-                  itemBuilder: (_, String item) => ListTile(
-                    title: Text(
-                      item,
-                      style: TextStyle(color: Colors.black),
+                onSuggestionSelected: (String val) {
+                  _ovController.text = val;
+                },
+                hideOnEmpty: true,
+                autoFlipDirection: true,
+                hideSuggestionsOnKeyboardHide: true,
+                textFieldConfiguration: TextFieldConfiguration(
+                  style: TextStyle(fontSize: 19, color: Colors.black),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
                     ),
+                    hintText: "Offer Validity",
+                    hintStyle: TextStyle(fontSize: 19),
                   ),
-                  onSuggestionSelected: (String val) {
-                    _noteController.text = val;
-                  },
-                  hideOnEmpty: true,
-                  autoFlipDirection: true,
-                  hideSuggestionsOnKeyboardHide: true,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      hintText: "Catatan",
-                      hintStyle: TextStyle(fontSize: 19),
-                    ),
-                    controller: _noteController,
+                  controller: _ovController,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TypeAheadFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
+                suggestionsCallback: (value) => condition_list.where(
+                    (element) =>
+                        element.toLowerCase().contains(value.toLowerCase())),
+                itemBuilder: (_, String item) => ListTile(
+                  title: Text(
+                    item,
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
-              ],
-            ),
+                onSuggestionSelected: (String val) {
+                  _conditionController.text = val;
+                },
+                hideOnEmpty: true,
+                autoFlipDirection: true,
+                hideSuggestionsOnKeyboardHide: true,
+                textFieldConfiguration: TextFieldConfiguration(
+                  style: TextStyle(fontSize: 19, color: Colors.black),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    hintText: "Conditions",
+                    hintStyle: TextStyle(fontSize: 19),
+                  ),
+                  controller: _conditionController,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TypeAheadFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
+                suggestionsCallback: (value) => note_list.where((element) =>
+                    element.toLowerCase().contains(value.toLowerCase())),
+                itemBuilder: (_, String item) => ListTile(
+                  title: Text(
+                    item,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                onSuggestionSelected: (String val) {
+                  _noteController.text = val;
+                },
+                hideOnEmpty: true,
+                autoFlipDirection: true,
+                hideSuggestionsOnKeyboardHide: true,
+                textFieldConfiguration: TextFieldConfiguration(
+                  style: TextStyle(fontSize: 19, color: Colors.black),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    hintText: "Catatan",
+                    hintStyle: TextStyle(fontSize: 19),
+                  ),
+                  controller: _noteController,
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -533,8 +598,10 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          masukData();
-          getSubmit();
+          if (_formKey.currentState!.validate()) {
+            masukData();
+            getSubmit();
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

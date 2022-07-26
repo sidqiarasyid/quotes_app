@@ -149,34 +149,37 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
             children: [
               Container(
                 padding: EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    listRangkuman(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Divider(
-                      color: Colors.grey,
-                      height: 1,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    addOrderButton(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    inputFormDetail(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    saveButton(),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    cancelButton(),
-                  ],
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      listRangkuman(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      addOrderButton(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      inputFormDetail(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      saveButton(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      cancelButton(),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -348,6 +351,12 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
     return Column(
       children: [
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: _cycController,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -363,6 +372,12 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           height: 15,
         ),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: _deliverController,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -378,6 +393,12 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           height: 15,
         ),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: _moqController,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
@@ -393,134 +414,155 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
         SizedBox(
           height: 15,
         ),
-        Form(
-          key: _formKey,
-          child: Container(
-            child: Column(
-              children: [
-                TypeAheadField(
-                  suggestionsCallback: (value) => top_list.where((element) =>
-                      element.toLowerCase().contains(value.toLowerCase())),
-                  itemBuilder: (_, String item) => ListTile(
-                    title: Text(
-                      item,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  onSuggestionSelected: (String val) {
-                    _topController.text = val;
-                  },
-                  hideOnEmpty: true,
-                  autoFlipDirection: true,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      hintText: "Term of Payment",
-                      hintStyle: TextStyle(fontSize: 19),
-                    ),
-                    controller: _topController,
+        Container(
+          child: Column(
+            children: [
+              TypeAheadFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
+                suggestionsCallback: (value) => top_list.where((element) =>
+                    element.toLowerCase().contains(value.toLowerCase())),
+                itemBuilder: (_, String item) => ListTile(
+                  title: Text(
+                    item,
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                TypeAheadField(
-                  suggestionsCallback: (value) => ov_list.where((element) =>
-                      element.toLowerCase().contains(value.toLowerCase())),
-                  itemBuilder: (_, String item) => ListTile(
-                    title: Text(
-                      item,
-                      style: TextStyle(color: Colors.black),
+                onSuggestionSelected: (String val) {
+                  _topController.text = val;
+                },
+                hideOnEmpty: true,
+                autoFlipDirection: true,
+                textFieldConfiguration: TextFieldConfiguration(
+                  style: TextStyle(fontSize: 19, color: Colors.black),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
                     ),
+                    hintText: "Term of Payment",
+                    hintStyle: TextStyle(fontSize: 19),
                   ),
-                  onSuggestionSelected: (String val) {
-                    _ovController.text = val;
-                  },
-                  hideOnEmpty: true,
-                  autoFlipDirection: true,
-                  hideSuggestionsOnKeyboardHide: true,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      hintText: "Offer Validity",
-                      hintStyle: TextStyle(fontSize: 19),
-                    ),
-                    controller: _ovController,
-                  ),
+                  controller: _topController,
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                TypeAheadField(
-                  suggestionsCallback: (value) => condition_list.where(
-                      (element) =>
-                          element.toLowerCase().contains(value.toLowerCase())),
-                  itemBuilder: (_, String item) => ListTile(
-                    title: Text(
-                      item,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  onSuggestionSelected: (String val) {
-                    _conditionController.text = val;
-                  },
-                  hideOnEmpty: true,
-                  autoFlipDirection: true,
-                  hideSuggestionsOnKeyboardHide: true,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      hintText: "Conditions",
-                      hintStyle: TextStyle(fontSize: 19),
-                    ),
-                    controller: _conditionController,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TypeAheadFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
+                suggestionsCallback: (value) => ov_list.where((element) =>
+                    element.toLowerCase().contains(value.toLowerCase())),
+                itemBuilder: (_, String item) => ListTile(
+                  title: Text(
+                    item,
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                TypeAheadField(
-                  suggestionsCallback: (value) => note_list.where((element) =>
-                      element.toLowerCase().contains(value.toLowerCase())),
-                  itemBuilder: (_, String item) => ListTile(
-                    title: Text(
-                      item,
-                      style: TextStyle(color: Colors.black),
+                onSuggestionSelected: (String val) {
+                  _ovController.text = val;
+                },
+                hideOnEmpty: true,
+                autoFlipDirection: true,
+                hideSuggestionsOnKeyboardHide: true,
+                textFieldConfiguration: TextFieldConfiguration(
+                  style: TextStyle(fontSize: 19, color: Colors.black),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
                     ),
+                    hintText: "Offer Validity",
+                    hintStyle: TextStyle(fontSize: 19),
                   ),
-                  onSuggestionSelected: (String val) {
-                    _noteController.text = val;
-                  },
-                  hideOnEmpty: true,
-                  autoFlipDirection: true,
-                  hideSuggestionsOnKeyboardHide: true,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      hintText: "Catatan",
-                      hintStyle: TextStyle(fontSize: 19),
-                    ),
-                    controller: _noteController,
+                  controller: _ovController,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TypeAheadFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
+                suggestionsCallback: (value) => condition_list.where(
+                    (element) =>
+                        element.toLowerCase().contains(value.toLowerCase())),
+                itemBuilder: (_, String item) => ListTile(
+                  title: Text(
+                    item,
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
-              ],
-            ),
+                onSuggestionSelected: (String val) {
+                  _conditionController.text = val;
+                },
+                hideOnEmpty: true,
+                autoFlipDirection: true,
+                hideSuggestionsOnKeyboardHide: true,
+                textFieldConfiguration: TextFieldConfiguration(
+                  style: TextStyle(fontSize: 19, color: Colors.black),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    hintText: "Conditions",
+                    hintStyle: TextStyle(fontSize: 19),
+                  ),
+                  controller: _conditionController,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TypeAheadFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
+                suggestionsCallback: (value) => note_list.where((element) =>
+                    element.toLowerCase().contains(value.toLowerCase())),
+                itemBuilder: (_, String item) => ListTile(
+                  title: Text(
+                    item,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                onSuggestionSelected: (String val) {
+                  _noteController.text = val;
+                },
+                hideOnEmpty: true,
+                autoFlipDirection: true,
+                hideSuggestionsOnKeyboardHide: true,
+                textFieldConfiguration: TextFieldConfiguration(
+                  style: TextStyle(fontSize: 19, color: Colors.black),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    hintText: "Catatan",
+                    hintStyle: TextStyle(fontSize: 19),
+                  ),
+                  controller: _noteController,
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -537,8 +579,10 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          masukData();
-          getSubmit();
+          if (_formKey.currentState!.validate()) {
+            masukData();
+            getSubmit();
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

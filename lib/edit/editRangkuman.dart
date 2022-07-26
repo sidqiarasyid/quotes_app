@@ -15,9 +15,7 @@ import 'package:quotes_app/edit/RangkumanEdit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditRingkasanPage extends StatefulWidget {
-  const EditRingkasanPage({Key? key})
-      : super(key: key);
-
+  const EditRingkasanPage({Key? key}) : super(key: key);
 
   @override
   State<EditRingkasanPage> createState() => _EditRingkasanPageState();
@@ -102,14 +100,14 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-    await http.post(Uri.parse(url), body: {'data': dataBase64});
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
     _urlModel = UrlModel.fromJson(json.decode(response.body.toString()));
     print("RESPON: " + _urlModel!.urlPdf.toString());
     print("STATUS: " + response.statusCode.toString());
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => SuccessSavePage(
-          url: _urlModel!.urlPdf,
-        )));
+              url: _urlModel!.urlPdf,
+            )));
     OrderDatabase.instance.deleteAll();
   }
 
@@ -216,7 +214,7 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => DataPesananPage()),
-                  (route) => false);
+              (route) => false);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -234,40 +232,41 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
     return isLoading
         ? Center(child: CircularProgressIndicator())
         : Container(
-        height: 200,
-        margin: EdgeInsets.only(top: 10),
-        child: ListView.builder(
-            itemCount: listOrder.length,
-            itemBuilder: (context, index) {
-              int no = index + 1;
-              // ind = index;
-              final item = listOrder[index];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('No          : ' + no.toString()),
-                  Text('Item       : ' + item.items),
-                  Text('Size        : ' +
-                      item.tebal +
-                      " X " +
-                      item.lebar +
-                      " X " +
-                      item.panjang),
-                  Text('Spec       : ' + item.spec),
-                  Text('Color      : ' + item.color),
-                  Text('Qty          : ' + item.qty),
-                  Text('Disc        : ' + item.disc),
-                  Text('Price       : ' + item.price),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  btnListRangkum(listOrder[index].id, listOrder[index].tw, listOrder[index].pc),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
-              );
-            }));
+            height: 200,
+            margin: EdgeInsets.only(top: 10),
+            child: ListView.builder(
+                itemCount: listOrder.length,
+                itemBuilder: (context, index) {
+                  int no = index + 1;
+                  // ind = index;
+                  final item = listOrder[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('No          : ' + no.toString()),
+                      Text('Item       : ' + item.items),
+                      Text('Size        : ' +
+                          item.tebal +
+                          " X " +
+                          item.lebar +
+                          " X " +
+                          item.panjang),
+                      Text('Spec       : ' + item.spec),
+                      Text('Color      : ' + item.color),
+                      Text('Qty          : ' + item.qty),
+                      Text('Disc        : ' + item.disc),
+                      Text('Price       : ' + item.price),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      btnListRangkum(listOrder[index].id, listOrder[index].tw,
+                          listOrder[index].pc),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  );
+                }));
   }
 
   Widget btnListRangkum(int? id, int tw, int pc) {
@@ -281,15 +280,15 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
               "Rubah",
               style: TextStyle(fontSize: 14),
             ),
-            onPressed: () async{
+            onPressed: () async {
               final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => RangkumanEdit(
-                        id: id,
-                        pc: pc,
-                        tw: tw,
-                      )));
+                            id: id,
+                            pc: pc,
+                            tw: tw,
+                          )));
               Future.delayed(Duration(seconds: 2));
               print('result: ' + result);
               getData();
@@ -458,7 +457,7 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
                 ),
                 TypeAheadField(
                   suggestionsCallback: (value) => condition_list.where(
-                          (element) =>
+                      (element) =>
                           element.toLowerCase().contains(value.toLowerCase())),
                   itemBuilder: (_, String item) => ListTile(
                     title: Text(

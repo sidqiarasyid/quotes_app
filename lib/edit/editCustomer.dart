@@ -54,7 +54,7 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-    await http.post(Uri.parse(url), body: {'data': dataBase64});
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
     _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       _itemCompany = _dropModel!.dataCompany;
@@ -71,7 +71,7 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-    await http.post(Uri.parse(url), body: {'data': dataBase64});
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
     _dropModel = DropModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       _itemCustomer = _dropModel!.dataCustomer;
@@ -92,19 +92,31 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
     final response =
-    await http.post(Uri.parse(url), body: {'data': dataBase64});
+        await http.post(Uri.parse(url), body: {'data': dataBase64});
     _dup = DupModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       nama.text = _dup!.data[0].namaCustomer;
       listData = _dup!.data;
     });
-    for(int i = 0; i < listData![1].dataPesanan!.length; i++){
-      for(int a = 0; a < listData![1].dataPesanan![i].detailProduk.length; a++){
-        hasilTebal += int.parse(listData![1].dataPesanan![i].detailProduk[a].tebal);
-        spec += listData![1].dataPesanan![i].detailProduk[a].namaProduk + "-" + listData![1].dataPesanan![i].detailProduk[a].tebal + "//";
+    for (int i = 0; i < listData![1].dataPesanan!.length; i++) {
+      for (int a = 0;
+          a < listData![1].dataPesanan![i].detailProduk.length;
+          a++) {
+        hasilTebal +=
+            int.parse(listData![1].dataPesanan![i].detailProduk[a].tebal);
+        spec += listData![1].dataPesanan![i].detailProduk[a].namaProduk +
+            "-" +
+            listData![1].dataPesanan![i].detailProduk[a].tebal +
+            "//";
         cat += listData![1].dataPesanan![i].detailProduk[a].catatan + "-" + "/";
-        idDrops +=  listData![1].dataPesanan![i].detailProduk[a].idProduk + "*" + "/";
-        sessionItem += listData![1].dataPesanan![i].detailProduk[a].idProduk + "#" + listData![1].dataPesanan![i].detailProduk[a].namaProduk + "#" + listData![1].dataPesanan![i].detailProduk[a].tebal + "#-##";
+        idDrops +=
+            listData![1].dataPesanan![i].detailProduk[a].idProduk + "*" + "/";
+        sessionItem += listData![1].dataPesanan![i].detailProduk[a].idProduk +
+            "#" +
+            listData![1].dataPesanan![i].detailProduk[a].namaProduk +
+            "#" +
+            listData![1].dataPesanan![i].detailProduk[a].tebal +
+            "#-##";
       }
       var order;
       order = OrderModel(
@@ -126,14 +138,12 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
           hrgZip: listData![1].dataPesanan![i].hrgZipper,
           lbrZip: listData![1].dataPesanan![i].zipper);
       await OrderDatabase.instance.create(order);
-        hasilTebal = 0;
-        spec = "";
-        cat = "";
-        idDrops = "";
-        sessionItem = "";
-
+      hasilTebal = 0;
+      spec = "";
+      cat = "";
+      idDrops = "";
+      sessionItem = "";
     }
-
   }
   // Future getData() async {
   //   List<OrderModel> listOrder = [];
@@ -142,10 +152,6 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
   //   final data = listOrder[0];
   //   print("NAMA PESANAN: " + data.items);
   // }
-
-
-
-
 
   @override
   void initState() {
@@ -164,7 +170,7 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
       body: SingleChildScrollView(
         child: Padding(
           padding:
-          const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
+              const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -307,12 +313,12 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
   }
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-    value: item,
-    child: Text(
-      item,
-      style: TextStyle(fontSize: 19, color: Colors.black),
-    ),
-  );
+        value: item,
+        child: Text(
+          item,
+          style: TextStyle(fontSize: 19, color: Colors.black),
+        ),
+      );
 
   Widget nextButton() {
     return Container(

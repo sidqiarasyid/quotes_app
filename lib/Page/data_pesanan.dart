@@ -20,6 +20,7 @@ class DataPesananPage extends StatefulWidget {
 }
 
 class _DataPesananPageState extends State<DataPesananPage> {
+  final _formKey = GlobalKey<FormState>();
   ModelTambahData? _model;
   List<ModelTambahData> _listTambahData = [];
   DropModel? _dropModel;
@@ -178,74 +179,77 @@ class _DataPesananPageState extends State<DataPesananPage> {
         appBar: appBarQuote("2. Data Pesanan"),
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
-            : ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20, top: 30, right: 20, bottom: 30),
-                    child: Column(
-                      children: [
-                        inputFormName(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        radioButtonPC(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        itemDropDown(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        inputFormNote(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        addButton(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        isShown ? orderSum() : Container(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Divider(
-                          color: Colors.black54,
-                          thickness: 1,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        inputFormPitch(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        radioButtonTW(),
-                        Divider(
-                          color: Colors.black54,
-                          thickness: 1,
-                        ),
-                        inputFormDiscount(),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        textPPN(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        countButton(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        nextButton(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        backButton(),
-                      ],
+            : Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20, top: 30, right: 20, bottom: 30),
+                      child: Column(
+                        children: [
+                          inputFormName(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          radioButtonPC(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          itemDropDown(),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          inputFormNote(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          addButton(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          isShown ? orderSum() : Container(),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Divider(
+                            color: Colors.black54,
+                            thickness: 1,
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          inputFormPitch(),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          radioButtonTW(),
+                          Divider(
+                            color: Colors.black54,
+                            thickness: 1,
+                          ),
+                          inputFormDiscount(),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          textPPN(),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          countButton(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          nextButton(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          backButton(),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
       ),
     );
@@ -273,6 +277,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
     return Column(
       children: [
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: nameCont,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -289,6 +299,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
           height: 15,
         ),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: colorCont,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
@@ -305,6 +321,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
           height: 15,
         ),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: _qty,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
@@ -325,6 +347,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
             Flexible(
               flex: 1,
               child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
                 controller: _lebar,
                 keyboardType: TextInputType.number,
                 style: TextStyle(fontSize: 19, color: Colors.black),
@@ -344,6 +372,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
             Flexible(
               flex: 1,
               child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter text';
+                  }
+                  return null;
+                },
                 controller: _panjang,
                 keyboardType: TextInputType.number,
                 style: TextStyle(fontSize: 19, color: Colors.black),
@@ -439,7 +473,14 @@ class _DataPesananPageState extends State<DataPesananPage> {
             color: Colors.grey,
           ),
         ),
-        child: DropdownButton<DataItem>(
+        child: DropdownButtonFormField<DataItem>(
+          decoration: InputDecoration.collapsed(hintText: ''),
+          validator: (value) {
+            if (value == null) {
+              return 'Please enter item';
+            }
+            return null;
+          },
           hint: Text("Pilih Item"),
           isExpanded: true,
           value: _dataItem,
@@ -451,7 +492,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
             print("DATA INDEX: " + _dataItem!.idBarang.toString());
           },
           isDense: true,
-          underline: SizedBox.shrink(),
           items: _itemlist.map((DataItem item) {
             return DropdownMenuItem<DataItem>(
               child: Text(
@@ -594,6 +634,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter text';
+              }
+              return null;
+            },
             controller: _pitch,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -613,6 +659,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter text';
+              }
+              return null;
+            },
             controller: _lbZipper,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -632,6 +684,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter text';
+              }
+              return null;
+            },
             controller: _hrgZipper,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -734,6 +792,12 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter text';
+              }
+              return null;
+            },
             controller: _discount,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -787,16 +851,18 @@ class _DataPesananPageState extends State<DataPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          setState(() {
-            pitch = _pitch.text;
-            hrgZipper = _hrgZipper.text;
-            lbZipper = _lbZipper.text;
-          });
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString("pitch", pitch);
-          prefs.setString("hrgZipper", hrgZipper);
-          prefs.setString("lbZipper", lbZipper);
-          getHasil();
+          if (_formKey.currentState!.validate()) {
+            setState(() {
+              pitch = _pitch.text;
+              hrgZipper = _hrgZipper.text;
+              lbZipper = _lbZipper.text;
+            });
+            final prefs = await SharedPreferences.getInstance();
+            prefs.setString("pitch", pitch);
+            prefs.setString("hrgZipper", hrgZipper);
+            prefs.setString("lbZipper", lbZipper);
+            getHasil();
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -820,8 +886,10 @@ class _DataPesananPageState extends State<DataPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          masukData();
-          createDb();
+          if (_formKey.currentState!.validate()) {
+            masukData();
+            createDb();
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

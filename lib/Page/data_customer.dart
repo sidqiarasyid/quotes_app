@@ -17,6 +17,7 @@ class DataCustomerPage extends StatefulWidget {
 }
 
 class _DataCustomerPageState extends State<DataCustomerPage> {
+  final _formKey = GlobalKey<FormState>();
   DropModel? _dropModel;
   DataCompany? _dataCompany;
   UserModel? _user;
@@ -85,23 +86,26 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           child: Padding(
             padding:
                 const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                itemDropDown(),
-                SizedBox(
-                  height: 15,
-                ),
-                inputFormDataCustomer(),
-                SizedBox(
-                  height: 20,
-                ),
-                nextButton(),
-                SizedBox(
-                  height: 20,
-                ),
-                backButton(),
-              ],
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  itemDropDown(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  inputFormDataCustomer(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  nextButton(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  backButton(),
+                ],
+              ),
             ),
           ),
         ),
@@ -135,7 +139,14 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
             color: Colors.grey,
           ),
         ),
-        child: DropdownButton<DataCompany>(
+        child: DropdownButtonFormField<DataCompany>(
+          decoration: InputDecoration.collapsed(hintText: ''),
+          validator: (value) {
+            if (value == null) {
+              return 'Please enter item';
+            }
+            return null;
+          },
           hint: Text("Pilih Company"),
           isExpanded: true,
           value: _dataCompany,
@@ -147,7 +158,6 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
             print("INDEX: " + _dataCompany!.id.toString());
           },
           isDense: true,
-          underline: SizedBox.shrink(),
           items: _itemCompany.map((DataCompany item) {
             return DropdownMenuItem<DataCompany>(
               child: Text(
@@ -162,7 +172,13 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
   Widget inputFormDataCustomer() {
     return Column(
       children: [
-        TypeAheadField(
+        TypeAheadFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           suggestionsCallback: (value) => _itemCustomer.where((element) =>
               element.nama.toLowerCase().contains(value.toLowerCase())),
           itemBuilder: (_, DataCustomer item) => ListTile(
@@ -195,6 +211,12 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           height: 15,
         ),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: alamat,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -211,6 +233,12 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           height: 15,
         ),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter text';
+            }
+            return null;
+          },
           controller: nomor,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
@@ -245,21 +273,23 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          setState(() {
-            company = _dataCompany!.nama;
-            Idcompany = _dataCompany!.id;
-            namaCust = nama.text;
-            alamatCust = alamat.text;
-            noCust = nomor.text;
-          });
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString("namaCust", namaCust);
-          prefs.setString("alamatCust", alamatCust);
-          prefs.setString("noCust", noCust);
-          prefs.setString("company", company);
-          prefs.setString("Idcompany", Idcompany);
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => DataPesananPage()));
+          if (_formKey.currentState!.validate()) {
+            setState(() {
+              company = _dataCompany!.nama;
+              Idcompany = _dataCompany!.id;
+              namaCust = nama.text;
+              alamatCust = alamat.text;
+              noCust = nomor.text;
+            });
+            final prefs = await SharedPreferences.getInstance();
+            prefs.setString("namaCust", namaCust);
+            prefs.setString("alamatCust", alamatCust);
+            prefs.setString("noCust", noCust);
+            prefs.setString("company", company);
+            prefs.setString("Idcompany", Idcompany);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => DataPesananPage()));
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

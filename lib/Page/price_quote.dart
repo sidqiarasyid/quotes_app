@@ -82,16 +82,14 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
       body: Padding(
         padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
         child: Center(
-          child: Column(
-            children: [
-              addPriceButton(),
-              isLoading
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : listPriceQuote(),
-            ],
-          ),
+          child: isLoading
+              ? CircularProgressIndicator()
+              : Column(
+                  children: [
+                    addPriceButton(),
+                    listPriceQuote(),
+                  ],
+                ),
         ),
       ),
     );
@@ -224,7 +222,6 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                           ),
                         ],
                       ),
-                      
                       Row(
                         children: [
                           Container(
@@ -267,7 +264,6 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                               ),
                               onPressed: () {
                                 delete(items[index].idPq);
-
                               },
                               style: ButtonStyle(
                                 backgroundColor:
@@ -293,13 +289,17 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                                 style: TextStyle(fontSize: 10),
                               ),
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: ((context) => DataCustomerEdit(idPq: items[index].idPq,))));
-
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => DataCustomerEdit(
+                                              idPq: items[index].idPq,
+                                            ))));
                               },
                               style: ButtonStyle(
                                 backgroundColor:
-                                MaterialStateProperty.all<Color>(
-                                    Colors.black),
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -317,6 +317,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
       },
     );
   }
+
   _launchUrl(String id) async {
     var url = 'http://128.199.81.36/generate-new.php?id=' + id;
     if (await canLaunch(url)) {

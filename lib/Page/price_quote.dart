@@ -28,6 +28,9 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
   bool isLoading = false;
 
   getPrice() async {
+    setState(() {
+      isLoading = true;
+    });
     final prefs = await SharedPreferences.getInstance();
     String url = "http://128.199.81.36/api/list_price_quote.php";
     Map<String, dynamic> data = {
@@ -41,6 +44,9 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
     _priceModel = PriceModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       items.addAll(_priceModel!.data);
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 
@@ -67,6 +73,41 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
         isLoading = false;
       });
     }
+  }
+
+  showAlertDialog(BuildContext context, int i) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continue"),
+      onPressed:  () {
+        delete(items[i].idPq);
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Deleting item"),
+      content: Text("Are you sure want to delete this?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
@@ -263,7 +304,8 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                                 style: TextStyle(fontSize: 10),
                               ),
                               onPressed: () {
-                                delete(items[index].idPq);
+                                showAlertDialog(context, index);
+
                               },
                               style: ButtonStyle(
                                 backgroundColor:

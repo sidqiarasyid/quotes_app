@@ -135,6 +135,13 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
   @override
   void initState() {
     // TODO: implement initState
+    _cycController.text = widget.cyc;
+    _deliverController.text = widget.deliver;
+    _moqController.text = widget.moq;
+    _topController.text = widget.top;
+    _noteController.text = widget.note;
+    _ovController.text = widget.ov;
+    _conditionController.text = widget.condition;
     super.initState();
     getData();
   }

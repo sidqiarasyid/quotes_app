@@ -15,22 +15,8 @@ import 'package:quotes_app/edit/editRangkuman.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class editDataPesanan extends StatefulWidget {
-  final String cyc;
-  final String deliver;
-  final String moq;
-  final String top;
-  final String note;
-  final String ov;
-  final String condition;
   const editDataPesanan(
-      {Key? key,
-        required this.cyc,
-        required this.deliver,
-        required this.moq,
-        required this.top,
-        required this.note,
-        required this.ov,
-        required this.condition})
+      {Key? key,})
       : super(key: key);
 
   @override
@@ -100,7 +86,7 @@ class _editDataPesananState extends State<editDataPesanan> {
         lbrZip: _lbZipper.text,
         hrgZip: _hrgZipper.text);
     await OrderDatabase.instance.create(order);
-    Navigator.push(context, MaterialPageRoute(builder: ((context) => EditRingkasanPage(cyc: widget.cyc, deliver: widget.deliver, moq: widget.moq, top: widget.top, note: widget.note, ov: widget.ov, condition: widget.condition))));
+    Navigator.pop(context, 'update');
   }
 
   Future<String> getItem() async {
@@ -184,7 +170,10 @@ class _editDataPesananState extends State<editDataPesanan> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: ()async {
+        Navigator.pop(context, 'update');
+        return true;
+      },
       child: Scaffold(
         appBar: appBarQuote("Data Pesanan"),
         body: _isLoading
@@ -924,7 +913,7 @@ class _editDataPesananState extends State<editDataPesanan> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: ((context) => EditRingkasanPage(cyc: widget.cyc, deliver: widget.deliver, moq: widget.moq, top: widget.top, note: widget.note, ov: widget.ov, condition: widget.condition))));
+          Navigator.pop(context, 'update');
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

@@ -23,7 +23,16 @@ class EditRingkasanPage extends StatefulWidget {
   final String note;
   final String ov;
   final String condition;
-  const EditRingkasanPage({Key? key, required this.cyc, required this.deliver, required this.moq, required this.top, required this.note, required this.ov, required this.condition}) : super(key: key);
+  const EditRingkasanPage(
+      {Key? key,
+      required this.cyc,
+      required this.deliver,
+      required this.moq,
+      required this.top,
+      required this.note,
+      required this.ov,
+      required this.condition})
+      : super(key: key);
 
   @override
   State<EditRingkasanPage> createState() => _EditRingkasanPageState();
@@ -154,44 +163,52 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarQuote("Ringkasan Pesanan"),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  listRangkuman(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    height: 1,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  addOrderButton(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  inputFormDetail(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  saveButton(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  cancelButton(),
-                ],
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => PriceQuotePage()),
+            (Route<dynamic> route) => false);
+        return true;
+      },
+      child: Scaffold(
+        appBar: appBarQuote("Ringkasan Pesanan"),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    listRangkuman(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 1,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    addOrderButton(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    inputFormDetail(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    saveButton(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    cancelButton(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -224,12 +241,14 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
           "Tambahkan Pesanan",
           style: TextStyle(fontSize: 17),
         ),
-        onPressed: () {
-          Navigator.pushAndRemoveUntil(
+        onPressed: () async{
+          final result = await Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => editDataPesanan(cyc: widget.cyc, deliver: widget.deliver, moq: widget.moq, top: widget.top, note: widget.note, ov: widget.ov, condition: widget.condition)),
-              (route) => false);
+                  builder: (BuildContext context) => editDataPesanan()));
+          Future.delayed(Duration(seconds: 2));
+          print('result: ' + result);
+          getData();
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -573,8 +592,9 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => PriceQuotePage()));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => PriceQuotePage()),
+              (Route<dynamic> route) => false);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

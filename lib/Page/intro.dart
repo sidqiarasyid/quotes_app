@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:quotes_app/Page/home.dart';
 import 'package:quotes_app/Page/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Intro extends StatefulWidget {
   const Intro({Key? key}) : super(key: key);
@@ -13,12 +15,15 @@ class Intro extends StatefulWidget {
 class _IntroState extends State<Intro> {
   @override
   void initState() {
-    Future.delayed(
-        Duration(seconds: 3),
-        () => Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => LoginPage()),
-            (Route<dynamic> route) => false));
     super.initState();
+    Future.delayed(Duration(seconds: 3), () async{
+      final prefs = await SharedPreferences.getInstance();
+      if(prefs.getString("username") == null){
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginPage(),), (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage(username: prefs.getString('username').toString()),), (route) => false);
+      }
+    });
   }
 
   @override

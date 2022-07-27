@@ -14,22 +14,8 @@ import 'package:quotes_app/dup/dupRangkuman.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class dupDataPesanan extends StatefulWidget {
-  final String cyc;
-  final String deliver;
-  final String moq;
-  final String top;
-  final String note;
-  final String ov;
-  final String condition;
   const dupDataPesanan(
-      {Key? key,
-      required this.cyc,
-      required this.deliver,
-      required this.moq,
-      required this.top,
-      required this.note,
-      required this.ov,
-      required this.condition})
+      {Key? key,})
       : super(key: key);
 
   @override
@@ -99,7 +85,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
         lbrZip: _lbZipper.text,
         hrgZip: _hrgZipper.text);
     await OrderDatabase.instance.create(order);
-    Navigator.push(context, MaterialPageRoute(builder: ((context) => DupRingkasanPage(cyc: widget.cyc, deliver: widget.deliver, moq: widget.moq, top: widget.top, note: widget.note, ov: widget.ov, condition: widget.condition))));
+    Navigator.pop(context, 'update');
   }
 
   Future<String> getItem() async {
@@ -166,7 +152,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
       });
       print("ID: " + model.dropId);
     });
-
     print('Hasil Lebar: ' + hasiTebal.toString());
     print('Drop IDs ' + idDrops);
     print('SESSION ITEMS: ' + sessionItem);
@@ -183,7 +168,10 @@ class _dupDataPesananState extends State<dupDataPesanan> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async{
+        Navigator.pop(context, 'update');
+        return true;
+      },
       child: Scaffold(
         appBar: appBarQuote("Data Pesanan"),
         body: _isLoading
@@ -923,7 +911,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: ((context) => DupRingkasanPage(cyc: widget.cyc, deliver: widget.deliver, moq: widget.moq, top: widget.top, note: widget.note, ov: widget.ov, condition: widget.condition))));
+          Navigator.pop(context, 'update');
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

@@ -86,7 +86,7 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
       "id_sales": prefs.getString('username'),
-      "id_pq": "2",
+      "id_pq": widget.idPq,
     };
     print("ID PQ: " + widget.idPq);
     var dataUtf = utf8.encode(json.encode(data));
@@ -270,7 +270,7 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
-              hintText: "Term of Payment",
+              hintText: "Nama Customer",
               hintStyle: TextStyle(fontSize: 19),
             ),
             controller: nama,

@@ -198,7 +198,7 @@ class _DataCustomerPageState extends State<DataCustomerPage> {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
-              hintText: "Term of Payment",
+              hintText: "Nama Customer",
               hintStyle: TextStyle(fontSize: 19),
             ),
             controller: nama,

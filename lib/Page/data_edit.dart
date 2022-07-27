@@ -186,79 +186,85 @@ class _DataEditPageState extends State<DataEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarQuote("Edit Pesanan"),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, top: 30, right: 20, bottom: 30),
-                  child: Column(
-                    children: [
-                      inputFormName(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      radioButtonPC(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      itemDropDown(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      inputFormNote(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      addButton(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      isShown ? orderSum() : Container(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Divider(
-                        color: Colors.black54,
-                        thickness: 1,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      inputFormPitch(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      radioButtonTW(),
-                      Divider(
-                        color: Colors.black54,
-                        thickness: 1,
-                      ),
-                      inputFormDiscount(),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      textPPN(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      countButton(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      nextButton(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      backButton(),
-                    ],
+    return WillPopScope(
+      onWillPop: () async{
+        Navigator.pop(context, 'update');
+        return true;
+      },
+      child: Scaffold(
+        appBar: appBarQuote("Edit Pesanan"),
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, top: 30, right: 20, bottom: 30),
+                    child: Column(
+                      children: [
+                        inputFormName(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        radioButtonPC(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        itemDropDown(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        inputFormNote(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        addButton(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        isShown ? orderSum() : Container(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Divider(
+                          color: Colors.black54,
+                          thickness: 1,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        inputFormPitch(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        radioButtonTW(),
+                        Divider(
+                          color: Colors.black54,
+                          thickness: 1,
+                        ),
+                        inputFormDiscount(),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        textPPN(),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        countButton(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        nextButton(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        backButton(),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 
@@ -845,7 +851,7 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.pop(context, 'update');
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

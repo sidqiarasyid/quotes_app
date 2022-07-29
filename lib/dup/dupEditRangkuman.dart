@@ -70,6 +70,34 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
   var dropId;
   String idDrops = "";
   bool drop = false;
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text("Total belum dihitung"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   updateItem() {
     print("ISI LENGTH LIST KETIKA UPDATE" + _listTambahData.length.toString());
     _listTambahData.forEach((EditModel model) {
@@ -106,21 +134,21 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
         id: widget.id,
         items: nameCont.text,
         tebal: hasil.toString(),
-        lebar: _lebar.text,
-        panjang: _panjang.text,
+        lebar: _lebar.text  == "" ? "0" : _lebar.text,
+        panjang: _panjang.text  == "" ? "0" : _panjang.text,
         spec: realItem,
         color: colorCont.text,
-        qty: _qty.text,
-        disc: _discount.text,
+        qty: _qty.text   == "" ? "0" : _qty.text,
+        disc: _discount.text == "" ? "0" : _discount.text,
         catatan: catatan,
-        price: _hasilModel!.grandTotal.toString(),
+        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toString(),
         tw: widget.tw,
         pc: widget.pc,
         sipSession: sips,
         dropId: idDrops,
-        hrgZip: _hrgZipper.text,
-        pitch: _pitch.text,
-        lbrZip: _lbZipper.text);
+        hrgZip: _hrgZipper.text == "" ? "0" : _hrgZipper.text,
+        pitch:  _pitch.text == "" ? "0" : _pitch.text,
+        lbrZip: _lbZipper.text == "" ? "0" : _lbZipper.text);
     await OrderDatabase.instance.update(order);
   }
 
@@ -149,16 +177,16 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
     });
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
-      "panjang": _panjang.text,
-      "lebar": _lebar.text,
-      "cash_disc": _discount.text,
+      "panjang": _panjang.text.isEmpty ? "" : _panjang.text,
+      "lebar": _lebar.text.isEmpty ? "" : _lebar.text,
+      "cash_disc":  _discount.text.isEmpty ? "" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
-      "qty": _qty.text,
+      "qty": _qty.text.isEmpty ? "" : _qty.text,
       "item": dropdownItem,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
-      "hrgZipper": _hrgZipper.text,
-      "etPitch": _pitch.text,
-      "etLbZipper": _lbZipper.text,
+      "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
+      "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
+      "etLbZipper": _lbZipper.text.isEmpty ? "" : _lbZipper.text,
     };
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
@@ -819,9 +847,13 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          updateItem();
-          update();
-          Navigator.pop(context, 'update');
+          if (_none != "-") {
+            updateItem();
+            update();
+            Navigator.pop(context, 'update');
+          } else if(_none == "-"){
+            showAlertDialog(context);
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

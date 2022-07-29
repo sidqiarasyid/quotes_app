@@ -96,6 +96,8 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
     _dup = DupModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       nama.text = _dup!.data[0].namaCustomer;
+      alamat.text = _itemCustomer.firstWhere((element) => element.nama == nama.text).alamat;
+      nomor.text = _itemCustomer.firstWhere((element) => element.nama == nama.text).telp;
       listData = _dup!.data;
     });
     for (int i = 0; i < listData![1].dataPesanan!.length; i++) {
@@ -285,7 +287,7 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
-              hintText: "Term of Payment",
+              hintText: "Nama Customer",
               hintStyle: TextStyle(fontSize: 19),
             ),
             controller: nama,

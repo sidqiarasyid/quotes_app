@@ -47,7 +47,6 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   }
 
   void masukData() async {
-    final prefs = await SharedPreferences.getInstance();
     listOrder.forEach((OrderModel model) {
       body += model.items +
           "#" +
@@ -59,11 +58,11 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           "#" +
           model.panjang +
           "#" +
-          prefs.getString('pitch').toString() +
+          model.pitch +
           "#" +
-          prefs.getString('hrgZipper').toString() +
+          model.hrgZip +
           "#" +
-          prefs.getString('lbZipper').toString() +
+          model.lbrZip +
           "#" +
           model.tw.toString() +
           "#" +
@@ -141,7 +140,12 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async{
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => PriceQuotePage()),
+                (Route<dynamic> route) => false);
+        return true;
+      },
       child: Scaffold(
         appBar: appBarQuote("3. Ringkasan Pesanan"),
         body: SingleChildScrollView(
@@ -217,11 +221,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => DataPesananPage()),
-              (route) => false);
+          Navigator.pop(context);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

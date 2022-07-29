@@ -8,6 +8,8 @@ import 'package:quotes_app/Model/price_model.dart';
 import 'package:quotes_app/Model/user_model.dart';
 import 'package:quotes_app/Page/ApproveAsSQPage.dart';
 import 'package:quotes_app/Page/data_customer.dart';
+import 'package:quotes_app/Page/home.dart';
+import 'package:quotes_app/db_order.dart';
 import 'package:quotes_app/dup/dupCustomer.dart';
 import 'package:quotes_app/edit/editCustomer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -118,19 +120,29 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarQuote("Price Quote"),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-        child: Center(
-          child: isLoading
-              ? CircularProgressIndicator()
-              : Column(
-                  children: [
-                    addPriceButton(),
-                    listPriceQuote(),
-                  ],
-                ),
+    return WillPopScope(
+      onWillPop: () async {
+        final prefs = await SharedPreferences.getInstance();
+
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomePage(username: prefs.getString('username').toString())),
+                (Route<dynamic> route) => false);
+        return true;
+      },
+      child: Scaffold(
+        appBar: appBarQuote("Price Quote"),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+          child: Center(
+            child: isLoading
+                ? CircularProgressIndicator()
+                : Column(
+                    children: [
+                      addPriceButton(),
+                      listPriceQuote(),
+                    ],
+                  ),
+          ),
         ),
       ),
     );
@@ -164,6 +176,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
+          OrderDatabase.instance.deleteAll();
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => DataCustomerPage()));
         },
@@ -273,6 +286,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                                 style: TextStyle(fontSize: 10),
                               ),
                               onPressed: () {
+                                OrderDatabase.instance.deleteAll();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -331,6 +345,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                                 style: TextStyle(fontSize: 10),
                               ),
                               onPressed: () {
+                                OrderDatabase.instance.deleteAll();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

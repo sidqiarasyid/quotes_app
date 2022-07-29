@@ -15,7 +15,12 @@ class _SuccessSavePageState extends State<SuccessSavePage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => PriceQuotePage()),
+                (Route<dynamic> route) => false);
+        return true;
+      },
       child: Scaffold(
         appBar: appBarQuote("Price Quote"),
         body: Padding(

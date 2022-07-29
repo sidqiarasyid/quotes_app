@@ -86,7 +86,7 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
       "id_sales": prefs.getString('username'),
-      "id_pq": "2",
+      "id_pq": widget.idPq,
     };
     print("ID PQ: " + widget.idPq);
     var dataUtf = utf8.encode(json.encode(data));
@@ -96,6 +96,8 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
     _dup = DupModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       nama.text = _dup!.data[0].namaCustomer;
+      alamat.text = _itemCustomer.firstWhere((element) => element.nama == nama.text).alamat;
+      nomor.text = _itemCustomer.firstWhere((element) => element.nama == nama.text).telp;
       listData = _dup!.data;
     });
     for (int i = 0; i < listData![1].dataPesanan!.length; i++) {
@@ -270,7 +272,7 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
-              hintText: "Term of Payment",
+              hintText: "Nama Customer",
               hintStyle: TextStyle(fontSize: 19),
             ),
             controller: nama,
@@ -351,6 +353,7 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
                   top: _dup!.data[0].termofpayment,
                   ov: _dup!.data[0].offerValidity,
                   condition: _dup!.data[0].conditions,
+                  id: widget.idPq,
                   note: _dup!.data[0].catatan)));
         },
         style: ButtonStyle(

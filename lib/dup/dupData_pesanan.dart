@@ -14,22 +14,8 @@ import 'package:quotes_app/dup/dupRangkuman.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class dupDataPesanan extends StatefulWidget {
-  final String cyc;
-  final String deliver;
-  final String moq;
-  final String top;
-  final String note;
-  final String ov;
-  final String condition;
   const dupDataPesanan(
-      {Key? key,
-      required this.cyc,
-      required this.deliver,
-      required this.moq,
-      required this.top,
-      required this.note,
-      required this.ov,
-      required this.condition})
+      {Key? key,})
       : super(key: key);
 
   @override
@@ -78,28 +64,64 @@ class _dupDataPesananState extends State<dupDataPesanan> {
   String sessionItem = "";
   int idx = -1;
 
+  showAlertDialog(BuildContext context) {
+
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text("Total belum dihitung"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   Future createDb() async {
     var order;
     order = OrderModel(
         items: nameCont.text,
         tebal: hasiTebal.toString(),
-        lebar: _lebar.text,
-        panjang: _panjang.text,
+        lebar: _lebar.text  == "" ? "0" : _lebar.text,
+        panjang: _panjang.text  == "" ? "0" : _panjang.text,
         spec: specLebar,
         color: colorCont.text,
-        qty: _qty.text,
-        disc: _discount.text,
-        price: _hasilModel!.grandTotal.toString(),
+        qty: _qty.text   == "" ? "0" : _qty.text,
+        disc: _discount.text == "" ? "0" : _discount.text,
+        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toString(),
         catatan: cat,
         tw: tw,
         pc: pc,
         sipSession: sessionItem,
         dropId: idDrops,
-        pitch: _pitch.text,
-        lbrZip: _lbZipper.text,
-        hrgZip: _hrgZipper.text);
+        pitch: _pitch.text == "" ? "0" : _pitch.text,
+        lbrZip: _lbZipper.text == "" ? "0" : _lbZipper.text,
+        hrgZip: _hrgZipper.text == "" ? "0" : _hrgZipper.text);
     await OrderDatabase.instance.create(order);
-    Navigator.push(context, MaterialPageRoute(builder: ((context) => DupRingkasanPage(cyc: widget.cyc, deliver: widget.deliver, moq: widget.moq, top: widget.top, note: widget.note, ov: widget.ov, condition: widget.condition))));
+    _listTambahData.clear();
+    setState(() {
+      specLebar = "";
+      hasiTebal = 0;
+      cat = "";
+      idDrops = "";
+      sessionItem = "";
+    });
+    Navigator.pop(context, 'update');
+
   }
 
   Future<String> getItem() async {
@@ -127,16 +149,16 @@ class _dupDataPesananState extends State<dupDataPesanan> {
     });
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
-      "panjang": _panjang.text,
-      "lebar": _lebar.text,
-      "cash_disc": _discount.text,
+      "panjang": _panjang.text.isEmpty ? "" : _panjang.text,
+      "lebar": _lebar.text.isEmpty ? "" : _lebar.text,
+      "cash_disc":  _discount.text.isEmpty ? "" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
-      "qty": _qty.text,
+      "qty": _qty.text.isEmpty ? "" : _qty.text,
       "item": _dataItem!.nama,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
-      "hrgZipper": _hrgZipper.text,
-      "etPitch": _pitch.text,
-      "etLbZipper": _lbZipper.text,
+      "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
+      "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
+      "etLbZipper": _lbZipper.text.isEmpty ? "" : _lbZipper.text,
     };
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
@@ -166,7 +188,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
       });
       print("ID: " + model.dropId);
     });
-
     print('Hasil Lebar: ' + hasiTebal.toString());
     print('Drop IDs ' + idDrops);
     print('SESSION ITEMS: ' + sessionItem);
@@ -183,7 +204,10 @@ class _dupDataPesananState extends State<dupDataPesanan> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async{
+        Navigator.pop(context, 'update');
+        return true;
+      },
       child: Scaffold(
         appBar: appBarQuote("Data Pesanan"),
         body: _isLoading
@@ -643,12 +667,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
         Flexible(
           flex: 1,
           child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter text';
-              }
-              return null;
-            },
             controller: _pitch,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -668,12 +686,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
         Flexible(
           flex: 1,
           child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter text';
-              }
-              return null;
-            },
             controller: _lbZipper,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -693,12 +705,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
         Flexible(
           flex: 1,
           child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter text';
-              }
-              return null;
-            },
             controller: _hrgZipper,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -801,12 +807,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
         Flexible(
           flex: 1,
           child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter text';
-              }
-              return null;
-            },
             controller: _discount,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -895,10 +895,11 @@ class _dupDataPesananState extends State<dupDataPesanan> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          if (_formKey.currentState!.validate()) {
+          if (_formKey.currentState!.validate() && _none != "-") {
             masukData();
             createDb();
-
+          } else if(_none == "-"){
+            showAlertDialog(context);
           }
         },
         style: ButtonStyle(
@@ -923,7 +924,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: ((context) => DupRingkasanPage(cyc: widget.cyc, deliver: widget.deliver, moq: widget.moq, top: widget.top, note: widget.note, ov: widget.ov, condition: widget.condition))));
+          Navigator.pop(context, 'update');
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

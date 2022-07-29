@@ -66,25 +66,44 @@ class _DataPesananPageState extends State<DataPesananPage> {
     order = OrderModel(
         items: nameCont.text,
         tebal: hasiTebal.toString(),
-        lebar: _lebar.text,
-        panjang: _panjang.text,
+        lebar: _lebar.text  == "" ? "0" : _lebar.text,
+        panjang: _panjang.text  == "" ? "0" : _panjang.text,
         spec: specLebar,
         color: colorCont.text,
-        qty: _qty.text,
-        disc: _discount.text,
-        price: _hasilModel!.grandTotal.toString(),
+        qty: _qty.text   == "" ? "0" : _qty.text,
+        disc: _discount.text == "" ? "0" : _discount.text,
+        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toString(),
         catatan: cat,
         tw: tw,
         pc: pc,
         sipSession: sessionItem,
         dropId: idDrops,
-        pitch: _pitch.text,
-        lbrZip: _lbZipper.text,
-        hrgZip: _hrgZipper.text);
+        pitch: _pitch.text == "" ? "0" : _pitch.text,
+        lbrZip: _lbZipper.text == "" ? "0" : _lbZipper.text,
+        hrgZip: _hrgZipper.text == "" ? "0" : _hrgZipper.text);
     await OrderDatabase.instance.create(order);
     setState(() {
       pc = _selectedValueRadioButtonPC;
       tw = _selectedValueRadioButtonTW;
+    });
+    _listTambahData.clear();
+    setState(() {
+      specLebar = "";
+      hasiTebal = 0;
+      cat = "";
+      idDrops = "";
+      sessionItem = "";
+      nameCont.clear();
+      _lebar.clear();
+      _panjang.clear();
+      colorCont.clear();
+      _qty.clear();
+      _discount.clear();
+      _pitch.clear();
+      _hrgZipper.clear();
+      _lbZipper.clear();
+      _none = "-";
+      _hasilModel = null;
     });
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => RingkasanPesananPage(
@@ -110,6 +129,32 @@ class _DataPesananPageState extends State<DataPesananPage> {
     print(_itemlist);
     return "Success";
   }
+  showAlertDialog(BuildContext context) {
+
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text("Total belum dihitung"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   getHasil() async {
     String url = "http://128.199.81.36/api/hitungtotal.php";
@@ -118,16 +163,16 @@ class _DataPesananPageState extends State<DataPesananPage> {
     });
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
-      "panjang": _panjang.text,
-      "lebar": _lebar.text,
-      "cash_disc": _discount.text,
+      "panjang": _panjang.text.isEmpty ? "" : _panjang.text,
+      "lebar": _lebar.text.isEmpty ? "" : _lebar.text,
+      "cash_disc":  _discount.text.isEmpty ? "" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
-      "qty": _qty.text,
+      "qty": _qty.text.isEmpty ? "" : _qty.text,
       "item": _dataItem!.nama,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
-      "hrgZipper": _hrgZipper.text,
-      "etPitch": _pitch.text,
-      "etLbZipper": _lbZipper.text,
+      "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
+      "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
+      "etLbZipper": _lbZipper.text.isEmpty ? "" : _lbZipper.text,
     };
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
@@ -269,6 +314,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
       backgroundColor: Colors.black,
     );
   }
+
 
   Widget inputFormName() {
     return Column(
@@ -631,12 +677,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter text';
-              }
-              return null;
-            },
             controller: _pitch,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -656,12 +696,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter text';
-              }
-              return null;
-            },
             controller: _lbZipper,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -681,12 +715,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter text';
-              }
-              return null;
-            },
+
             controller: _hrgZipper,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -789,12 +818,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter text';
-              }
-              return null;
-            },
+
             controller: _discount,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -883,9 +907,11 @@ class _DataPesananPageState extends State<DataPesananPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          if (_formKey.currentState!.validate()) {
+          if (_formKey.currentState!.validate() && _none != "-") {
             masukData();
             createDb();
+          } else if(_none == "-"){
+            showAlertDialog(context);
           }
         },
         style: ButtonStyle(

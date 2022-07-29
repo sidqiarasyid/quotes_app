@@ -1,14 +1,13 @@
 // To parse this JSON data, do
 //
-//     final hasilModel = hasilModelFromJson(jsonString);
+//     final dupModel = dupModelFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-HasilModel hasilModelFromJson(String str) =>
-    HasilModel.fromJson(json.decode(str));
+HasilModel dupModelFromJson(String str) => HasilModel.fromJson(json.decode(str));
 
-String hasilModelToJson(HasilModel data) => json.encode(data.toJson());
+String dupModelToJson(HasilModel data) => json.encode(data.toJson());
 
 class HasilModel {
   HasilModel({
@@ -23,29 +22,29 @@ class HasilModel {
 
   String response;
   dynamic idCust;
-  double grandTotal;
-  double grandTotalBag;
-  String grandTotalDisplay;
-  double grandTotalValue;
+  dynamic grandTotal;
+  dynamic grandTotalBag;
+  dynamic grandTotalDisplay;
+  dynamic grandTotalValue;
   String message;
 
   factory HasilModel.fromJson(Map<String, dynamic> json) => HasilModel(
-        response: json["Response"],
-        idCust: json["id_cust"],
-        grandTotal: json["grand_total"].toDouble(),
-        grandTotalBag: json["grand_total_bag"].toDouble(),
-        grandTotalDisplay: json["grand_total_display"],
-        grandTotalValue: json["grand_total_value"].toDouble(),
-        message: json["Message"],
-      );
+    response: json["Response"],
+    idCust: json["id_cust"],
+    grandTotal: json["grand_total"],
+    grandTotalBag: json["grand_total_bag"],
+    grandTotalDisplay: json["grand_total_display"],
+    grandTotalValue: json["grand_total_value"],
+    message: json["Message"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "Response": response,
-        "id_cust": idCust,
-        "grand_total": grandTotal,
-        "grand_total_bag": grandTotalBag,
-        "grand_total_display": grandTotalDisplay,
-        "grand_total_value": grandTotalValue,
-        "Message": message,
-      };
+    "Response": response,
+    "id_cust": idCust,
+    "grand_total": grandTotal,
+    "grand_total_bag": grandTotalBag,
+    "grand_total_display": grandTotalDisplay,
+    "grand_total_value": grandTotalValue,
+    "Message": message,
+  };
 }

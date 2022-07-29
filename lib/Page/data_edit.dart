@@ -70,6 +70,34 @@ class _DataEditPageState extends State<DataEditPage> {
   var dropId;
   String idDrops = "";
   bool drop = false;
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text("Total belum dihitung"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   updateItem() {
     print("ISI LENGTH LIST KETIKA UPDATE" + _listTambahData.length.toString());
     _listTambahData.forEach((EditModel model) {
@@ -106,21 +134,21 @@ class _DataEditPageState extends State<DataEditPage> {
         id: widget.id,
         items: nameCont.text,
         tebal: hasil.toString(),
-        lebar: _lebar.text,
-        panjang: _panjang.text,
+        lebar: _lebar.text  == "" ? "0" : _lebar.text,
+        panjang: _panjang.text  == "" ? "0" : _panjang.text,
         spec: realItem,
         color: colorCont.text,
-        qty: _qty.text,
-        disc: _discount.text,
+        qty: _qty.text   == "" ? "0" : _qty.text,
+        disc: _discount.text == "" ? "0" : _discount.text,
         catatan: catatan,
-        price: _hasilModel!.grandTotal.toString(),
+        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toString(),
         tw: widget.tw,
         pc: widget.pc,
         sipSession: sips,
         dropId: idDrops,
-        pitch: '',
-        lbrZip: '',
-        hrgZip: '');
+        hrgZip: _hrgZipper.text == "" ? "0" : _hrgZipper.text,
+        pitch:  _pitch.text == "" ? "0" : _pitch.text,
+        lbrZip: _lbZipper.text == "" ? "0" : _lbZipper.text);
     await OrderDatabase.instance.update(order);
   }
 
@@ -825,9 +853,13 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          updateItem();
-          update();
-          Navigator.pop(context, 'update');
+          if (_none != "-") {
+            updateItem();
+            update();
+            Navigator.pop(context, 'update');
+          } else if(_none == "-"){
+            showAlertDialog(context);
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

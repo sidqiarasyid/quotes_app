@@ -22,6 +22,7 @@ class EditRingkasanPage extends StatefulWidget {
   final String top;
   final String note;
   final String ov;
+  final String id;
   final String condition;
   const EditRingkasanPage(
       {Key? key,
@@ -31,7 +32,7 @@ class EditRingkasanPage extends StatefulWidget {
       required this.top,
       required this.note,
       required this.ov,
-      required this.condition})
+      required this.condition, required this.id})
       : super(key: key);
 
   @override
@@ -96,9 +97,10 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
 
   getSubmit() async {
     final prefs = await SharedPreferences.getInstance();
-    String url = "http://128.199.81.36/api/insertpq_new.php";
+    String url = "http://128.199.81.36/api/update_pq.php";
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
+      "id_pq": widget.id,
       "username": prefs.getString('username').toString(),
       "id_perusahaan": prefs.getString('Idcompany').toString(),
       "nama_customer": prefs.getString('namaCust').toString(),
@@ -568,7 +570,7 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
         ),
         onPressed: () {
           masukData();
-          //getSubmit();
+          getSubmit();
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

@@ -47,7 +47,6 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   }
 
   void masukData() async {
-    final prefs = await SharedPreferences.getInstance();
     listOrder.forEach((OrderModel model) {
       body += model.items +
           "#" +
@@ -59,11 +58,11 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           "#" +
           model.panjang +
           "#" +
-          prefs.getString('pitch').toString() +
+          model.pitch +
           "#" +
-          prefs.getString('hrgZipper').toString() +
+          model.hrgZip +
           "#" +
-          prefs.getString('lbZipper').toString() +
+          model.lbrZip +
           "#" +
           model.tw.toString() +
           "#" +

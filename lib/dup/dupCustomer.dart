@@ -62,7 +62,7 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
     return "Success";
   }
 
-  Future<String> getCustomer() async {
+   getCustomer() async {
     String url = "http://128.199.81.36/api/list_data.php";
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
@@ -77,7 +77,7 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
       _itemCustomer = _dropModel!.dataCustomer;
     });
     print(_itemCustomer);
-    return "Success";
+    getDuplicate();
   }
 
   getDuplicate() async {
@@ -161,7 +161,7 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
     getCompany();
     getCustomer();
     super.initState();
-    getDuplicate();
+
     // getData();
   }
 

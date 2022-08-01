@@ -179,7 +179,7 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
       "api_key": "kspconnectpedia2020feb",
       "panjang": _panjang.text.isEmpty ? "" : _panjang.text,
       "lebar": _lebar.text.isEmpty ? "" : _lebar.text,
-      "cash_disc":  _discount.text.isEmpty ? "" : _discount.text,
+      "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
       "item": dropdownItem,

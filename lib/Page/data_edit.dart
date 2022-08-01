@@ -177,16 +177,16 @@ class _DataEditPageState extends State<DataEditPage> {
     });
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
-      "panjang": _panjang.text,
-      "lebar": _lebar.text,
-      "cash_disc": _discount.text,
+      "panjang": _panjang.text.isEmpty ? "" : _panjang.text,
+      "lebar": _lebar.text.isEmpty ? "" : _lebar.text,
+      "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
-      "qty": _qty.text,
-      "item": dropdownItem,
+      "qty": _qty.text.isEmpty ? "" : _qty.text,
+      "item": _dataItem!.nama,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
-      "hrgZipper": _hrgZipper.text,
-      "etPitch": _pitch.text,
-      "etLbZipper": _lbZipper.text,
+      "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
+      "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
+      "etLbZipper": _lbZipper.text.isEmpty ? "" : _lbZipper.text,
     };
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);

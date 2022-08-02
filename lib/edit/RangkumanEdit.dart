@@ -70,7 +70,7 @@ class _RangkumanEditState extends State<RangkumanEdit> {
   var dropId;
   String idDrops = "";
   bool drop = false;
-
+  String item_hitungan = "";
   showAlertDialog(BuildContext context) {
 
     // set up the button
@@ -114,6 +114,14 @@ class _RangkumanEditState extends State<RangkumanEdit> {
           model.tebal.toString() +
           "#" +
           "#-##";
+      item_hitungan += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
       print("SIPS: " + sips);
       catatan += model.catatan.toString() + "-" + "/";
       print("CATATAN: " + catatan);
@@ -182,7 +190,7 @@ class _RangkumanEditState extends State<RangkumanEdit> {
       "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
-      "item": dropdownItem,
+      "item": item_hitungan,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
       "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
       "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
@@ -196,6 +204,7 @@ class _RangkumanEditState extends State<RangkumanEdit> {
     setState(() {
       _none = _hasilModel!.grandTotalDisplay;
       _isLoadingHasil = false;
+      item_hitungan = "";
     });
   }
 
@@ -823,6 +832,7 @@ class _RangkumanEditState extends State<RangkumanEdit> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
+          updateItem();
           getHasil();
         },
         style: ButtonStyle(
@@ -848,7 +858,6 @@ class _RangkumanEditState extends State<RangkumanEdit> {
         ),
         onPressed: () async {
           if (_none != "-") {
-            updateItem();
             update();
             Navigator.pop(context, 'update');
           } else if(_none == "-"){

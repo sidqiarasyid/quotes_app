@@ -63,6 +63,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
   String idDrops = "";
   String sessionItem = "";
   int idx = -1;
+  String item_hitung = "";
 
   showAlertDialog(BuildContext context) {
 
@@ -154,7 +155,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
       "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
-      "item": _dataItem!.nama,
+      "item": item_hitung,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
       "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
       "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
@@ -168,7 +169,9 @@ class _dupDataPesananState extends State<dupDataPesanan> {
     setState(() {
       _none = _hasilModel!.grandTotalDisplay;
       _isLoadingHasil = false;
+      item_hitung = "";
     });
+
   }
 
   masukData() {
@@ -182,6 +185,14 @@ class _dupDataPesananState extends State<dupDataPesanan> {
           "#" +
           model.tebal.replaceAll(" ", "") +
           "#-##";
+      item_hitung += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;
@@ -870,6 +881,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
             prefs.setString("pitch", pitch);
             prefs.setString("hrgZipper", hrgZipper);
             prefs.setString("lbZipper", lbZipper);
+            masukData();
             getHasil();
           }
         },
@@ -896,7 +908,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
         ),
         onPressed: () async {
           if (_formKey.currentState!.validate() && _none != "-") {
-            masukData();
             createDb();
           } else if(_none == "-"){
             showAlertDialog(context);

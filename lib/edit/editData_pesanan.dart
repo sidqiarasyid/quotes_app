@@ -64,6 +64,7 @@ class _editDataPesananState extends State<editDataPesanan> {
   String idDrops = "";
   String sessionItem = "";
   int idx = -1;
+  String item_hitungan = "";
 
   showAlertDialog(BuildContext context) {
     // set up the button
@@ -154,7 +155,7 @@ class _editDataPesananState extends State<editDataPesanan> {
       "cash_disc": _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
-      "item": _dataItem!.nama,
+      "item": item_hitungan,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
       "hrgZipper": _hrgZipper.text.isEmpty ? "" : _hrgZipper.text,
       "etPitch": _pitch.text.isEmpty ? "" : _pitch.text,
@@ -168,6 +169,7 @@ class _editDataPesananState extends State<editDataPesanan> {
     setState(() {
       _none = _hasilModel!.grandTotalDisplay;
       _isLoadingHasil = false;
+      item_hitungan = "";
     });
   }
 
@@ -182,6 +184,14 @@ class _editDataPesananState extends State<editDataPesanan> {
           "#" +
           model.tebal.replaceAll(" ", "") +
           "#-##";
+      item_hitungan += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;
@@ -871,6 +881,7 @@ class _editDataPesananState extends State<editDataPesanan> {
             prefs.setString("pitch", pitch);
             prefs.setString("hrgZipper", hrgZipper);
             prefs.setString("lbZipper", lbZipper);
+            masukData();
             getHasil();
           }
         },
@@ -897,7 +908,6 @@ class _editDataPesananState extends State<editDataPesanan> {
         ),
         onPressed: () async {
           if (_formKey.currentState!.validate() && _none != "-") {
-            masukData();
             createDb();
           } else if (_none == "-") {
             showAlertDialog(context);

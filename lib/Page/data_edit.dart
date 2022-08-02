@@ -70,6 +70,7 @@ class _DataEditPageState extends State<DataEditPage> {
   var dropId;
   String idDrops = "";
   bool drop = false;
+  String item_hitung = "";
 
   showAlertDialog(BuildContext context) {
 
@@ -114,6 +115,14 @@ class _DataEditPageState extends State<DataEditPage> {
           model.tebal.toString() +
           "#" +
           "#-##";
+      item_hitung += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
       print("SIPS: " + sips);
       catatan += model.catatan.toString() + "-" + "/";
       print("CATATAN: " + catatan);
@@ -182,7 +191,7 @@ class _DataEditPageState extends State<DataEditPage> {
       "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
-      "item": dropdownItem,
+      "item": item_hitung,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
       "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
       "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
@@ -196,6 +205,9 @@ class _DataEditPageState extends State<DataEditPage> {
     setState(() {
       _none = _hasilModel!.grandTotalDisplay;
       _isLoadingHasil = false;
+    });
+    setState(() {
+      item_hitung = "";
     });
   }
 
@@ -829,6 +841,7 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
+          updateItem();
           getHasil();
         },
         style: ButtonStyle(
@@ -854,7 +867,6 @@ class _DataEditPageState extends State<DataEditPage> {
         ),
         onPressed: () async {
           if (_none != "-") {
-            updateItem();
             update();
             Navigator.pop(context, 'update');
           } else if(_none == "-"){

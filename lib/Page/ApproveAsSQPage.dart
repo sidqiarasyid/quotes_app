@@ -553,7 +553,7 @@ class _ApproveAsSQPageState extends State<ApproveAsSQPage> {
                             style: TextStyle(fontSize: 15),
                           ),
                           onPressed: () {
-                            setState(() {});
+                            Navigator.pop(context);
                           },
                           style: ButtonStyle(
                             backgroundColor:

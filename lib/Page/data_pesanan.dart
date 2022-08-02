@@ -60,6 +60,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
   String idDrops = "";
   String sessionItem = "";
   int idx = -1;
+  String item_hitung = "";
 
   Future createDb() async {
     var order;
@@ -168,7 +169,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
       "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
-      "item": _dataItem!.nama,
+      "item": item_hitung,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
       "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
       "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
@@ -183,6 +184,10 @@ class _DataPesananPageState extends State<DataPesananPage> {
       _none = _hasilModel!.grandTotalDisplay;
       _isLoadingHasil = false;
     });
+    print("Format item hitung: " + item_hitung);
+    setState(() {
+      item_hitung = "";
+    });
   }
 
   masukData() {
@@ -196,6 +201,14 @@ class _DataPesananPageState extends State<DataPesananPage> {
           "#" +
           model.tebal.replaceAll(" ", "") +
           "#-##";
+      item_hitung += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;
@@ -882,6 +895,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
             prefs.setString("pitch", pitch);
             prefs.setString("hrgZipper", hrgZipper);
             prefs.setString("lbZipper", lbZipper);
+            masukData();
             getHasil();
           }
         },
@@ -908,7 +922,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
         ),
         onPressed: () async {
           if (_formKey.currentState!.validate() && _none != "-") {
-            masukData();
             createDb();
           } else if(_none == "-"){
             showAlertDialog(context);

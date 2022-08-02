@@ -182,7 +182,7 @@ class _DataEditPageState extends State<DataEditPage> {
       "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
-      "item": _dataItem!.nama,
+      "item": dropdownItem,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
       "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
       "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,

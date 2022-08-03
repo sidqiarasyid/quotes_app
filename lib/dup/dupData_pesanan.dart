@@ -14,9 +14,9 @@ import 'package:quotes_app/dup/dupRangkuman.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class dupDataPesanan extends StatefulWidget {
-  const dupDataPesanan(
-      {Key? key,})
-      : super(key: key);
+  const dupDataPesanan({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<dupDataPesanan> createState() => _dupDataPesananState();
@@ -66,7 +66,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
   String item_hitung = "";
 
   showAlertDialog(BuildContext context) {
-
     // set up the button
     Widget okButton = TextButton(
       child: Text("Cancel"),
@@ -92,7 +91,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
     );
   }
 
-  format_hitung(){
+  format_hitung() {
     _listTambahData.forEach((ModelTambahData model) {
       item_hitung += model.dropId +
           "#" +
@@ -110,11 +109,11 @@ class _dupDataPesananState extends State<dupDataPesanan> {
     order = OrderModel(
         items: nameCont.text,
         tebal: hasiTebal.toString(),
-        lebar: _lebar.text  == "" ? "0" : _lebar.text,
-        panjang: _panjang.text  == "" ? "0" : _panjang.text,
+        lebar: _lebar.text == "" ? "0" : _lebar.text,
+        panjang: _panjang.text == "" ? "0" : _panjang.text,
         spec: specLebar,
         color: colorCont.text,
-        qty: _qty.text   == "" ? "0" : _qty.text,
+        qty: _qty.text == "" ? "0" : _qty.text,
         disc: _discount.text == "" ? "0" : _discount.text,
         price: _none == "-" ? "0" : _hasilModel!.grandTotal.toString(),
         catatan: cat,
@@ -135,7 +134,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
       sessionItem = "";
     });
     Navigator.pop(context, 'update');
-
   }
 
   Future<String> getItem() async {
@@ -165,13 +163,13 @@ class _dupDataPesananState extends State<dupDataPesanan> {
       "api_key": "kspconnectpedia2020feb",
       "panjang": _panjang.text.isEmpty ? "" : _panjang.text,
       "lebar": _lebar.text.isEmpty ? "" : _lebar.text,
-      "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
+      "cash_disc": _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
       "item": item_hitung,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
-      "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
-      "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
+      "hrgZipper": _hrgZipper.text.isEmpty ? "" : _hrgZipper.text,
+      "etPitch": _pitch.text.isEmpty ? "" : _pitch.text,
       "etLbZipper": _lbZipper.text.isEmpty ? "" : _lbZipper.text,
     };
     var dataUtf = utf8.encode(json.encode(data));
@@ -184,7 +182,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
       _isLoadingHasil = false;
       item_hitung = "";
     });
-
   }
 
   masukData() {
@@ -220,7 +217,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context, 'update');
         return true;
       },
@@ -526,7 +523,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
           decoration: InputDecoration.collapsed(hintText: ''),
           validator: (value) {
             if (value == null) {
-              return 'Please enter item';
+              return 'Please enter item, quantity, notes';
             }
             return null;
           },
@@ -597,27 +594,29 @@ class _dupDataPesananState extends State<dupDataPesanan> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          setState(() {
-            for (int i = 0; i < _listTambahData.length; i++) {
-              if (_listTambahData[i].item == _dataItem!.nama.toString()) {
-                idx = i;
+          if (_formKey.currentState!.validate()) {
+            setState(() {
+              for (int i = 0; i < _listTambahData.length; i++) {
+                if (_listTambahData[i].item == _dataItem!.nama.toString()) {
+                  idx = i;
+                }
               }
-            }
-            if (idx == -1) {
-              _listTambahData.add(ModelTambahData(_dataItem!.nama,
-                  tebalCont.text, catatanCont.text, _dataItem!.idBarang));
-            } else {
-              _listTambahData[idx].tebal = tebalCont.text.toString();
-              _listTambahData[idx].catatan = catatanCont.text.toString();
-            }
+              if (idx == -1) {
+                _listTambahData.add(ModelTambahData(_dataItem!.nama,
+                    tebalCont.text, catatanCont.text, _dataItem!.idBarang));
+              } else {
+                _listTambahData[idx].tebal = tebalCont.text.toString();
+                _listTambahData[idx].catatan = catatanCont.text.toString();
+              }
 
-            idx = -1;
-          });
+              idx = -1;
+            });
 
-          isShown = true;
-          if (isShown == true) {
-            tebalCont.clear();
-            catatanCont.clear();
+            isShown = true;
+            if (isShown == true) {
+              tebalCont.clear();
+              catatanCont.clear();
+            }
           }
         },
         style: ButtonStyle(
@@ -915,7 +914,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
           if (_formKey.currentState!.validate() && _none != "-") {
             masukData();
             createDb();
-          } else if(_none == "-"){
+          } else if (_none == "-") {
             showAlertDialog(context);
           }
         },

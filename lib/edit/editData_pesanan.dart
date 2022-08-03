@@ -173,7 +173,7 @@ class _editDataPesananState extends State<editDataPesanan> {
     });
   }
 
-  format_hitung(){
+  format_hitung() {
     _listTambahData.forEach((ModelTambahData model) {
       item_hitungan += model.dropId +
           "#" +
@@ -526,7 +526,7 @@ class _editDataPesananState extends State<editDataPesanan> {
           decoration: InputDecoration.collapsed(hintText: ''),
           validator: (value) {
             if (value == null) {
-              return 'Please enter item';
+              return 'Please enter item, quantity, notes';
             }
             return null;
           },
@@ -597,27 +597,29 @@ class _editDataPesananState extends State<editDataPesanan> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          setState(() {
-            for (int i = 0; i < _listTambahData.length; i++) {
-              if (_listTambahData[i].item == _dataItem!.nama.toString()) {
-                idx = i;
+          if (_formKey.currentState!.validate()) {
+            setState(() {
+              for (int i = 0; i < _listTambahData.length; i++) {
+                if (_listTambahData[i].item == _dataItem!.nama.toString()) {
+                  idx = i;
+                }
               }
-            }
-            if (idx == -1) {
-              _listTambahData.add(ModelTambahData(_dataItem!.nama,
-                  tebalCont.text, catatanCont.text, _dataItem!.idBarang));
-            } else {
-              _listTambahData[idx].tebal = tebalCont.text.toString();
-              _listTambahData[idx].catatan = catatanCont.text.toString();
-            }
+              if (idx == -1) {
+                _listTambahData.add(ModelTambahData(_dataItem!.nama,
+                    tebalCont.text, catatanCont.text, _dataItem!.idBarang));
+              } else {
+                _listTambahData[idx].tebal = tebalCont.text.toString();
+                _listTambahData[idx].catatan = catatanCont.text.toString();
+              }
 
-            idx = -1;
-          });
+              idx = -1;
+            });
 
-          isShown = true;
-          if (isShown == true) {
-            tebalCont.clear();
-            catatanCont.clear();
+            isShown = true;
+            if (isShown == true) {
+              tebalCont.clear();
+              catatanCont.clear();
+            }
           }
         },
         style: ButtonStyle(

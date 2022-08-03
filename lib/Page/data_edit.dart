@@ -27,6 +27,7 @@ class DataEditPage extends StatefulWidget {
 }
 
 class _DataEditPageState extends State<DataEditPage> {
+  final _formKey = GlobalKey<FormState>();
   EditModel? tambahData;
   String _none = "-";
   HasilModel? _hasilModel;
@@ -73,7 +74,6 @@ class _DataEditPageState extends State<DataEditPage> {
   String item_hitung = "";
 
   showAlertDialog(BuildContext context) {
-
     // set up the button
     Widget okButton = TextButton(
       child: Text("Cancel"),
@@ -135,11 +135,11 @@ class _DataEditPageState extends State<DataEditPage> {
         id: widget.id,
         items: nameCont.text,
         tebal: hasil.toString(),
-        lebar: _lebar.text  == "" ? "0" : _lebar.text,
-        panjang: _panjang.text  == "" ? "0" : _panjang.text,
+        lebar: _lebar.text == "" ? "0" : _lebar.text,
+        panjang: _panjang.text == "" ? "0" : _panjang.text,
         spec: realItem,
         color: colorCont.text,
-        qty: _qty.text   == "" ? "0" : _qty.text,
+        qty: _qty.text == "" ? "0" : _qty.text,
         disc: _discount.text == "" ? "0" : _discount.text,
         catatan: catatan,
         price: _none == "-" ? "0" : _hasilModel!.grandTotal.toString(),
@@ -148,7 +148,7 @@ class _DataEditPageState extends State<DataEditPage> {
         sipSession: sips,
         dropId: idDrops,
         hrgZip: _hrgZipper.text == "" ? "0" : _hrgZipper.text,
-        pitch:  _pitch.text == "" ? "0" : _pitch.text,
+        pitch: _pitch.text == "" ? "0" : _pitch.text,
         lbrZip: _lbZipper.text == "" ? "0" : _lbZipper.text);
     await OrderDatabase.instance.update(order);
   }
@@ -171,7 +171,7 @@ class _DataEditPageState extends State<DataEditPage> {
     return "Success";
   }
 
-  format_hitung () {
+  format_hitung() {
     _listTambahData.forEach((EditModel model) {
       item_hitung += model.dropId +
           "#" +
@@ -183,6 +183,7 @@ class _DataEditPageState extends State<DataEditPage> {
           "##";
     });
   }
+
   getHasil() async {
     String url = "http://128.199.81.36/api/hitungtotal.php";
     setState(() {
@@ -192,13 +193,13 @@ class _DataEditPageState extends State<DataEditPage> {
       "api_key": "kspconnectpedia2020feb",
       "panjang": _panjang.text.isEmpty ? "" : _panjang.text,
       "lebar": _lebar.text.isEmpty ? "" : _lebar.text,
-      "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
+      "cash_disc": _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
       "item": item_hitung,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
-      "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
-      "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
+      "hrgZipper": _hrgZipper.text.isEmpty ? "" : _hrgZipper.text,
+      "etPitch": _pitch.text.isEmpty ? "" : _pitch.text,
       "etLbZipper": _lbZipper.text.isEmpty ? "" : _lbZipper.text,
     };
     var dataUtf = utf8.encode(json.encode(data));
@@ -231,7 +232,7 @@ class _DataEditPageState extends State<DataEditPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context, 'update');
         return true;
       },
@@ -239,74 +240,77 @@ class _DataEditPageState extends State<DataEditPage> {
         appBar: appBarQuote("Edit Pesanan"),
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
-            : ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20, top: 30, right: 20, bottom: 30),
-                    child: Column(
-                      children: [
-                        inputFormName(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        radioButtonPC(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        itemDropDown(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        inputFormNote(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        addButton(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        isShown ? orderSum() : Container(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Divider(
-                          color: Colors.black54,
-                          thickness: 1,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        inputFormPitch(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        radioButtonTW(),
-                        Divider(
-                          color: Colors.black54,
-                          thickness: 1,
-                        ),
-                        inputFormDiscount(),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        textPPN(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        countButton(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        nextButton(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        backButton(),
-                      ],
+            : Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20, top: 30, right: 20, bottom: 30),
+                      child: Column(
+                        children: [
+                          inputFormName(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          radioButtonPC(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          itemDropDown(),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          inputFormNote(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          addButton(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          isShown ? orderSum() : Container(),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Divider(
+                            color: Colors.black54,
+                            thickness: 1,
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          inputFormPitch(),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          radioButtonTW(),
+                          Divider(
+                            color: Colors.black54,
+                            thickness: 1,
+                          ),
+                          inputFormDiscount(),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          textPPN(),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          countButton(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          nextButton(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          backButton(),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
       ),
     );
@@ -500,7 +504,14 @@ class _DataEditPageState extends State<DataEditPage> {
             color: Colors.grey,
           ),
         ),
-        child: DropdownButton<DataItem>(
+        child: DropdownButtonFormField<DataItem>(
+          decoration: InputDecoration.collapsed(hintText: ''),
+          validator: (value) {
+            if (value == null) {
+              return 'Please enter item, quantity, notes';
+            }
+            return null;
+          },
           hint: Text("Pilih Item"),
           isExpanded: true,
           value: _dataItem,
@@ -512,7 +523,6 @@ class _DataEditPageState extends State<DataEditPage> {
             print("DropDown Item: " + _dataItem!.nama.toString());
           },
           isDense: true,
-          underline: SizedBox.shrink(),
           items: itemList?.map((DataItem item) {
                 return DropdownMenuItem<DataItem>(
                   child: Text(
@@ -570,24 +580,26 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          setState(() {
-            print("List: " + _listTambahData.length.toString());
-            for (int i = 0; i < _listTambahData.length; i++) {
-              if (_listTambahData[i].item == _dataItem!.nama) {
-                idxEdit = i;
+          if (_formKey.currentState!.validate()) {
+            setState(() {
+              print("List: " + _listTambahData.length.toString());
+              for (int i = 0; i < _listTambahData.length; i++) {
+                if (_listTambahData[i].item == _dataItem!.nama) {
+                  idxEdit = i;
+                }
               }
-            }
-            if (idxEdit == -1) {
-              _listTambahData.add(EditModel(_dataItem!.nama, tebalCont.text,
-                  catatanCont.text, _dataItem!.idBarang));
-              print(idxEdit);
-            } else {
-              _listTambahData[idxEdit].tebal = tebalCont.text.toString();
-              _listTambahData[idxEdit].catatan = catatanCont.text.toString();
-            }
+              if (idxEdit == -1) {
+                _listTambahData.add(EditModel(_dataItem!.nama, tebalCont.text,
+                    catatanCont.text, _dataItem!.idBarang));
+                print(idxEdit);
+              } else {
+                _listTambahData[idxEdit].tebal = tebalCont.text.toString();
+                _listTambahData[idxEdit].catatan = catatanCont.text.toString();
+              }
 
-            idxEdit = -1;
-          });
+              idxEdit = -1;
+            });
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -874,7 +886,7 @@ class _DataEditPageState extends State<DataEditPage> {
             updateItem();
             update();
             Navigator.pop(context, 'update');
-          } else if(_none == "-"){
+          } else if (_none == "-") {
             showAlertDialog(context);
           }
         },

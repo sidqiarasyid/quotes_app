@@ -98,6 +98,19 @@ class _RangkumanEditState extends State<RangkumanEdit> {
     );
   }
 
+  format_hitung () {
+    _listTambahData.forEach((EditModel model) {
+      item_hitungan += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
+    });
+  }
+
   updateItem() {
     print("ISI LENGTH LIST KETIKA UPDATE" + _listTambahData.length.toString());
     _listTambahData.forEach((EditModel model) {
@@ -114,14 +127,6 @@ class _RangkumanEditState extends State<RangkumanEdit> {
           model.tebal.toString() +
           "#" +
           "#-##";
-      item_hitungan += model.dropId +
-          "#" +
-          model.item +
-          "#" +
-          model.tebal.replaceAll(" ", "") +
-          "#" +
-          model.catatan +
-          "##";
       print("SIPS: " + sips);
       catatan += model.catatan.toString() + "-" + "/";
       print("CATATAN: " + catatan);
@@ -832,7 +837,7 @@ class _RangkumanEditState extends State<RangkumanEdit> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          updateItem();
+          format_hitung();
           getHasil();
         },
         style: ButtonStyle(
@@ -858,6 +863,7 @@ class _RangkumanEditState extends State<RangkumanEdit> {
         ),
         onPressed: () async {
           if (_none != "-") {
+            updateItem();
             update();
             Navigator.pop(context, 'update');
           } else if(_none == "-"){

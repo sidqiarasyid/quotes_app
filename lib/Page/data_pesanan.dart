@@ -156,6 +156,18 @@ class _DataPesananPageState extends State<DataPesananPage> {
       },
     );
   }
+  format_hitung(){
+    _listTambahData.forEach((ModelTambahData model) {
+      item_hitung += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
+    });
+  }
 
   getHasil() async {
     String url = "http://128.199.81.36/api/hitungtotal.php";
@@ -201,14 +213,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
           "#" +
           model.tebal.replaceAll(" ", "") +
           "#-##";
-      item_hitung += model.dropId +
-          "#" +
-          model.item +
-          "#" +
-          model.tebal.replaceAll(" ", "") +
-          "#" +
-          model.catatan +
-          "##";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;
@@ -895,7 +899,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
             prefs.setString("pitch", pitch);
             prefs.setString("hrgZipper", hrgZipper);
             prefs.setString("lbZipper", lbZipper);
-            masukData();
+            format_hitung();
             getHasil();
           }
         },
@@ -922,6 +926,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
         ),
         onPressed: () async {
           if (_formKey.currentState!.validate() && _none != "-") {
+            masukData();
             createDb();
           } else if(_none == "-"){
             showAlertDialog(context);

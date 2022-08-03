@@ -92,6 +92,19 @@ class _dupDataPesananState extends State<dupDataPesanan> {
     );
   }
 
+  format_hitung(){
+    _listTambahData.forEach((ModelTambahData model) {
+      item_hitung += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
+    });
+  }
+
   Future createDb() async {
     var order;
     order = OrderModel(
@@ -185,14 +198,6 @@ class _dupDataPesananState extends State<dupDataPesanan> {
           "#" +
           model.tebal.replaceAll(" ", "") +
           "#-##";
-      item_hitung += model.dropId +
-          "#" +
-          model.item +
-          "#" +
-          model.tebal.replaceAll(" ", "") +
-          "#" +
-          model.catatan +
-          "##";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;
@@ -881,7 +886,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
             prefs.setString("pitch", pitch);
             prefs.setString("hrgZipper", hrgZipper);
             prefs.setString("lbZipper", lbZipper);
-            masukData();
+            format_hitung();
             getHasil();
           }
         },
@@ -908,6 +913,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
         ),
         onPressed: () async {
           if (_formKey.currentState!.validate() && _none != "-") {
+            masukData();
             createDb();
           } else if(_none == "-"){
             showAlertDialog(context);

@@ -173,6 +173,19 @@ class _editDataPesananState extends State<editDataPesanan> {
     });
   }
 
+  format_hitung(){
+    _listTambahData.forEach((ModelTambahData model) {
+      item_hitungan += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
+    });
+  }
+
   masukData() {
     _listTambahData.forEach((ModelTambahData model) {
       specLebar += model.item + "-" + model.tebal.replaceAll(" ", "") + "//";
@@ -184,14 +197,6 @@ class _editDataPesananState extends State<editDataPesanan> {
           "#" +
           model.tebal.replaceAll(" ", "") +
           "#-##";
-      item_hitungan += model.dropId +
-          "#" +
-          model.item +
-          "#" +
-          model.tebal.replaceAll(" ", "") +
-          "#" +
-          model.catatan +
-          "##";
       var lebarInt = int.parse(model.tebal);
       setState(() {
         hasiTebal += lebarInt;
@@ -881,7 +886,7 @@ class _editDataPesananState extends State<editDataPesanan> {
             prefs.setString("pitch", pitch);
             prefs.setString("hrgZipper", hrgZipper);
             prefs.setString("lbZipper", lbZipper);
-            masukData();
+            format_hitung();
             getHasil();
           }
         },
@@ -908,6 +913,7 @@ class _editDataPesananState extends State<editDataPesanan> {
         ),
         onPressed: () async {
           if (_formKey.currentState!.validate() && _none != "-") {
+            masukData();
             createDb();
           } else if (_none == "-") {
             showAlertDialog(context);

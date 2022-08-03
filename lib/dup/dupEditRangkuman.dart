@@ -115,14 +115,6 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
           model.tebal.toString() +
           "#" +
           "#-##";
-      item_hitung += model.dropId +
-          "#" +
-          model.item +
-          "#" +
-          model.tebal.replaceAll(" ", "") +
-          "#" +
-          model.catatan +
-          "##";
       print("SIPS: " + sips);
       catatan += model.catatan.toString() + "-" + "/";
       print("CATATAN: " + catatan);
@@ -136,6 +128,19 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
     // print("SIPS: " + sips);
     // print("DROP ID EDIT:  " + idDrops);
     print('Hasil Lebar: ' + hasil.toString());
+  }
+
+  format_hitung () {
+    _listTambahData.forEach((EditModel model) {
+      item_hitung += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
+    });
   }
 
   Future update() async {
@@ -835,7 +840,7 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          updateItem();
+          format_hitung();
           getHasil();
         },
         style: ButtonStyle(
@@ -861,6 +866,7 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
         ),
         onPressed: () async {
           if (_none != "-") {
+            updateItem();
             update();
             Navigator.pop(context, 'update');
           } else if(_none == "-"){

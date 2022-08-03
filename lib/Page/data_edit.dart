@@ -115,14 +115,6 @@ class _DataEditPageState extends State<DataEditPage> {
           model.tebal.toString() +
           "#" +
           "#-##";
-      item_hitung += model.dropId +
-          "#" +
-          model.item +
-          "#" +
-          model.tebal.replaceAll(" ", "") +
-          "#" +
-          model.catatan +
-          "##";
       print("SIPS: " + sips);
       catatan += model.catatan.toString() + "-" + "/";
       print("CATATAN: " + catatan);
@@ -179,6 +171,18 @@ class _DataEditPageState extends State<DataEditPage> {
     return "Success";
   }
 
+  format_hitung () {
+    _listTambahData.forEach((EditModel model) {
+      item_hitung += model.dropId +
+          "#" +
+          model.item +
+          "#" +
+          model.tebal.replaceAll(" ", "") +
+          "#" +
+          model.catatan +
+          "##";
+    });
+  }
   getHasil() async {
     String url = "http://128.199.81.36/api/hitungtotal.php";
     setState(() {
@@ -841,7 +845,7 @@ class _DataEditPageState extends State<DataEditPage> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () {
-          updateItem();
+          format_hitung();
           getHasil();
         },
         style: ButtonStyle(
@@ -867,6 +871,7 @@ class _DataEditPageState extends State<DataEditPage> {
         ),
         onPressed: () async {
           if (_none != "-") {
+            updateItem();
             update();
             Navigator.pop(context, 'update');
           } else if(_none == "-"){

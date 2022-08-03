@@ -198,7 +198,7 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
         var height = MediaQuery.of(context).size.height;
         return Container(
             padding: EdgeInsets.only(top: 20),
-            height: height * 0.77,
+            height: height * 0.75,
             child: ListView.builder(
                 itemCount: items.length,
                 itemBuilder: (context, index) {

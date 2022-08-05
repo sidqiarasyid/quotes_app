@@ -788,7 +788,7 @@ class _DupRangkumanEditState extends State<DupRangkumanEdit> {
         Flexible(
           flex: 1,
           child: Text(
-            "Discount",
+            "Discount %",
             style: TextStyle(
               fontSize: 16,
               color: Colors.black,

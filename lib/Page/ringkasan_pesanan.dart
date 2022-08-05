@@ -48,7 +48,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
 
   void masukData() async {
     listOrder.forEach((OrderModel model) {
-      body += model.items +
+      body += "~"+ model.items +
           "#" +
           model.color +
           "#" +

@@ -815,7 +815,7 @@ class _editDataPesananState extends State<editDataPesanan> {
         Flexible(
           flex: 1,
           child: Text(
-            "Discount",
+            "Discount %",
             style: TextStyle(
               fontSize: 16,
               color: Colors.black,

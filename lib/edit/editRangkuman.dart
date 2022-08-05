@@ -66,7 +66,7 @@ class _EditRingkasanPageState extends State<EditRingkasanPage> {
   void masukData() async {
     final prefs = await SharedPreferences.getInstance();
     listOrder.forEach((OrderModel model) {
-      body += model.items +
+      body += "~" + model.items +
           "#" +
           model.color +
           "#" +

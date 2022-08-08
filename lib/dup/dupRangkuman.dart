@@ -63,9 +63,10 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
   }
 
   void masukData() async {
+    String tmpBody = "";
     final prefs = await SharedPreferences.getInstance();
     listOrder.forEach((OrderModel model) {
-      body += "~" + model.items +
+      tmpBody += "~" + model.items +
           "#" +
           model.color +
           "#" +
@@ -91,6 +92,7 @@ class _DupRingkasanPageState extends State<DupRingkasanPage> {
           "###" +
           model.sipSession;
     });
+    body = tmpBody.substring(1, tmpBody.length);
     print("ISI BODY DATA: " + body);
   }
 

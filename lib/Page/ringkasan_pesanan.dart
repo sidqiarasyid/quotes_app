@@ -47,8 +47,9 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
   }
 
   void masukData() async {
+    String tmpBody = "";
     listOrder.forEach((OrderModel model) {
-      body += "~"+ model.items +
+      tmpBody += "~"+ model.items +
           "#" +
           model.color +
           "#" +
@@ -74,6 +75,7 @@ class _RingkasanPesananPageState extends State<RingkasanPesananPage> {
           "###" +
           model.sipSession;
     });
+    body = tmpBody.substring(1, tmpBody.length);
     print("ISI BODY DATA: " + body);
   }
 

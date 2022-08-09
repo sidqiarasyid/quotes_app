@@ -142,7 +142,7 @@ class _DataEditPageState extends State<DataEditPage> {
         qty: _qty.text == "" ? "0" : _qty.text,
         disc: _discount.text == "" ? "0" : _discount.text,
         catatan: catatan,
-        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toString(),
+        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toDouble().round().toString(),
         tw: widget.tw,
         pc: widget.pc,
         sipSession: sips,
@@ -198,9 +198,9 @@ class _DataEditPageState extends State<DataEditPage> {
       "qty": _qty.text.isEmpty ? "" : _qty.text,
       "item": item_hitung,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
-      "hrgZipper": _hrgZipper.text.isEmpty ? "" : _hrgZipper.text,
-      "etPitch": _pitch.text.isEmpty ? "" : _pitch.text,
-      "etLbZipper": _lbZipper.text.isEmpty ? "" : _lbZipper.text,
+      "hrgZipper": _hrgZipper.text.isEmpty ? "0" : _hrgZipper.text,
+      "etPitch": _pitch.text.isEmpty ? "0" : _pitch.text,
+      "etLbZipper": _lbZipper.text.isEmpty ? "0" : _lbZipper.text,
     };
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
@@ -211,6 +211,7 @@ class _DataEditPageState extends State<DataEditPage> {
       _none = _hasilModel!.grandTotalDisplay;
       _isLoadingHasil = false;
     });
+    print("Format item hitung: " + item_hitung);
     setState(() {
       item_hitung = "";
     });
@@ -590,11 +591,11 @@ class _DataEditPageState extends State<DataEditPage> {
               }
               if (idxEdit == -1) {
                 _listTambahData.add(EditModel(_dataItem!.nama, tebalCont.text,
-                    catatanCont.text, _dataItem!.idBarang));
+                    catatanCont.text.isEmpty ? "N" : catatanCont.text, _dataItem!.idBarang));
                 print(idxEdit);
               } else {
                 _listTambahData[idxEdit].tebal = tebalCont.text.toString();
-                _listTambahData[idxEdit].catatan = catatanCont.text.toString();
+                catatanCont.text.isEmpty ? "N" : _listTambahData[idxEdit].catatan = catatanCont.text.toString();
               }
 
               idxEdit = -1;

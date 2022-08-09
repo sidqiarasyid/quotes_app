@@ -67,13 +67,13 @@ class _DataPesananPageState extends State<DataPesananPage> {
     order = OrderModel(
         items: nameCont.text,
         tebal: hasiTebal.toString(),
-        lebar: _lebar.text  == "" ? "0" : _lebar.text,
-        panjang: _panjang.text  == "" ? "0" : _panjang.text,
+        lebar: _lebar.text == "" ? "0" : _lebar.text,
+        panjang: _panjang.text == "" ? "0" : _panjang.text,
         spec: specLebar,
         color: colorCont.text,
-        qty: _qty.text   == "" ? "0" : _qty.text,
+        qty: _qty.text == "" ? "0" : _qty.text,
         disc: _discount.text == "" ? "0" : _discount.text,
-        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toString(),
+        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toDouble().round().toString(),
         catatan: cat,
         tw: tw,
         pc: pc,
@@ -130,8 +130,8 @@ class _DataPesananPageState extends State<DataPesananPage> {
     print(_itemlist);
     return "Success";
   }
-  showAlertDialog(BuildContext context) {
 
+  showAlertDialog(BuildContext context) {
     // set up the button
     Widget okButton = TextButton(
       child: Text("Cancel"),
@@ -156,7 +156,8 @@ class _DataPesananPageState extends State<DataPesananPage> {
       },
     );
   }
-  format_hitung(){
+
+  format_hitung() {
     _listTambahData.forEach((ModelTambahData model) {
       item_hitung += model.dropId +
           "#" +
@@ -178,14 +179,14 @@ class _DataPesananPageState extends State<DataPesananPage> {
       "api_key": "kspconnectpedia2020feb",
       "panjang": _panjang.text.isEmpty ? "" : _panjang.text,
       "lebar": _lebar.text.isEmpty ? "" : _lebar.text,
-      "cash_disc":  _discount.text.isEmpty ? "0" : _discount.text,
+      "cash_disc": _discount.text.isEmpty ? "0" : _discount.text,
       "kode_produksi": _selectedValueRadioButtonPC.toString(),
       "qty": _qty.text.isEmpty ? "" : _qty.text,
       "item": item_hitung,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
-      "hrgZipper": _hrgZipper.text.isEmpty ? ""  : _hrgZipper.text,
-      "etPitch": _pitch.text.isEmpty ? ""  : _pitch.text,
-      "etLbZipper": _lbZipper.text.isEmpty ? "" : _lbZipper.text,
+      "hrgZipper": _hrgZipper.text.isEmpty ? "0" : _hrgZipper.text,
+      "etPitch": _pitch.text.isEmpty ? "0" : _pitch.text,
+      "etLbZipper": _lbZipper.text.isEmpty ? "0" : _lbZipper.text,
     };
     print("BODY PARAM: " + data.toString());
     var dataUtf = utf8.encode(json.encode(data));
@@ -199,7 +200,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
     });
     print("Format item hitung: " + item_hitung);
     print("Format item dataBase64: " + dataBase64);
-    print("Format item hitung: " + _hasilModel!.grandTotalDisplay.toString());
     setState(() {
       item_hitung = "";
     });
@@ -334,7 +334,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
       backgroundColor: Colors.black,
     );
   }
-
 
   Widget inputFormName() {
     return Column(
@@ -619,11 +618,14 @@ class _DataPesananPageState extends State<DataPesananPage> {
                 }
               }
               if (idx == -1) {
-                _listTambahData.add(ModelTambahData(_dataItem!.nama,
-                    tebalCont.text, catatanCont.text, _dataItem!.idBarang));
+                _listTambahData.add(ModelTambahData(
+                    _dataItem!.nama,
+                    tebalCont.text,
+                    catatanCont.text.isEmpty ? "N" : catatanCont.text,
+                    _dataItem!.idBarang));
               } else {
                 _listTambahData[idx].tebal = tebalCont.text.toString();
-                _listTambahData[idx].catatan = catatanCont.text.toString();
+                catatanCont.text.isEmpty ? "N" : _listTambahData[idx].catatan = catatanCont.text.toString();
               }
 
               idx = -1;
@@ -737,7 +739,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
-
             controller: _hrgZipper,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -840,7 +841,6 @@ class _DataPesananPageState extends State<DataPesananPage> {
         Flexible(
           flex: 1,
           child: TextFormField(
-
             controller: _discount,
             keyboardType: TextInputType.number,
             style: TextStyle(fontSize: 19, color: Colors.black),
@@ -933,7 +933,7 @@ class _DataPesananPageState extends State<DataPesananPage> {
           if (_formKey.currentState!.validate() && _none != "-") {
             masukData();
             createDb();
-          } else if(_none == "-"){
+          } else if (_none == "-") {
             showAlertDialog(context);
           }
         },

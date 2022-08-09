@@ -110,7 +110,9 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
             "-" +
             listData![1].dataPesanan![i].detailProduk[a].tebal +
             "//";
-        cat += listData![1].dataPesanan![i].detailProduk[a].catatan + "-" + "/";
+        cat += listData![1].dataPesanan![i].detailProduk[a].catatan.isEmpty
+            ? "N" + "-" + "/"
+            : listData![1].dataPesanan![i].detailProduk[a].catatan + "-" + "/";
         idDrops +=
             listData![1].dataPesanan![i].detailProduk[a].idProduk + "*" + "/";
         sessionItem += listData![1].dataPesanan![i].detailProduk[a].idProduk +

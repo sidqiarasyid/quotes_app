@@ -62,7 +62,7 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
     return "Success";
   }
 
-   getCustomer() async {
+  getCustomer() async {
     String url = "http://128.199.81.36/api/list_data.php";
     Map<String, dynamic> data = {
       "api_key": "kspconnectpedia2020feb",
@@ -96,8 +96,11 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
     _dup = DupModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       nama.text = _dup!.data[0].namaCustomer;
-      alamat.text = _itemCustomer.firstWhere((element) => element.nama == nama.text).alamat;
-      nomor.text = _itemCustomer.firstWhere((element) => element.nama == nama.text).telp;
+      alamat.text = _itemCustomer
+          .firstWhere((element) => element.nama == nama.text)
+          .alamat;
+      nomor.text =
+          _itemCustomer.firstWhere((element) => element.nama == nama.text).telp;
       listData = _dup!.data;
     });
     for (int i = 0; i < listData![1].dataPesanan!.length; i++) {
@@ -110,7 +113,11 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
             "-" +
             listData![1].dataPesanan![i].detailProduk[a].tebal +
             "//";
-        cat += listData![1].dataPesanan![i].detailProduk[a].catatan + "-" + "/";
+        print("duplicate : "+listData![1].dataPesanan![i].detailProduk[a].catatan.isEmpty.toString());
+        print("duplicate : "+listData![1].dataPesanan![i].detailProduk[a].catatan == "");
+        cat += listData![1].dataPesanan![i].detailProduk[a].catatan.isEmpty
+            ? "N" + "-" + "/"
+            : listData![1].dataPesanan![i].detailProduk[a].catatan + "-" + "/";
         idDrops +=
             listData![1].dataPesanan![i].detailProduk[a].idProduk + "*" + "/";
         sessionItem += listData![1].dataPesanan![i].detailProduk[a].idProduk +

@@ -115,7 +115,7 @@ class _dupDataPesananState extends State<dupDataPesanan> {
         color: colorCont.text,
         qty: _qty.text == "" ? "0" : _qty.text,
         disc: _discount.text == "" ? "0" : _discount.text,
-        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toString(),
+        price: _none == "-" ? "0" : _hasilModel!.grandTotal.toDouble().round().toString(),
         catatan: cat,
         tw: tw,
         pc: pc,
@@ -168,9 +168,9 @@ class _dupDataPesananState extends State<dupDataPesanan> {
       "qty": _qty.text.isEmpty ? "" : _qty.text,
       "item": item_hitung,
       "tol_wase": _selectedValueRadioButtonTW.toString(),
-      "hrgZipper": _hrgZipper.text.isEmpty ? "" : _hrgZipper.text,
-      "etPitch": _pitch.text.isEmpty ? "" : _pitch.text,
-      "etLbZipper": _lbZipper.text.isEmpty ? "" : _lbZipper.text,
+      "hrgZipper": _hrgZipper.text.isEmpty ? "0" : _hrgZipper.text,
+      "etPitch": _pitch.text.isEmpty ? "0" : _pitch.text,
+      "etLbZipper": _lbZipper.text.isEmpty ? "0" : _lbZipper.text,
     };
     var dataUtf = utf8.encode(json.encode(data));
     var dataBase64 = base64.encode(dataUtf);
@@ -602,11 +602,14 @@ class _dupDataPesananState extends State<dupDataPesanan> {
                 }
               }
               if (idx == -1) {
-                _listTambahData.add(ModelTambahData(_dataItem!.nama,
-                    tebalCont.text, catatanCont.text, _dataItem!.idBarang));
+                _listTambahData.add(ModelTambahData(
+                    _dataItem!.nama,
+                    tebalCont.text,
+                    catatanCont.text.isEmpty ? "N" : catatanCont.text,
+                    _dataItem!.idBarang));
               } else {
                 _listTambahData[idx].tebal = tebalCont.text.toString();
-                _listTambahData[idx].catatan = catatanCont.text.toString();
+                catatanCont.text.isEmpty ? "N" : _listTambahData[idx].catatan = catatanCont.text.toString();
               }
 
               idx = -1;

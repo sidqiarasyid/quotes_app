@@ -71,7 +71,7 @@ class Datum1 {
     offerValidity:
     json["offer_validity"] == null ? "-" : json["offer_validity"],
     conditions: json["conditions"] == null ? "-" : json["conditions"],
-    catatan: json["catatan"] == null ? "-" : json["catatan"],
+    catatan: json["catatan"] == null ? "N" : json["catatan"],
     date: json["date"] == null ? "-" : json["date"],
     hour: json["hour"] == null ? "-" : json["hour"],
     noUrut: json["no_urut"] == null ? "-" : json["no_urut"],
@@ -91,7 +91,7 @@ class Datum1 {
     "termofpayment": termofpayment == null ? "-" : termofpayment,
     "offer_validity": offerValidity == null ? "-" : offerValidity,
     "conditions": conditions == null ? "-" : conditions,
-    "catatan": catatan == null ? "-" : catatan,
+    "catatan": catatan == null ? "N" : catatan,
     "date": date == null ? "-" : date,
     "hour": hour == null ? "-" : hour,
     "no_urut": noUrut == null ? "-" : noUrut,

@@ -113,9 +113,8 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
             "-" +
             listData![1].dataPesanan![i].detailProduk[a].tebal +
             "//";
-        print("duplicate : "+listData![1].dataPesanan![i].detailProduk[a].catatan.isEmpty.toString());
-        print("duplicate : "+listData![1].dataPesanan![i].detailProduk[a].catatan == "");
-        cat += listData![1].dataPesanan![i].detailProduk[a].catatan.isEmpty
+        print(listData![1].dataPesanan![i].detailProduk[a].tebal);
+        cat += listData![1].dataPesanan![i].detailProduk[a].catatan.isEmpty ||  listData![1].dataPesanan![i].detailProduk[a].catatan.contains("-")
             ? "N" + "-" + "/"
             : listData![1].dataPesanan![i].detailProduk[a].catatan + "-" + "/";
         idDrops +=
@@ -126,6 +125,7 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
             "#" +
             listData![1].dataPesanan![i].detailProduk[a].tebal +
             "#-##";
+        print(sessionItem);
       }
       var order;
       order = OrderModel(

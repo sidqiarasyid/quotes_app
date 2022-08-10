@@ -96,11 +96,15 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
     _dup = DupModel.fromJson(json.decode(response.body.toString()));
     setState(() {
       nama.text = _dup!.data[0].namaCustomer;
-      alamat.text = _itemCustomer.firstWhere((element) => element.nama == nama.text).alamat;
-      nomor.text = _itemCustomer.firstWhere((element) => element.nama == nama.text).telp;
+      alamat.text = _itemCustomer
+          .firstWhere((element) => element.nama == nama.text)
+          .alamat;
+      nomor.text =
+          _itemCustomer.firstWhere((element) => element.nama == nama.text).telp;
       listData = _dup!.data;
     });
     for (int i = 0; i < listData![1].dataPesanan!.length; i++) {
+      print("lengnth detail produk: " + listData![1].dataPesanan![i].detailProduk.length.toString());
       for (int a = 0;
           a < listData![1].dataPesanan![i].detailProduk.length;
           a++) {
@@ -110,7 +114,12 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
             "-" +
             listData![1].dataPesanan![i].detailProduk[a].tebal +
             "//";
-        cat += listData![1].dataPesanan![i].detailProduk[a].catatan.isEmpty
+        cat += listData![1].dataPesanan![i].detailProduk[a].catatan.isEmpty ||
+                listData![1]
+                    .dataPesanan![i]
+                    .detailProduk[a]
+                    .catatan
+                    .contains("-")
             ? "N" + "-" + "/"
             : listData![1].dataPesanan![i].detailProduk[a].catatan + "-" + "/";
         idDrops +=
@@ -121,6 +130,15 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
             "#" +
             listData![1].dataPesanan![i].detailProduk[a].tebal +
             "#-##";
+        print("spesifikasi edit: " + spec);
+        print("nama produk kosong: " +
+            listData![1]
+                .dataPesanan![i]
+                .detailProduk[a]
+                .namaProduk
+                .isEmpty
+                .toString());
+        print("session item edit: " + sessionItem);
       }
       var order;
       order = OrderModel(

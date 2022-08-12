@@ -23,9 +23,9 @@ class DataCustomerDup extends StatefulWidget {
 }
 
 class _DataCustomerDupState extends State<DataCustomerDup> {
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
   DropModel? _dropModel;
-  DataCompany? _dataCompany;
+  DataCompany? _dataCompany = null;
   UserModel? _user;
   DupModel? _dup;
   List<DataCompany> _itemCompany = [];
@@ -180,26 +180,23 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
         child: Padding(
           padding:
               const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                itemDropDown(),
-                SizedBox(
-                  height: 15,
-                ),
-                inputFormDataCustomer(),
-                SizedBox(
-                  height: 20,
-                ),
-                nextButton(),
-                SizedBox(
-                  height: 20,
-                ),
-                backButton(),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              itemDropDown(),
+              SizedBox(
+                height: 15,
+              ),
+              inputFormDataCustomer(),
+              SizedBox(
+                height: 20,
+              ),
+              nextButton(),
+              SizedBox(
+                height: 20,
+              ),
+              backButton(),
+            ],
           ),
         ),
       ),
@@ -234,12 +231,12 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
         ),
         child: DropdownButtonFormField<DataCompany>(
           decoration: InputDecoration.collapsed(hintText: ''),
-          validator: (value) {
-            if (value == null) {
-              return 'Please enter item';
-            }
-            return null;
-          },
+          // validator: (value) {
+          //   if (value == null) {
+          //     return 'Please enter item';
+          //   }
+          //   return null;
+          // },
           hint: Text("Pilih Company"),
           isExpanded: true,
           value: _dataCompany,
@@ -266,12 +263,12 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
     return Column(
       children: [
         TypeAheadFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter text';
-            }
-            return null;
-          },
+          // validator: (value) {
+          //   if (value == null || value.isEmpty) {
+          //     return 'Please enter text';
+          //   }
+          //   return null;
+          // },
           suggestionsCallback: (value) => _itemCustomer.where((element) =>
               element.nama.toLowerCase().contains(value.toLowerCase())),
           itemBuilder: (_, DataCustomer item) => ListTile(
@@ -304,12 +301,12 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
           height: 15,
         ),
         TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter text';
-            }
-            return null;
-          },
+          // validator: (value) {
+          //   if (value == null || value.isEmpty) {
+          //     return 'Please enter text';
+          //   }
+          //   return null;
+          // },
           controller: alamat,
           style: TextStyle(fontSize: 19, color: Colors.black),
           decoration: InputDecoration(
@@ -326,12 +323,12 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
           height: 15,
         ),
         TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter text';
-            }
-            return null;
-          },
+          // validator: (value) {
+          //   if (value == null || value.isEmpty) {
+          //     return 'Please enter text';
+          //   }
+          //   return null;
+          // },
           controller: nomor,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 19, color: Colors.black),
@@ -366,14 +363,19 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
           style: TextStyle(fontSize: 17),
         ),
         onPressed: () async {
-          if (_formKey.currentState!.validate()) {
+          // if (_formKey.currentState!.validate()) {
             setState(() {
-              company = _dataCompany!.nama;
-              Idcompany = _dataCompany!.id;
-              namaCust = nama.text;
-              alamatCust = alamat.text;
-              noCust = nomor.text;
+              company = _dataCompany != null ? _dataCompany!.nama : "_";
+              Idcompany = _dataCompany != null ? _dataCompany!.id : "_";
+              namaCust = nama.text.isEmpty ?  "_" : nama.text ;
+              alamatCust = alamat.text.isEmpty ? "_" : alamat.text;
+              noCust = nomor.text.isEmpty ? "_" : nomor.text;
             });
+            print("company "+company);
+            print("Idcompany "+Idcompany);
+            print("nama "+namaCust);
+            print("alamat "+alamatCust);
+            print("no "+noCust);
             final prefs = await SharedPreferences.getInstance();
             prefs.setString("namaCust", namaCust);
             prefs.setString("alamatCust", alamatCust);
@@ -389,7 +391,7 @@ class _DataCustomerDupState extends State<DataCustomerDup> {
                     ov: _dup!.data[0].offerValidity,
                     condition: _dup!.data[0].conditions,
                     note: _dup!.data[0].catatan)));
-          }
+          // }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

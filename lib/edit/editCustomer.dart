@@ -25,7 +25,7 @@ class DataCustomerEdit extends StatefulWidget {
 
 class _DataCustomerEditState extends State<DataCustomerEdit> {
   DropModel? _dropModel;
-  DataCompany? _dataCompany;
+  DataCompany? _dataCompany = null;
   UserModel? _user;
   DupModel? _dup;
   List<DataCompany> _itemCompany = [];
@@ -353,12 +353,17 @@ class _DataCustomerEditState extends State<DataCustomerEdit> {
         ),
         onPressed: () async {
           setState(() {
-            company = _dataCompany!.nama;
-            Idcompany = _dataCompany!.id;
-            namaCust = nama.text;
-            alamatCust = alamat.text;
-            noCust = nomor.text;
+            company = _dataCompany != null ? _dataCompany!.nama : "_";
+            Idcompany = _dataCompany != null ? _dataCompany!.id : "_";
+            namaCust = nama.text.isEmpty ?  "_" : nama.text ;
+            alamatCust = alamat.text.isEmpty ? "_" : alamat.text;
+            noCust = nomor.text.isEmpty ? "_" : nomor.text;
           });
+          print("company "+company);
+          print("Idcompany "+Idcompany);
+          print("nama "+namaCust);
+          print("alamat "+alamatCust);
+          print("no "+noCust);
           final prefs = await SharedPreferences.getInstance();
           prefs.setString("namaCust", namaCust);
           prefs.setString("alamatCust", alamatCust);

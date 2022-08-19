@@ -139,10 +139,8 @@ class _LoginPageState extends State<LoginPage> {
         });
         final prefs = await SharedPreferences.getInstance();
         prefs.setString('username', result.username);
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext c) => HomePage(username: result.name)));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext c) => HomePage()));
       }
     }
   }

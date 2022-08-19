@@ -81,13 +81,13 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
-      onPressed:  () {
+      onPressed: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = TextButton(
       child: Text("Continue"),
-      onPressed:  () {
+      onPressed: () {
         delete(items[i].idPq);
         Navigator.pop(context);
       },
@@ -122,11 +122,9 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        final prefs = await SharedPreferences.getInstance();
-
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomePage(username: prefs.getString('username').toString())),
-                (Route<dynamic> route) => false);
+            MaterialPageRoute(builder: (context) => HomePage()),
+            (Route<dynamic> route) => false);
         return true;
       },
       child: Scaffold(
@@ -319,7 +317,6 @@ class _PriceQuotePageState extends State<PriceQuotePage> {
                               ),
                               onPressed: () {
                                 showAlertDialog(context, index);
-
                               },
                               style: ButtonStyle(
                                 backgroundColor:

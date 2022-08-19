@@ -86,16 +86,10 @@ class _SalesContractPageState extends State<SalesContractPage> {
                   // ignore: deprecated_member_use
                   child: RaisedButton(
                     onPressed: () async {
-                      final prefs = await SharedPreferences.getInstance();
                       setState(() {
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage(
-                                      username: prefs
-                                          .getString('username')
-                                          .toString(),
-                                    )),
+                            MaterialPageRoute(builder: (context) => HomePage()),
                             ModalRoute.withName("/HomePage"));
                         launch(dataList[index]['idheader']);
                         // downloadPDF(dataList[index]['idheader']);
